@@ -21,6 +21,7 @@ Install all dependencies:
 
 Run migrations:
 
+    cd src
     python3 manage.py migrate
 
 ### Detailed instructions
