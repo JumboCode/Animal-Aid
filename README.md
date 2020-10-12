@@ -12,8 +12,8 @@ Built with [Python][0] using the [Django Web Framework][1].
 To set up a development environment quickly, first install Python 3. It
 comes with virtualenv built-in. So create a virtual env by:
 
-    1. `$ python3 -m venv JumbocodeAnimalAid`
-    2. `$ . JumbocodeAnimalAid/bin/activate`
+    1. `$ python3 -m venv AnimalAid`
+    2. `$ . AnimalAid/bin/activate`
 
 Install all dependencies:
 
