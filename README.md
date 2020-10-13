@@ -23,6 +23,11 @@ Run migrations:
 
     cd src
     python3 manage.py migrate
+    
+Run Server and view webpage:
+
+    python3 manage.py runserver
+ Then just open up a browser and go to the url printed by the runserver!
 
 ### Detailed instructions
 
