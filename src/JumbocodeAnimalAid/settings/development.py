@@ -22,7 +22,7 @@ PASSWORD_HASHERS = [
 AUTH_PASSWORD_VALIDATORS = []
 
 # Django Debug Toolbar
-INSTALLED_APPS += ("debug_toolbar",)
+INSTALLED_APPS += ("debug_toolbar", "simpleApp")
 
 # Additional middleware introduced by debug toolbar
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
