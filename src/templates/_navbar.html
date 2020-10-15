@@ -4,3 +4,5 @@
 <li {% if active_link == "login" %}class="active"{% endif %}><a href="{% url 'accounts:login' %}">Login</a></li>
 
 <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'accounts:signup' %}">Sign Up</a></li>
+
+<li {% if active_link == "contact" %}class="active"{% endif %}><a href="{% url 'accounts:contact' %}">Contact</a></li>
