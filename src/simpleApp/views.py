@@ -18,5 +18,10 @@ def test(request):
     global count
     # return HttpResponse("hello")
     if request.method == "GET":
-        count += 1
+
+        if 'click' in request.GET:
+            count += 1
+        elif 'reset' in request.GET:
+            count = 0
+        
         return render(request, 'test.html', {"output": count})
