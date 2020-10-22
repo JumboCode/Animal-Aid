@@ -1,0 +1,14 @@
+
+
+{% block newcontent %}
+    <h1>Signup Page</h1>
+    <form action="Signup">
+        {% csrf_token %}
+        {{ form }}
+        <input type="text"value="email:" placeholder="email"><br>
+        <input type="text"value="type password: " placeholder="create password: "><br>
+        <input type="Submit">
+    </form>
+{% endblock %}
+
+
