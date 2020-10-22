@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core'
 ]
+# Setup SMTP
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
