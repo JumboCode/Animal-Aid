@@ -21,6 +21,7 @@ from core import views as core_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', core_views.home, name="home"),
+    path('login/', core_views.login, name="login"),
     path('', core_views.home, name="home")
 
 ]
