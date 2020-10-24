@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Hello, World</h1>
+<nav> <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
+      <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> </nav>
+      <h1>Hello, World!</h1>
 {% endblock %}
+
+

@@ -1,14 +1,23 @@
+{% extends 'base.html' %}
 
-
-{% block newcontent %}
-    <h1>Signup Page</h1>
-    <form action="Signup">
-        {% csrf_token %}
-        {{ form }}
-        <input type="text"value="email:" placeholder="email"><br>
-        <input type="text"value="type password: " placeholder="create password: "><br>
-        <input type="Submit">
+  {% block content %}
+  <nav> <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
+    <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> </nav>
+    <h2>Sign up</h2>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <p>
+          {{ field.label_tag }}<br>
+          {{ field }}
+          <!-- {% if field.help_text %} -->
+            <!-- <small style="color: grey">{{ field.help_text }}</small>
+          {% endif %} -->
+          {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+          {% endfor %}
+        </p>
+      {% endfor %}
+      <button type="submit">Sign up</button>
     </form>
-{% endblock %}
-
-
+  {% endblock %}
