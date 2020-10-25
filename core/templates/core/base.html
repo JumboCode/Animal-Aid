@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-    {% load static %}
+  {% load static %}
     <!-- {% load thumbnail %} -->
-</html>
+    
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block description %}{% endblock description %}">
+
+    <title>{% block title %}{% include "_brandname.html" %} :: {% endblock %}</title>
 
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <script src="{% static 'bootstrap/js/boostrap.min.js' %}"></script>
@@ -18,16 +20,22 @@
     {% endblock styles %}
 
     {% block extrahead %}{% endblock extrahead %}
+    
   </head>
 
 <body>
-    {% block navbar %}
-    
-    {% endblock navbar %}
-
   
+  <!-- Blank navbar for testing -->
+  {% block navbar %}
+
+  {% endblock navbar %}
+
+
+    
     {% block content %}
 
     {% endblock %}
+
+    
   </body>
 </html>
