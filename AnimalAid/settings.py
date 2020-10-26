@@ -45,11 +45,12 @@ INSTALLED_APPS = [
 #EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 #EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ty.9100@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+DEFAULT_FROM_EMAIL = 'tyler.thompson@tufts.edu'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
