@@ -41,9 +41,12 @@ INSTALLED_APPS = [
     'core'
 ]
 
+
+## for saving emails locally instead of over smtp ##
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
+
 # Setup SMTP
-#EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-#EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_USE_TLS = True
