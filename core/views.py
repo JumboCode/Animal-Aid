@@ -1,8 +1,7 @@
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from .forms import CustomUserCreationForm
 from django.shortcuts import render, redirect
-from django.contrib import messages
-import django.contrib.auth.forms as forms
+from django.contrib.auth import login
 
 def home(request):
     return render(request, 'core/home.html')
@@ -10,24 +9,12 @@ def home(request):
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        print(form.as_p())
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            try:
-                form.save()
-                username = form.cleaned_data.get('username')
-                if not username.endswith('@tufts.edu'):
-                    form.add_error("username", "Please enter a valid Tufts email address")
-                    raise forms.ValidationError("Please enter a valid Tufts email address")
-            except:
-                return render(request, 'core/signup.html', {'form': form})
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
+            user = form.save()
             login(request, user)
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'core/signup.html', {'form': form})
     
-def error(request):
-    return render(request, 'core/error.html')
