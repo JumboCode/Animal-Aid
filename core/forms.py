@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth import authenticate
@@ -29,6 +29,16 @@ class CustomUserCreationForm(UserCreationForm):
     def save(self, commit=True):
         user = User.objects.create_user(
             self.cleaned_data['email'],
-            self.cleaned_data['password1']
+            password=self.cleaned_data['password1']
         )
         return user
+
+class LoginForm(AuthenticationForm):
+    # Fields default to username and password from parent class.
+
+    class Meta:
+        model = User
+        fields = ["username", "password"]
+    
+    def confirm_login_allowed(self, user):
+        pass
