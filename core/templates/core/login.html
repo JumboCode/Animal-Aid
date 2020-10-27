@@ -2,13 +2,17 @@
 
 {% block content %}
   <h1>Login</h1>
-  <div>
-  <label><b>Username:</b></label>
-  <input type="text" placeholder="Username" required>
-  </div>
-  <div>
-  <label><b>Password:</b></label>
-  <input type="password" placeholder="Password" required>
-  </div>
-  <button type="submit" onclick="location.href = '{% url 'home' %}'">Log in</button>
+  <form action="" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div>
+        {{ field.label_tag }}
+        {{ field }}
+        {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    <button type="submit">Log in</button>
+  </form>
 {% endblock %}
