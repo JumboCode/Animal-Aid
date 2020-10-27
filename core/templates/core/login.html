@@ -2,8 +2,13 @@
 
 {% block content %}
   <h1>Login</h1>
-  <p>Username: <textarea style="resize:none"></textarea> </p>
-  <p>Password: <textarea style="resize:none"></textarea> </p>
-  <a href="https://tinyurl.com/y8cxey6n">Log in</a>
-  <!--<a href="{% url 'home' %}">Log in</a>-->
+  <div>
+  <label><b>Username:</b></label>
+  <input type="text" placeholder="Username" required>
+  </div>
+  <div>
+  <label><b>Password:</b></label>
+  <input type="password" placeholder="Password" required>
+  </div>
+  <button type="submit" onclick="location.href = '{% url 'home' %}'">Log in</button>
 {% endblock %}
