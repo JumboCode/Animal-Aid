@@ -1,5 +1,11 @@
 @import "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css";
 
+.hello {
+  font-size: 40px;
+  font-weight: bold;
+  padding-left: 100px;
+}
+
 html, body{
     height:100%;		/* For full height images */
 }

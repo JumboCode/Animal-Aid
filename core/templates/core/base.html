@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  {% load static %}
+  <!-- {% load static %} -->
     <!-- {% load thumbnail %} -->
     
 
@@ -12,11 +12,12 @@
 
     <title>{% block title %}{% include "_brandname.html" %} :: {% endblock %}</title>
 
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <script src="{% static 'bootstrap/js/boostrap.min.js' %}"></script>
+    <!-- <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+    <!-- <script src="{% static 'bootstrap/js/boostrap.min.js' %}"></script> -->
 
     {% block styles %}
-    <link href="{% static 'site/css/app.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'site/css/app.css' %}" rel="stylesheet" type="text/css" /> -->
+   
     {% endblock styles %}
 
     {% block extrahead %}{% endblock extrahead %}
