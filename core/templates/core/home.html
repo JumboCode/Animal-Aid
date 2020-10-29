@@ -4,6 +4,8 @@
 <nav> <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
       <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
       <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li> </nav>
+      <li {% if active_link == "password_reset" %}class="active"{% endif %}><a href="{% url 'password_reset' %}">Forgot your password?</a></li> </nav>
+
 </nav>
       <h1>Hello, World!</h1>
 {% endblock %}
