@@ -15,22 +15,30 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ['email', 'password1', 'password2']
 
     def clean_email(self):
+        print("CLEAN EMAIL WAS CALLED")
         email = self.cleaned_data['email'].lower()
-        r = User.objects.filter(email=email)
-        if r.count():
-            raise  ValidationError("Email already exists")
+        r = User.objects.filter(username=email)
+        if r.exists():
+            raise  ValidationError("A user with that email already exists")
         if not email.endswith("@tufts.edu"):
             raise ValidationError("Invalid Tufts email address")
         return email
 
     def clean_password2(self):
+        print("CHECKING PASSWORD VALIDITY")
         return super().clean_password2()
 
     def save(self, commit=True):
+        print("SAVING USER TO DB")
         user = User.objects.create_user(
+<<<<<<< HEAD
             username=self.cleaned_data['email'],
             password=self.cleaned_data['password1'],
             email=self.cleaned_data['email'],
+=======
+            self.cleaned_data['email'],
+            self.cleaned_data['password1']
+>>>>>>> fixed redundant email error
         )
         return user
 
