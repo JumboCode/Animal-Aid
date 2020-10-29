@@ -15,8 +15,8 @@
           {{ field.label_tag }}<br>
           {{ field }}
           {% for error in field.errors %}
-            <p style="color: red">{{ error }}</p>
-            <p> {% if error == "A user with that email already exists" %}<a href ="{% url 'login' %}"> Login? </a>{% endif %}</p>
+            <p style="color: red">{{ error }} {% if error == "A user with that email already exists" %}</p>
+              <!-- <a href ="{% url 'login' %}"> Login? </a>{% endif %} -->
           {% endfor %}
         </p>
       {% endfor %}
