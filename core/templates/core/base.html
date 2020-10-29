@@ -16,7 +16,7 @@
     <!-- <script src="{% static 'bootstrap/js/boostrap.min.js' %}"></script> -->
 
     {% block styles %}
-    <!-- <link href="{% static 'site/css/app.css' %}" rel="stylesheet" type="text/css" /> -->
+    <link href="{% static 'site/css/app.css' %}" rel="stylesheet" type="text/css" />
    
     {% endblock styles %}
 
@@ -25,6 +25,14 @@
   </head>
 
 <body>
+
+  {% nav %}
+<nav> <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
+      <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
+      <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li> </nav>
+</nav>
+      <h1>Hello, World!</h1>
+{% endblock %}
   
   <!-- Blank navbar for testing -->
   {% block navbar %}
