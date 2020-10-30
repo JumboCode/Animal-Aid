@@ -32,14 +32,28 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'core',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core'
 ]
+
+
+## for saving emails locally instead of over smtp ##
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
+
+# Setup SMTP
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+DEFAULT_FROM_EMAIL = 'tyler.thompson@tufts.edu'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
