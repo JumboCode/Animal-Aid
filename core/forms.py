@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
+from django.http import JsonResponse
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -41,6 +42,14 @@ class CustomUserCreationForm(UserCreationForm):
 >>>>>>> fixed redundant email error
         )
         return user
+
+def validate_username(request):
+    email = str(request.GET.get('username',None))
+    data = {
+        'tufts_edu': not email.endswith("@tufts.edu"),
+        'is_taken': User.objects.filter(username=email).exists()
+    }
+    return JsonResponse(data)
 
 class LoginForm(AuthenticationForm):
     # Fields default to username and password from parent class.
