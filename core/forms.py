@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+from django.contrib.auth.password_validation import *
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(label='Enter Tufts email')
@@ -38,10 +39,12 @@ class CustomUserCreationForm(UserCreationForm):
         return user
 
 def validate_username(request):
-    email = str(request.GET.get('username',None))
+    email = str(request.GET.get('email',None))
     data = {
         'tufts_edu': not email.endswith("@tufts.edu"),
     }
+    if (data['tufts_edu'] == True):
+        print("yay")
     return JsonResponse(data)
 
 def validate_password1(request):
