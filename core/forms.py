@@ -47,7 +47,17 @@ def validate_username(request):
     email = str(request.GET.get('username',None))
     data = {
         'tufts_edu': not email.endswith("@tufts.edu"),
-        'is_taken': User.objects.filter(username=email).exists()
+    }
+    return JsonResponse(data)
+
+def validate_password1(request):
+    SpecialSym =['$', '@', '#', '%', '*']
+    password1 = str(request.GET.get('password1',None))
+    data = {
+        'too_short': len(password1) < 6,
+        'no_special_char': not any(char in SpecialSym for char in password1),
+        'too_common': password1 == "test" or password1 == "testtest" or "123" in password1 or "abc" in password1,
+        'only_digits': password1.isdigit()
     }
     return JsonResponse(data)
 
