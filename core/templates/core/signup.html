@@ -16,9 +16,6 @@
           if (data.tufts_edu) {
             console.log("The email does not with tufts.edu");
           }
-          if (data.is_taken) {
-            console.log("This email is already taken");
-          }
         }
       });
     });
@@ -32,11 +29,17 @@
         },
         dataType: 'json',
         success: function (data) {
-          if (data.is_short) {
+          if (data.too_short) {
             console.log("The password is too short");
           }
-          if (data.is_common) {
+          if (data.no_special_char) {
+            console.log("The password is too weak");
+          }
+          if (data.too_common) {
             console.log("The password is too common");
+          }
+          if (data.only_digits) {
+            console.log("The password cannot be only digits");
           }
         }
       });
