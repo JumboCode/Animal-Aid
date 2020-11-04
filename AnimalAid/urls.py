@@ -15,12 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin, auth
 from django.urls import include, path
-<<<<<<< HEAD
 from django.contrib.auth import views as auth_views
-=======
 from django.conf.urls import url
 from core import forms
->>>>>>> half-working dynamic validation
 
 from core import views as core_views
 
@@ -34,12 +31,8 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='core/password/password_reset_complete.html'), name='password_reset_complete'), 
     path('login/', core_views.login, name="login"),
     path('signup/', core_views.signup, name = "signup"),
-<<<<<<< HEAD
-]
-=======
     url(r'^ajax/validate_username/$', forms.validate_username, name='validate_username'),
     url(r'^ajax/validate_password1/$', forms.validate_password1, name='validate_password1'),
     path('', core_views.home, name="home"),
 
 ]
->>>>>>> half-working dynamic validation
