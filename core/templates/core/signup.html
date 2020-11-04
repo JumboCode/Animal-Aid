@@ -9,7 +9,7 @@
       $.ajax({
         url: '/ajax/validate_username/',
         data: {
-          'username': email
+          'email': email
         },
         dataType: 'json',
         success: function (data) {
@@ -41,6 +41,7 @@
           if (data.only_digits) {
             console.log("The password cannot be only digits");
           }
+          // console.log(data.similarity);
         }
       });
     });
