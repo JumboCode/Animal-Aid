@@ -5,7 +5,6 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 
-
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(label='Enter Tufts email')
     password1 = forms.CharField(label='Enter password', widget=forms.PasswordInput)
@@ -32,14 +31,9 @@ class CustomUserCreationForm(UserCreationForm):
     def save(self, commit=True):
         print("SAVING USER TO DB")
         user = User.objects.create_user(
-<<<<<<< HEAD
             username=self.cleaned_data['email'],
             password=self.cleaned_data['password1'],
             email=self.cleaned_data['email'],
-=======
-            self.cleaned_data['email'],
-            self.cleaned_data['password1']
->>>>>>> fixed redundant email error
         )
         return user
 
