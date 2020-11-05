@@ -13,9 +13,14 @@
         },
         dataType: 'json',
         success: function (data) {
-          if (data.tufts_edu) {
-            console.log("The email does not with tufts.edu");
-          }
+          // if (!(data.tufts_edu)) {
+          //   console.log("The email does not with tufts.edu");
+          //   $("#id_email").addClass('error');
+          // }
+          // else {
+          //   $("#id_email").removeClass('error')
+          // }
+          data.tufts_edu ? $("#id_email").removeClass('error') : $("#id_email").addClass('error');
         }
       });
     });
@@ -29,19 +34,25 @@
         },
         dataType: 'json',
         success: function (data) {
+          var has_error = false;
           if (data.too_short) {
+            has_error = true;
             console.log("The password is too short");
           }
           if (data.no_special_char) {
+            has_error = true;
             console.log("The password is too weak");
           }
           if (data.too_common) {
+            has_error = true;
             console.log("The password is too common");
           }
           if (data.only_digits) {
+            has_error = true;
             console.log("The password cannot be only digits");
           }
-          // console.log(data.similarity);
+          console.log("FLAG", has_error);
+          has_error ? $("#id_password1").addClass('error') : $("#id_password1").removeClass('error');
         }
       });
     });
@@ -63,8 +74,8 @@
           {{ field.label_tag }}<br>
           {{ field }}
           {% for error in field.errors %}
-            <p style="color: red">{{ error }} {% if error == "A user with that email already exists" %}</p>
-              <!-- <a href ="{% url 'login' %}"> Login? </a>{% endif %} -->
+            <p style="color: red">{{ error }} {% if error == "A user with that email already exists" %} </p>
+            {% endif %}
           {% endfor %}
         </p>
       {% endfor %}
