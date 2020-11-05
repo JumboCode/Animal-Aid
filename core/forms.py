@@ -41,7 +41,7 @@ class CustomUserCreationForm(UserCreationForm):
 def validate_username(request):
     email = str(request.GET.get('email',None))
     data = {
-        'tufts_edu': not email.endswith("@tufts.edu"),
+        'tufts_edu': email.endswith("@tufts.edu"),
     }
     if (data['tufts_edu'] == True):
         print("yay")
