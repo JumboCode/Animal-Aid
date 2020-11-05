@@ -13,6 +13,7 @@
         },
         dataType: 'json',
         success: function (data) {
+<<<<<<< HEAD
           // if (!(data.tufts_edu)) {
           //   console.log("The email does not with tufts.edu");
           //   $("#id_email").addClass('error');
@@ -21,6 +22,11 @@
           //   $("#id_email").removeClass('error')
           // }
           data.tufts_edu ? $("#id_email").removeClass('error') : $("#id_email").addClass('error');
+=======
+          if (data.tufts_edu) {
+            console.log("The email does not with tufts.edu");
+          }
+>>>>>>> 53bd96ee646d3d948a61a3d6599b505b76e55501
         }
       });
     });
@@ -74,8 +80,13 @@
           {{ field.label_tag }}<br>
           {{ field }}
           {% for error in field.errors %}
+<<<<<<< HEAD
             <p style="color: red">{{ error }} {% if error == "A user with that email already exists" %} </p>
             {% endif %}
+=======
+            <p style="color: red">{{ error }} {% if error == "A user with that email already exists" %}</p>
+              <!-- <a href ="{% url 'login' %}"> Login? </a>{% endif %} -->
+>>>>>>> 53bd96ee646d3d948a61a3d6599b505b76e55501
           {% endfor %}
         </p>
       {% endfor %}
