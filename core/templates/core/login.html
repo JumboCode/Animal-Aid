@@ -8,7 +8,7 @@
       <div>
         {{ field.label_tag }}
         {{ field }}
-        {% for error in field.errors %}
+        {% for error in field.errors %} <!-- TODO: fix -->
             <p style="color: red">{{ error }}</p>
         {% endfor %}
       </div>

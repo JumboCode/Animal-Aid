@@ -33,7 +33,7 @@ class CustomUserCreationForm(UserCreationForm):
         )
         return user
 
-class LoginForm(AuthenticationForm):
+class LoginForm(AuthenticationForm): # inherit from Authentication Form
     # Fields default to username and password from parent class.
 
     class Meta:
