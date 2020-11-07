@@ -31,6 +31,7 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='core/password/password_reset_complete.html'), name='password_reset_complete'), 
     path('login/', core_views.login, name="login"),
     path('signup/', core_views.signup, name = "signup"),
+    path('results/', core_views.results, name="results"),
     url(r'^ajax/validate_username/$', forms.validate_username, name='validate_username'),
     url(r'^ajax/validate_password1/$', forms.validate_password1, name='validate_password1'),
     url(r'^ajax/validate_password2/$', forms.validate_password2, name='validate_password2'),
