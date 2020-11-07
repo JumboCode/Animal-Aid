@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <nav> <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
+        <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
+        <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
+        <li {% if active_link == "password_reset" %}class="active"{% endif %}><a href="{% url 'password_reset' %}">Forgot your password?</a></li>
+        <li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
+    </nav>
+
+    <p></p>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" name="run_matcher" id="run_matcher">Run Matcher</button>
+    </form>
+
+    <h1>Results</h1>
+
+    {% if matches %}
+        <table style="background-color: rgba(214, 226, 217, 0.658);">
+            <tr>
+                <th>Dog Name</th>
+                <th>Walker</th>
+                <th>Walk Times</th>
+            </tr>
+            {% for match in matches %}
+            <tr>
+                <td>
+                    {{ match.dog_name}}
+                </td>
+                <td>
+                    {{ match.walker }}
+                </td>
+                <td>
+                    {{ match.times }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
