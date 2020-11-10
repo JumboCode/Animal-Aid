@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- {% load static %} -->
-    <!-- {% load thumbnail %} -->
+  {% load static %}
+
     
 
 <head>
@@ -12,8 +12,8 @@
 
     <title>{% block title %}{% include "_brandname.html" %} :: {% endblock %}</title>
 
-    <!-- <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
-    <!-- <script src="{% static 'bootstrap/js/boostrap.min.js' %}"></script> -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap/js/boostrap.min.js' %}"></script>
 
     {% block styles %}
     <link href="{% static 'site/css/app.css' %}" rel="stylesheet" type="text/css" />
@@ -25,22 +25,16 @@
   </head>
 
 <body>
+  <h2>Base works</h2>
+    {% nav %}
+        <nav> <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
+            <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
+            <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li> 
+            <li {% if active_link == "home" %}class="active"{% endif %}><a href="#">Logout</a></li> 
+        </nav>
+        <h1>Hello World!</h1>
+    {% endblock %}
 
-  {% nav %}
-<nav> <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
-      <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
-      <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li> </nav>
-</nav>
-      <h1>Hello, World!</h1>
-{% endblock %}
-  
-  <!-- Blank navbar for testing -->
-  {% block navbar %}
-
-  {% endblock navbar %}
-
-
-    
     {% block content %}
 
     {% endblock %}

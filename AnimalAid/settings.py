@@ -123,5 +123,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 # STATIC_ROOt = ''
-STATIC_URL = '/static/site/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [str(BASE_DIR / "static")]

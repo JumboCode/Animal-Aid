@@ -12,7 +12,7 @@
     <script src="{% static 'bootstrap/js/boostrap.min.js' %}"></script>
 
     {% block styles %}
-    <link href="{% static 'site/css/app.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static '/css/app.css' %}" rel="stylesheet" type="text/css" />
    
     {% endblock styles %}
 
@@ -21,10 +21,16 @@
 </head>
 
 <body>
+
   <nav> 
     <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
+    {% if user.is_authenticated %}
+    <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Logout</a></li>
+    {% else %}
     <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
-    <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li> </nav>
+    <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
+    {% endif %}
+   </nav>
   </nav>
     
     {% block content %}
