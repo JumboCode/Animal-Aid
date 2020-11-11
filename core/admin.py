@@ -1,6 +1,6 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import DogModel
+from .models import Dog
 
-admin.site.register(DogModel)
+admin.site.register(Dog)
