@@ -13,14 +13,6 @@ class DogModel(models.Model):
     evening_walk = models.BooleanField()
     night_walk   = models.BooleanField()
 
-    # TODO: maybe replace values with resp. variables?
-    walktimes = {
-        "morning" : False,
-        "midday"  : False,
-        "evening" : False,
-        "night"   : False,
-    }
-
     def walkable(self):
         return self.morning_walk or self.midday_walk or self.evening_walk or self.night_walk
     
@@ -34,9 +26,11 @@ class DogModel(models.Model):
         return self.image
     
     def get_walktimes(self):
-        return walktimes
+        return {
+            "morning": self.morning_walk,
+            "midday" : self.midday_walk,
+            "evening": self.evening_walk,
+            "night"  : self.night_walk
+        }
     
-    def update_walktimes(self, new_times):
-        return None
-
     
