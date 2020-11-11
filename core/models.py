@@ -6,8 +6,7 @@ class Dog(models.Model):
     name = models.CharField(max_length=30)
     location = models.CharField(max_length=100)
     zip_code = models.IntegerField() 
-    # TODO: Specify a path for uploaded pictures.
-    image = models.ImageField(upload_to=None)
+    image = models.ImageField(upload_to='dogs/')
 
     morning_walk = models.BooleanField()
     midday_walk  = models.BooleanField()
