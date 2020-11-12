@@ -8,17 +8,24 @@ class Dog(models.Model):
     zip_code = models.IntegerField() 
     image = models.ImageField(upload_to='dogs/')
 
-    morning_walk = models.BooleanField()
-    midday_walk  = models.BooleanField()
-    evening_walk = models.BooleanField()
-    night_walk   = models.BooleanField()
-    
+    nine_am   = models.BooleanField()
+    ten_am    = models.BooleanField()
+    eleven_am = models.BooleanField()
+    noon      = models.BooleanField()
+    one_pm    = models.BooleanField()
+    two_pm    = models.BooleanField()
+    three_pm  = models.BooleanField()
+    four_pm   = models.BooleanField()
+    five_pm   = models.BooleanField()
+
     class Meta:
         ordering = ['name']
 
     # Clean data.
     def clean(self):
-        if not (self.morning_walk or self.midday_walk or self.evening_walk or self.night_walk):
+        if not (self.nine_am or self.ten_am or self.eleven_am or self.noon or
+                self.one_pm or self.two_pm or self.three_pm or self.four_pm or
+                self.five_pm):
             raise ValidationError("You must specify at least one walk time.")
 
     def walkable(self):
@@ -35,10 +42,15 @@ class Dog(models.Model):
     
     def get_walktimes(self):
         return {
-            "morning": self.morning_walk,
-            "midday" : self.midday_walk,
-            "evening": self.evening_walk,
-            "night"  : self.night_walk
+            9  : self.nine_am,
+            10 : self.ten_am,
+            11 : self.eleven_am,
+            12 : self.noon,
+            13 : self.one_pm,
+            14 : self.two_pm,
+            15 : self.three_pm,
+            16 : self.four_pm,
+            17 : self.five_pm,
         }
     
     def __str__(self):
