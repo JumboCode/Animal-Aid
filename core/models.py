@@ -6,7 +6,7 @@ class Dog(models.Model):
     name = models.CharField(max_length=30)
     location = models.CharField(max_length=100)
     zip_code = models.IntegerField() 
-    image = models.ImageField(upload_to='dogs/')
+    image = models.ImageField(upload_to='static/img/dogs/')
 
     nine_am   = models.BooleanField()
     ten_am    = models.BooleanField()
