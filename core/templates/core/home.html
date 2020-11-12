@@ -1,13 +1,26 @@
 {% extends 'base.html' %}
+{% load static %}
 
 
 {% block title %}{{ block.super }} Home{% endblock %}
 
 
+{% block styles %}
+<link href="{% static '/css/home.css' %}" rel="stylesheet" type="text/css" />    
+{% endblock styles %}
 
 {% block content %}
-    <h1>Hello, World!</h1>
-    <p class="hello">Welcome to our home page</p>
+    <div class="row">
+        <div class="column" style="border: 3px solid #2B140D; width: 40%">
+        <h3>Text Col</h3>
+        </div>
+        <div class="column" style="border: 3px solid pink; width: 60%">
+        <h3>Img Col</h3>
+        </div>
+    </div>
+    <h2> Our Mission </h2>
+    <div class="missiontxt"> Animal Aid pairs volunteer undergraduate students with dogs in the nearby Medford/Somerville area to walk on a weekly basis. Walking is a semester-long commitment, and interested students are able to designate their top choices/schedules at the beginning of each semester. Animal Aid pairs volunteer undergraduate students with dogs in the nearby Medford/Somerville area to walk on a weekly basis. Walking is a semester-long commitment, and interested students are able to designate their top choices/schedules at the beginning of each semester. 
+    </div>
 {% endblock %}
 
 
