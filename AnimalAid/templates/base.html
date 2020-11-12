@@ -22,27 +22,33 @@
 <body>
 
   <nav class="navbar"> 
-    <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
-    {% if user.is_superuser %}
-    <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
-    <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
-    <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Logout</a></li>
-    <li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
-    {% else %}
-      {% if user.is_authenticated %}
-      <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Logout</a></li>
-      {% else %}
-      <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
-      <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
-      {% endif %}
-    {% endif %}
-
-   </nav>
+    <div class="navbar-left">
+    <a class="navbar-logo" href="{% url 'home' %}"><img src="{% static 'img/templogo.png' %}"></a>
+    </div>
+    <div class="navbar-right">
+        <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
+        {% if user.is_superuser %}
+        <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
+        <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
+        <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Logout</a></li>
+        <li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
+        {% else %}
+          {% if user.is_authenticated %}
+          <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Logout</a></li>
+          {% else %}
+          <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
+          <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
+          {% endif %}
+        {% endif %}
+    </div>
   </nav>
     
-    {% block content %}
+  {% block content %}
 
-    {% endblock %}
-    
+  {% endblock %}
+  
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+  {% block javascript %}{% endblock %}
 </body>
 </html>
