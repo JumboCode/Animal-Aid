@@ -23,7 +23,7 @@
 
   <nav class="navbar"> 
     <div class="navbar-left">
-    	<a class="navbar-logo" href="{% url 'home' %}"><img src="{% static 'img/templogo.png' %}"></a>
+    <a class="navbar-logo" href="{% url 'home' %}"><img src="{% static 'img/templogo.png' %}"></a>
     </div>
     <div class="navbar-right">
         <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
@@ -31,6 +31,7 @@
         <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
         <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
         <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Logout</a></li>
+        <li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
         {% else %}
           {% if user.is_authenticated %}
           <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Logout</a></li>

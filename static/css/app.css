@@ -192,7 +192,6 @@ body>.navbar-transparent {
 .form-box form .form-control:focus {
   z-index: 2;
 }
-
 .error {
     border: 1px solid red;
 }
