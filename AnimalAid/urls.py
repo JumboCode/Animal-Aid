@@ -30,6 +30,7 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="core/password/password_reset_confirm.html"), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='core/password/password_reset_complete.html'), name='password_reset_complete'), 
     path('login/', core_views.login, name="login"),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', core_views.signup, name = "signup"),
     path('results/', core_views.results, name="results"),
     url(r'^ajax/validate_username/$', forms.validate_username, name='validate_username'),
