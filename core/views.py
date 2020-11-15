@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
 from django.core.exceptions import PermissionDenied
+from core.models import Dog
 
 def home(request):
     return render(request, 'core/home.html')
@@ -40,18 +41,15 @@ def results(request):
     if request.user.is_authenticated and request.user.is_staff:
         if request.method == 'POST':
             # database logic
-            data = {'matches':[
-                {
-                    'dog_name': 'Fluffy',
-                    'walker': 'Tyler',
-                    'times': [6, 7, 3, 0, 1, 4, 6],
-                },
-                {
-                    'dog_name': 'Cuddles',
-                    'walker': 'Ann Marie',
-                    'times': [12, 12, 12, 1, 1, 2, 0],
-                },
-            ]}
+            dogs = Dog.objects.all()
+            data = {'matches':[]}
+            for dog in dogs:
+                data['matches'].append({
+                    'name': dog.get_name,
+                    'image': dog.get_image,
+                    'location': dog.get_location,
+                    'times': dog.get_walktimes,
+                })
             return render(request, 'core/results.html', data)
         else:
             # GET req to load page

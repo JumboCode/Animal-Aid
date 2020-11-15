@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block content %}
     <p></p>
     <form action="" method="post">
@@ -13,19 +14,30 @@
         <table style="background-color: rgba(214, 226, 217, 0.658);">
             <tr>
                 <th>Dog Name</th>
-                <th>Walker</th>
+                <th>Image</th>
+                <th>Location</th>
                 <th>Walk Times</th>
             </tr>
             {% for match in matches %}
             <tr>
                 <td>
-                    {{ match.dog_name}}
+                    {{ match.name }}
                 </td>
                 <td>
-                    {{ match.walker }}
+                    <img src="/{{ match.image }}">
                 </td>
                 <td>
-                    {{ match.times }}
+                    {{ match.location }}
+                </td>
+                <td>
+                    <table style="background-color: rgba(214, 226, 217, 0.658);">
+                        {% for key, value in match.times.items %}
+                            <tr>
+                                <td>{{ key }}: </td>
+                                <td>{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
                 </td>
             </tr>
             {% endfor %}
