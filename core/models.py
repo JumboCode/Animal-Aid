@@ -4,9 +4,17 @@ from django.core.validators import MinValueValidator
 class Form(models.Model):
 	form_name = models.CharField(max_length=100)
 	pubdate = models.DateTimeField('date pubbed')
+	field_ids = []
 
 	def __str__(self):
 		return self.form_name
+
+	# def insertChild(self, id):
+	# 	self.field_ids.append(id)
+
+	# # optional helper funcs
+	# def numChildren(self):
+	# 	return len(self.field_ids)
 
 
 class Field(models.Model):
@@ -14,7 +22,7 @@ class Field(models.Model):
 	forms = models.ForeignKey(Form, on_delete=models.CASCADE, default=1)
 
 	#setting up label name
-	label = models.CharField(max_length=200)
+	label = models.CharField(max_length=200, blank=True)
 
 	#determining which field type
 	#defining constants
@@ -38,3 +46,18 @@ class Field(models.Model):
 
 	#ordering - validator to make sure it stays positive (applies only when made into ModelForm)
 	order = models.IntegerField('field order', null=True, blank=True, validators=[MinValueValidator(0)])
+
+
+	#override save() function to insert id into parent's list
+	#PROBLEM - FIELD_IDS ALWAYS RESETS---------------------------------------------
+	# def save(self, *args, **kwargs):
+	# 	#insert ID into parent's list
+	# 	if self.visibleBool == True:
+	# 		parent = Form.objects.get(id=self.forms.id)
+	# 		parent.insertChild(self.id)
+
+	# 	super().save(*args, **kwargs)
+
+
+
+

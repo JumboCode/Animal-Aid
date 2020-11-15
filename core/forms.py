@@ -97,3 +97,16 @@ class LoginForm(AuthenticationForm):
     
     def confirm_login_allowed(self, user):
         pass
+
+
+
+# ################ FORM BUILDER #######################
+# class FormBuilderForm(forms.ModelForm):
+
+
+
+
+
+
+
+
