@@ -2,14 +2,51 @@
 {% load static %}
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>{% block title %}Animal Aid Website{% endblock %}</title>
-  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-  <link href="{% static 'css/app.css' %}" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block description %}{% endblock description %}">
+
+    <!-- <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+    {% block styles %}
+    <link href="{% static '/css/app.css' %}" rel="stylesheet" type="text/css" />
+   
+    {% endblock styles %}
+
+    {% block extrahead %}{% endblock extrahead %}
+    
 </head>
+
 <body>
+
+  <nav class="navbar"> 
+    <div class="navbar-left">
+    <a class="navbar-logo" href="{% url 'home' %}"><img src="{% static 'img/templogo.png' %}"></a>
+    </div>
+    <div class="navbar-right">
+        <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
+        {% if user.is_superuser %}
+        <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
+        <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
+        <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Logout</a></li>
+        <li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
+        {% else %}
+          {% if user.is_authenticated %}
+          <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Logout</a></li>
+          {% else %}
+          <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
+          <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
+          {% endif %}
+        {% endif %}
+    </div>
+  </nav>
+    
   {% block content %}
+
   {% endblock %}
+  
   <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
   <script src="{% static 'js/app.js' %}"></script>
   {% block javascript %}{% endblock %}
