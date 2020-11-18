@@ -48,7 +48,7 @@ def dog_gallery(request):
     for dog in dogs:
         dog_info = {}
         dog_info["name"] = dog.name
-        dog_info["image_path"] = dog.image.path 
+        dog_info["image_path"] = dog.image.url 
         dog_infos.append(dog_info)
     
     return render(request, 'core/dog.html', {'dogs': dog_infos})
