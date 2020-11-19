@@ -59,3 +59,24 @@ class Dog(models.Model):
 class Walker(models.Model):
     class Meta:
         ordering = ['name']
+        
+    name = models.CharField(max_length=30)
+    email = models.CharField(max_length=100)
+    phone_number = models.IntegerField(max_length=100)
+    
+    dog_1 = models.CharField(max_length=30)
+    dog_2 = models.CharField(max_length=30)
+    dog_3 = models.CharField(max_length=30)
+    dog_4 = models.CharField(max_length=30)
+    dog_5 = models.CharField(max_length=30)
+    
+    nine_am   = models.BooleanField()
+    ten_am    = models.BooleanField()
+    eleven_am = models.BooleanField()
+    noon      = models.BooleanField()
+    one_pm    = models.BooleanField()
+    two_pm    = models.BooleanField()
+    three_pm  = models.BooleanField()
+    four_pm   = models.BooleanField()
+    five_pm   = models.BooleanField()
+    
