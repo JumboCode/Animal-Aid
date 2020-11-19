@@ -56,3 +56,6 @@ class Dog(models.Model):
     def __str__(self):
         return self.name
 
+class Walker(models.Model):
+    class Meta:
+        ordering = ['name']
