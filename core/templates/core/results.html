@@ -10,13 +10,28 @@
 
     <h1>Results</h1>
 
+    <select>
+        <option>[dog name 1]</option>
+        <option>[dog name 2]</option>
+        <option>[dog name 3]</option>
+    </select>
+
+    <button type="button">Go!</button>
+    <p></p>
+
     {% if matches %}
         <table style="background-color: rgba(214, 226, 217, 0.658);">
             <tr>
                 <th>Dog Name</th>
                 <th>Image</th>
                 <th>Location</th>
-                <th>Walk Times</th>
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
             </tr>
             {% for match in matches %}
             <tr>
@@ -31,12 +46,13 @@
                 </td>
                 <td>
                     <table style="background-color: rgba(214, 226, 217, 0.658);">
+                        <ul>
                         {% for key, value in match.times.items %}
-                            <tr>
-                                <td>{{ key }}: </td>
-                                <td>{{ value }}</td>
-                            </tr>
+                            {% if value %}
+                                <li>{{ key }}</li>
+                            {% endif %}
                         {% endfor %}
+                        </ul>
                     </table>
                 </td>
             </tr>
