@@ -3,22 +3,27 @@
 {% load static %}
 {% block content %}
     <p></p>
-    <form action="" method="post">
-        {% csrf_token %}
-        <button type="submit" name="run_matcher" id="run_matcher">Run Matcher</button>
-    </form>
 
     <h1>Results</h1>
 
-    <select>
-        <option>[dog name 1]</option>
-        <option>[dog name 2]</option>
-        <option>[dog name 3]</option>
-    </select>
+    <form action="" method="post">
+        {% csrf_token %}
 
-    <button type="button">Go!</button>
+        <!-- Dropdown menu -->
+        <select id="dog_select" name="dog_select">
+            <option>All dogs</option>
+            {% for dog in dog_names %}
+                <option>{{ dog.name }}</option>
+            {% endfor %}
+        </select> 
+
+        <!-- Button to ilter by dog name -->
+        <button type="submit" name="filter_dog" id="filter_dog">Go!</button>
+    </form>
+
     <p></p>
 
+    <!-- Display matches -->
     {% if matches %}
         <table style="background-color: rgba(214, 226, 217, 0.658);">
             <tr>
