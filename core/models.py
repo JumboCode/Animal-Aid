@@ -62,13 +62,13 @@ class Walker(models.Model):
         
     name = models.CharField(max_length=30)
     email = models.CharField(max_length=100)
-    phone_number = models.IntegerField(max_length=100)
+    phone_number = models.IntegerField()
     
-    dog_1 = models.CharField(max_length=30)
-    dog_2 = models.CharField(max_length=30)
-    dog_3 = models.CharField(max_length=30)
-    dog_4 = models.CharField(max_length=30)
-    dog_5 = models.CharField(max_length=30)
+    dog_1 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog1")
+    dog_2 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog2")
+    dog_3 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog3")
+    dog_4 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog4")
+    dog_5 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog5")
     
     nine_am   = models.BooleanField()
     ten_am    = models.BooleanField()
@@ -79,4 +79,6 @@ class Walker(models.Model):
     three_pm  = models.BooleanField()
     four_pm   = models.BooleanField()
     five_pm   = models.BooleanField()
-    
+   
+    def __str__(self):
+        return self.name
