@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ form.title }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        {% for field in form.fields %}
+        <p>
+            {{ field.prompt }}<br>
+            {% if field.type == 'TF' %}
+                <input type="text" name={{ field.id }}><br>
+            {% elif field.type == 'NM' %}
+                <input type="number" name={{ field.id }}><br>
+            {% elif field.type == 'CL' %}
+                {% for option in field.options %}
+                    <input type="checkbox" name={{ field.id }} id={{ option }}>
+                    <label for={{ option }}>{{ option }}</label><br>
+                {% endfor %}
+            {% elif field.type == 'DD' %}
+                <select name={{ field.id }}>
+                    {% for option in field.options %}
+                        <option>{{ option }}</option>
+                    {% endfor %}
+                </select><br>
+            {% endif %}
+        </p>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
