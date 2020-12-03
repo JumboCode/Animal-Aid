@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
 from django.core.exceptions import PermissionDenied
+from core.models import Form
 
 def home(request):
     return render(request, 'core/home.html')
@@ -58,3 +59,39 @@ def results(request):
             return render(request, 'core/results.html')
     else:
         raise PermissionDenied()
+
+def form_builder_view(request):
+    if request.method == 'POST':
+        built_form = Form.objects.get(form_name=request.POST.get('form'))
+
+        form_data = {
+            'title': built_form.form_name,
+            'fields': []
+        }
+        for field in built_form.field.all():
+            form_data['fields'].append ({ 
+                'id': field.id,
+                'prompt': field.label,
+                'type': field.formType,
+                'options': field.options.split(','),
+                'order': field.order,
+            })
+        form_data['fields'].sort(key=by_id)
+        return render(request, 'core/form_builder.html', {'form': form_data})
+    else:
+        form_list = Form.objects.all()
+        form_data = {
+            'title': 'Choose Your Form:',
+            'fields': [{
+                'id': 'form',
+                'prompt': 'Form',
+                'type': 'DD',
+                'options': [],
+            }]
+        }
+        for form in form_list:
+            form_data['fields'][0]['options'].append(form.form_name)
+        return render(request, 'core/form_builder.html', {'form': form_data})
+
+def by_id(field_entry):
+    return field_entry['order']

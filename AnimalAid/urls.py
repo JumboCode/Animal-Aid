@@ -33,6 +33,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', core_views.signup, name = "signup"),
     path('results/', core_views.results, name="results"),
+    path('formbuilder/', core_views.form_builder_view, name="formbuilder"),
     url(r'^ajax/validate_username/$', forms.validate_username, name='validate_username'),
     url(r'^ajax/validate_password1/$', forms.validate_password1, name='validate_password1'),
     url(r'^ajax/validate_password2/$', forms.validate_password2, name='validate_password2'),
