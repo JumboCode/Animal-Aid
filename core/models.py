@@ -2,11 +2,18 @@ from django.db import models
 from django.core.validators import MinValueValidator
 
 # class FormDisplay(models.Model):
+# 	displayed_form_id = models.IntegerField('displayed form id', default=1)
+
+# 	def return_id(self):
+# 		return displayed_form_id
 
 
 class Form(models.Model):
+	# # make Form a child of FormDisplay
+	# form_display = models.ForeignKey(FormDisplay, on_delete=models.CASCADE, default=1)
+
 	form_name = models.CharField(max_length=100)
-	pubdate = models.DateTimeField('date pubbed')
+	pubdate = models.DateTimeField('date published')
 
 	#true if this form is intended for walker model
 	walker_bool = models.BooleanField('form for walker info', default=1)
@@ -51,8 +58,10 @@ class Field(models.Model):
 	visibleBool = models.BooleanField('field visible', default=1)
 
 	#ordering - validator to make sure it stays positive (applies only when made into ModelForm)
-	order = models.IntegerField('field order', null=True, blank=True, validators=[MinValueValidator(0)])
+	order = models.IntegerField('field order', null=True, blank=True, validators=[MinValueValidator(0)], default=1)
 
+
+# model to hold results for generic purposes
 # class Result(models.Model):
 # 	#which form's data we're storing
 # 	form_id = models.PositiveIntegerField('form id')
