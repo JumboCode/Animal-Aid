@@ -61,9 +61,29 @@ def results(request):
         raise PermissionDenied()
 
 def form_builder_view(request):
-    if request.method == 'POST':
-        built_form = Form.objects.get(form_name=request.POST.get('form'))
+    # just choosing first form in database, need to make solution to allow admin to select which form to display
+    built_form = Form.objects.all()[0]
 
+    if request.method == 'POST':
+        ids = []
+        for field in built_form.field.all():
+            ids.append(field.id)
+        
+        for field_id in ids:
+            if built_form.field.get(id=field_id).formType == 'CL':
+                response = ''
+                for option in built_form.field.get(id=field_id).options.split(','):
+                    print(request.POST.get(str(field_id) + str(option)))
+                    if request.POST.get(str(field_id) + str(option)) == 'On':
+                        response = response, option
+            else:
+                response = request.POST.get(str(field_id))
+
+            # not storing data yet just getting from user input
+            print(built_form.field.get(id=field_id).label, ':', response)
+        return redirect(home)
+
+    else:
         form_data = {
             'title': built_form.form_name,
             'fields': []
@@ -77,20 +97,6 @@ def form_builder_view(request):
                 'order': field.order,
             })
         form_data['fields'].sort(key=by_id)
-        return render(request, 'core/form_builder.html', {'form': form_data})
-    else:
-        form_list = Form.objects.all()
-        form_data = {
-            'title': 'Choose Your Form:',
-            'fields': [{
-                'id': 'form',
-                'prompt': 'Form',
-                'type': 'DD',
-                'options': [],
-            }]
-        }
-        for form in form_list:
-            form_data['fields'][0]['options'].append(form.form_name)
         return render(request, 'core/form_builder.html', {'form': form_data})
 
 def by_id(field_entry):

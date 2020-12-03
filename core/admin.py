@@ -15,6 +15,9 @@ class FormAdmin(admin.ModelAdmin):
 
 	inlines = [FieldInLine]
 
+	#add list display
+	list_display = ('form_name', 'pubdate', 'display_form', 'form_id')
+
 # Other method - change the template
 # class FormBuilderAdmin(admin.ModelAdmin):
 # 	list_display = 
