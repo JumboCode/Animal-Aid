@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^ajax/validate_username/$', forms.validate_username, name='validate_username'),
     url(r'^ajax/validate_password1/$', forms.validate_password1, name='validate_password1'),
     url(r'^ajax/validate_password2/$', forms.validate_password2, name='validate_password2'),
+    url('dog_gallery/', core_views.dog_gallery, name="dog_gallery"),
     path('', core_views.home, name="home"),
-
+    
 ]
