@@ -27,11 +27,12 @@
     </div>
     <div class="navbar-right">
         <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
-        {% if user.is_superuser %}
+	<li {% if active_link == "dog" %}class="active"{% endif %}><a href="{% url 'dog_gallery' %}">Dog Gallery</a></li>
+	{% if user.is_superuser %}
         <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
         <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
         <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Logout</a></li>
-        <li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
+	<li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
         {% else %}
           {% if user.is_authenticated %}
           <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Logout</a></li>
