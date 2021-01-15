@@ -70,17 +70,24 @@ def form_builder_view(request):
             ids.append(field.id)
         
         for field_id in ids:
-            if built_form.field.get(id=field_id).formType == 'CL':
+            curr_field = built_form.field.get(id=field_id)
+            if curr_field.formType == 'CL':
                 response = ''
-                for option in built_form.field.get(id=field_id).options.split(','):
-                    print(request.POST.get(str(field_id) + str(option)))
+                for option in curr_field.options.split(','):
                     if request.POST.get(str(field_id) + str(option)) == 'On':
                         response = response, option
             else:
                 response = request.POST.get(str(field_id))
+            
+            if 'name' in curr_field.label.lower():
+                print('Found name:')
+            elif 'email' in curr_field.label.lower():
+                print('Found email:')
+            elif 'phone' in curr_field.label.lower():
+                print('Found phone #:')
 
             # not storing data yet just getting from user input
-            print(built_form.field.get(id=field_id).label, ':', response)
+            print(curr_field.label, ':', response)
         return redirect(home)
 
     else:
