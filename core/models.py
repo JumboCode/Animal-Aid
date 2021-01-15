@@ -57,6 +57,30 @@ class Dog(models.Model):
     def __str__(self):
         return self.name
 
+
+class Match(models.Model):
+    dog    = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog")
+    
+    # Walker model is not in here yet
+    # walker = models.ForeignKey(Walker, on_delete=models.SET_NULL, blank=True, null=True, related_name="walker")
+    day    = models.CharField(max_length=10)
+    time   = models.PositiveIntegerField()
+
+    def get_dog(self):
+        return self.dog
+
+    # def get_walker(self):
+    #     return self.walker
+    
+    def get_day(self):
+        return self.day 
+
+    def get_time(self):
+        return self.time
+
+    def __str__(self):
+        return self.dog.get_name() + " walked by " # + self.walker.get_name()
+
 class Walker(models.Model):
     class Meta:
         ordering = ['name']

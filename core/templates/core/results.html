@@ -1,31 +1,64 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block content %}
     <p></p>
-    <form action="" method="post">
-        {% csrf_token %}
-        <button type="submit" name="run_matcher" id="run_matcher">Run Matcher</button>
-    </form>
 
     <h1>Results</h1>
 
+    <form action="" method="post">
+        {% csrf_token %}
+
+        <!-- Dropdown menu -->
+        <select id="dog_select" name="dog_select">
+            <option>All dogs</option>
+            {% for dog in dog_names %}
+                <option>{{ dog.name }}</option>
+            {% endfor %}
+        </select> 
+
+        <!-- Button to ilter by dog name -->
+        <button type="submit" name="filter_dog" id="filter_dog">Go!</button>
+    </form>
+
+    <p></p>
+
+    <!-- Display matches -->
     {% if matches %}
         <table style="background-color: rgba(214, 226, 217, 0.658);">
             <tr>
                 <th>Dog Name</th>
-                <th>Walker</th>
-                <th>Walk Times</th>
+                <th>Image</th>
+                <th>Location</th>
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
             </tr>
             {% for match in matches %}
             <tr>
                 <td>
-                    {{ match.dog_name}}
+                    {{ match.name }}
                 </td>
                 <td>
-                    {{ match.walker }}
+                    <img src="/{{ match.image }}">
                 </td>
                 <td>
-                    {{ match.times }}
+                    {{ match.location }}
+                </td>
+                <td>
+                    <table style="background-color: rgba(214, 226, 217, 0.658);">
+                        <ul>
+                        {% for key, value in match.times.items %}
+                            {% if value %}
+                                <li>{{ key }}</li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    </table>
                 </td>
             </tr>
             {% endfor %}
