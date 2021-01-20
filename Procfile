@@ -1,2 +1,2 @@
 web: gunicorn AnimalAid.wsgi
-release: python3 manage.py migrate
+release: python -m pip install Pillow & python3 manage.py migrate & wait -n
