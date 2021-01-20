@@ -31,6 +31,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["https://hidden-taiga-39776.herokuapp.com", "127.0.0.1"]
 
+DATABASES = { 
+    'default': {
+        'ENGINE': 'django.db.backend.postgregsql',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+    }
+}
 
 # Application definition
 
@@ -95,9 +101,14 @@ WSGI_APPLICATION = 'AnimalAid.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'NAME': 'd9gut0bmnueagd',
+        'HOST': "ec2-18-211-86-133.compute-1.amazonaws.com",
+        'PORT': 5432,
+        'USER': 'sndqwtgrrlmsnr',
+        'PASSWORD': '148325bf7a76119684132e95e0fc29cf91dff22aacb6ded4d0b9f43baea6c32f'
     }
 }
+# postgres://sndqwtgrrlmsnr:148325bf7a76119684132e95e0fc29cf91dff22aacb6ded4d0b9f43baea6c32f@ec2-18-211-86-133.compute-1.amazonaws.com:5432/d9gut0bmnueagd
 
 
 # Password validation
