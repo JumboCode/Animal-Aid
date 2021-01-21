@@ -29,7 +29,7 @@ SECRET_KEY = '***REMOVED***'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["https://hidden-taiga-39776.herokuapp.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["https://tuftsanimalaid.herokuapp.com", "127.0.0.1"]
 
 DATABASES = { 
     'default': {
@@ -108,12 +108,10 @@ DATABASES = {
         'PASSWORD': '148325bf7a76119684132e95e0fc29cf91dff22aacb6ded4d0b9f43baea6c32f'
     }
 }
-# postgres://sndqwtgrrlmsnr:148325bf7a76119684132e95e0fc29cf91dff22aacb6ded4d0b9f43baea6c32f@ec2-18-211-86-133.compute-1.amazonaws.com:5432/d9gut0bmnueagd
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
+APPEND_SLASH = False
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
