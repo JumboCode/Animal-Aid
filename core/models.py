@@ -4,20 +4,29 @@ from django.conf import settings
 
 # Create your models here.
 class Dog(models.Model):
-    name = models.CharField(max_length=30)
-    location = models.CharField(max_length=100)
-    zip_code = models.IntegerField() 
-    image = models.ImageField(upload_to='static/img/dogs/')
+    # location = models.CharField(max_length=100)
+    # zip_code = models.IntegerField() 
+    # image = models.ImageField(upload_to='static/img/dogs/')
 
-    nine_am   = models.BooleanField()
-    ten_am    = models.BooleanField()
-    eleven_am = models.BooleanField()
-    noon      = models.BooleanField()
-    one_pm    = models.BooleanField()
-    two_pm    = models.BooleanField()
-    three_pm  = models.BooleanField()
-    four_pm   = models.BooleanField()
-    five_pm   = models.BooleanField()
+    #Updated Fields
+    dog_name = models.CharField(max_length=30)
+    info = models.CharField(max_length=200)
+    owner_name = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
+    image = models.ImageField(height_field=350, max_length=100)
+
+    
+
+
+    # nine_am   = models.BooleanField()
+    # ten_am    = models.BooleanField()
+    # eleven_am = models.BooleanField()
+    # noon      = models.BooleanField()
+    # one_pm    = models.BooleanField()
+    # two_pm    = models.BooleanField()
+    # three_pm  = models.BooleanField()
+    # four_pm   = models.BooleanField()
+    # five_pm   = models.BooleanField()
 
     class Meta:
         ordering = ['name']
