@@ -28,7 +28,7 @@ SECRET_KEY = '***REMOVED***'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["animalaidtufts.herokuapp.com", "0.0.0.0"]
+ALLOWED_HOSTS = ["animalaidtufts.herokuapp.com", "0.0.0.0", "127.0.0.1"]
 
 
 # Application definition
@@ -65,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
 
 ROOT_URLCONF = 'AnimalAid.urls'
