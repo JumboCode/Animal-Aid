@@ -93,13 +93,22 @@ WSGI_APPLICATION = 'AnimalAid.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': str(BASE_DIR / 'db.sqlite3'),
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'NAME': 'dfdj445f5e079o',
+        'HOST': "ec2-34-202-88-122.compute-1.amazonaws.com",
+        'PORT': 5432,
+        'USER': 'fmhzcysxtzamqb',
+        'PASSWORD': '67fae76176e05933fa21cbcd15af5c91648617331a4364b0c83743a73b9d0c6c'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
