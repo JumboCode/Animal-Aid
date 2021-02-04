@@ -15,15 +15,27 @@ class Dog(models.Model):
     # address = models.CharField(max_length=100)
     # image = models.ImageField(height_field=350, max_length=100)
     
-    nine_am   = models.BooleanField()
-    ten_am    = models.BooleanField()
-    eleven_am = models.BooleanField()
-    noon      = models.BooleanField()
-    one_pm    = models.BooleanField()
-    two_pm    = models.BooleanField()
-    three_pm  = models.BooleanField()
-    four_pm   = models.BooleanField()
-    five_pm   = models.BooleanField()
+    sunday_nine_am   = models.BooleanField()
+    sunday_ten_am    = models.BooleanField()
+    sunday_eleven_am = models.BooleanField()
+    sunday_noon      = models.BooleanField()
+    sunday_one_pm    = models.BooleanField()
+    sunday_two_pm    = models.BooleanField()
+    sunday_three_pm  = models.BooleanField()
+    sunday_four_pm   = models.BooleanField()
+    sunday_five_pm   = models.BooleanField()
+
+    monday_nine_am   = models.BooleanField()
+    monday_ten_am    = models.BooleanField()
+    monday_eleven_am = models.BooleanField()
+    monday_noon      = models.BooleanField()
+    monday_one_pm    = models.BooleanField()
+    monday_two_pm    = models.BooleanField()
+    monday_three_pm  = models.BooleanField()
+    monday_four_pm   = models.BooleanField()
+    monday_five_pm   = models.BooleanField()
+
+
 
     class Meta:
         ordering = ['name']
