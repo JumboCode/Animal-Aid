@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Dog, Walker
+from .models import Dog, Walker, Match
 
 class Dogs(admin.ModelAdmin):
     list_display= ('name', 'location', 'zip_code')
@@ -9,3 +9,5 @@ class Dogs(admin.ModelAdmin):
 admin.site.register(Dog, Dogs)
 
 admin.site.register(Walker)
+
+admin.site.register(Match)
