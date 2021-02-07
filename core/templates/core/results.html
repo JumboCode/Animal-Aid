@@ -60,6 +60,17 @@
                         </ul>
                     </table>
                 </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <a href="{% url 'edit_dog' %}?q={{ match.name }}">
+                        edit
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </table>

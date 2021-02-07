@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
 from .models import Dog
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, EmptyResultSet
 from core.models import Dog
 
 def home(request):
@@ -107,5 +107,29 @@ def results(request):
                     'name': dog.get_name,
                 })
             return render(request, 'core/results.html', data) 
+    else:
+        raise PermissionDenied()
+
+def edit_dog(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        # POST request
+        if request.method == 'POST':
+            return redirect('home')
+        else:
+            dog_name = request.GET.get('q', '')
+            if not Dog.objects.filter(name=dog_name).exists():
+                return redirect('results')
+            selected_dog = Dog.objects.get(name=dog_name)
+            data = {
+                'dog': {
+                    'name': selected_dog.get_name,
+                    'image': selected_dog.get_image,
+                    'location': selected_dog.get_location,
+                    'times': selected_dog.get_walktimes,
+                },
+                'days': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                'hours': ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm'],
+            }
+            return render(request, 'core/edit_dog.html', data)
     else:
         raise PermissionDenied()
