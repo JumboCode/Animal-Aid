@@ -3,8 +3,8 @@ from django.contrib import admin
 # Register your models here.
 from .models import Dog, Walker
 
-class Dogs(admin.ModelAdmin):
-    list_display= ('name', 'location', 'zip_code')
+# class Dogs(admin.ModelAdmin):
+#     list_display= ('name', 'location', 'zip_code')
 
 
 class DogModelForm(forms.modelForm):
@@ -28,6 +28,6 @@ class DogModelAdmin(admin.ModelAdmin)
 			}),
 		)
   
-admin.site.register(Dog, Dogs, DogModelAdmin)
+admin.site.register(Dog, DogModelAdmin)
 
 admin.site.register(Walker)
