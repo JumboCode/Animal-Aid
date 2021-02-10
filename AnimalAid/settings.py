@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os, time, sys
 from pathlib import Path
+from .aws.conf import *
+
 import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
 ]
 
 
@@ -94,12 +97,6 @@ WSGI_APPLICATION = 'AnimalAid.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': str(BASE_DIR / 'db.sqlite3'),
-#     }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -150,11 +147,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = (
-  os.path.join(BASE_DIR, 'static/'),
-)
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = (
+#     (os.path.join(BASE_DIR, 'static')),
+# )
 
-LOGOUT_REDIRECT_URL = '/'
-django_heroku.settings(locals())
+# # AWS_STORAGE_BUCKET_NAME = 'animal-aid-local'
+# # STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+# # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+# STATIC_URL = 'http://' + AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com/'
+
+# LOGOUT_REDIRECT_URL = '/'
+# https://stackoverflow.com/questions/61111988/django-keeps-using-wrong-storage-backend-when-trying-to-upload-static-files-to-s
+# django_heroku.settings(locals(), staticfiles=False)
