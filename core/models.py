@@ -15,6 +15,8 @@ class Dog(models.Model):
     # owner_email
     # owner_phone
     address = models.CharField(max_length=100)
+    # image = models.ImageField()
+    # need to install pillow for image field
     
     sunday_nine_am   = models.BooleanField()
     sunday_ten_am    = models.BooleanField()
@@ -46,7 +48,7 @@ class Dog(models.Model):
     tuesday_four_pm   = models.BooleanField()
     tuesday_five_pm   = models.BooleanField()
 
-	wednesday_nine_am   = models.BooleanField()
+    wednesday_nine_am   = models.BooleanField()
     wednesday_ten_am    = models.BooleanField()
     wednesday_eleven_am = models.BooleanField()
     wednesday_noon      = models.BooleanField()
@@ -87,7 +89,7 @@ class Dog(models.Model):
     saturday_five_pm   = models.BooleanField()
 
     class Meta:
-        ordering = ['name']
+        ordering = ['dog_name']
 
     # Clean data.
     # TODO: Check all times of all days
@@ -123,7 +125,7 @@ class Dog(models.Model):
     #     }
     
     def __str__(self):
-        return self.name
+        return self.dog_name
 
 
 class Match(models.Model):
@@ -193,7 +195,7 @@ class Walker(models.Model):
     tuesday_four_pm   = models.BooleanField()
     tuesday_five_pm   = models.BooleanField()
 
-	wednesday_nine_am   = models.BooleanField()
+    wednesday_nine_am   = models.BooleanField()
     wednesday_ten_am    = models.BooleanField()
     wednesday_eleven_am = models.BooleanField()
     wednesday_noon      = models.BooleanField()
