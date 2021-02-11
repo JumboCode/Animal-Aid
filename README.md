@@ -22,6 +22,7 @@ Install all dependencies:
 Run migrations:
 
     cd src
+    python3 manage.py makemigrations
     python3 manage.py migrate
     
 Run Server and view webpage:
