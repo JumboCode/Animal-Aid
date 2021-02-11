@@ -21,7 +21,7 @@ class DogAdmin(admin.ModelAdmin):
 
     #fields when opening a single dogmodel
     fieldsets = [
-        ('Dog Info', {'fields': ('dog_name', 'dog_info')}),
+        ('Dog Info', {'fields': ('dog_name', 'dog_info', 'image')}),
 
         ('Owner Info', {'fields': ('owner_name', 'address')}),
 
