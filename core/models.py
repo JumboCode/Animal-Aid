@@ -15,7 +15,7 @@ class Dog(models.Model):
     # owner_email
     # owner_phone
     address = models.CharField(max_length=100)
-    image = models.ImageField()
+    # image = models.ImageField()
     # need to install pillow for image field
     
     sunday_nine_am   = models.BooleanField(verbose_name="9:00 AM")
