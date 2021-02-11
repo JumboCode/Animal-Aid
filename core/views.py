@@ -3,9 +3,9 @@ from .forms import CustomUserCreationForm, LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
-from .models import Dog
+from .models import Dog, Match
 from django.core.exceptions import PermissionDenied
-from core.models import Dog
+from core.models import Dog, Match
 
 def home(request):
     return render(request, 'core/home.html')
@@ -78,6 +78,16 @@ def results(request):
                         'times': dog.get_walktimes,
                     })
             
+            # print match
+            # FOR TESTING
+            # TODO: delete later
+            matches = Match.objects.all()
+            for match in matches:
+                print(match)
+                print(match.get_day)
+                print(match.get_time)
+            
+
             # look for dog with name == dog query
             else:
                 for dog in dogs:
