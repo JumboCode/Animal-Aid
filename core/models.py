@@ -1,33 +1,43 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 
-# Create your models here.
+# constants to control how many walking times are used
+DAYS = 7
+HOURS = 9
+
 class Dog(models.Model):
     name = models.CharField(max_length=30)
     location = models.CharField(max_length=100)
     zip_code = models.IntegerField() 
-    image = models.ImageField(upload_to='static/img/dogs/')
+    image = models.ImageField(upload_to='static/img/dogs/', null=True)
+    visible = models.BooleanField(default=True)
 
-    nine_am   = models.BooleanField()
-    ten_am    = models.BooleanField()
-    eleven_am = models.BooleanField()
-    noon      = models.BooleanField()
-    one_pm    = models.BooleanField()
-    two_pm    = models.BooleanField()
-    three_pm  = models.BooleanField()
-    four_pm   = models.BooleanField()
-    five_pm   = models.BooleanField()
+    # Array of walk times as booleans
+    
+    def blank_times():
+        times = []
+        for day in range(DAYS * HOURS):
+            times.append(False)
+        return times
+
+    times = ArrayField(
+        models.BooleanField(),
+        size=DAYS*HOURS,
+        default=blank_times,
+    )
 
     class Meta:
         ordering = ['name']
 
+    # TODO create clean function using new walk time scheme
     # Clean data.
     def clean(self):
-        if not (self.nine_am or self.ten_am or self.eleven_am or self.noon or
+        '''if not (self.nine_am or self.ten_am or self.eleven_am or self.noon or
                 self.one_pm or self.two_pm or self.three_pm or self.four_pm or
                 self.five_pm):
-            raise ValidationError("You must specify at least one walk time.")
+            raise ValidationError("You must specify at least one walk time.")'''
 
     def walkable(self):
         return self.morning_walk or self.midday_walk or self.evening_walk or self.night_walk
@@ -37,27 +47,26 @@ class Dog(models.Model):
 
     def get_location(self):
         return self.location
+        
+    def get_zip(self):
+        return self.zip_code
     
     def get_image(self):
         return self.image
+
+    def get_visible(self):
+        return self.visible
     
+    # takes 2D ArrayField times and maps to 3D array for use in front-end
     def get_walktimes(self):
-        return {
-            9  : self.nine_am,
-            10 : self.ten_am,
-            11 : self.eleven_am,
-            12 : self.noon,
-            13 : self.one_pm,
-            14 : self.two_pm,
-            15 : self.three_pm,
-            16 : self.four_pm,
-            17 : self.five_pm,
-        }
+        out_times = []
+        for day in range(DAYS):
+            out_times.append(self.times[day * HOURS : day * HOURS + HOURS])
+        return out_times
     
     def __str__(self):
         return self.name
-
-
+    
 class Match(models.Model):
     dog    = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog")
     
@@ -87,63 +96,53 @@ class Walker(models.Model):
         
     name = models.CharField(max_length=30)
     email = models.CharField(max_length=100)
-    phone_number = models.IntegerField()
+    phone_number = models.PositiveBigIntegerField(blank=True, null=True)
     
-    dog_1 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog1")
+    def blank_choices():
+        return []
+
+    dog_choices = ArrayField(
+        models.CharField(max_length=16),
+        default=blank_choices,
+    )
+
+    '''dog_1 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog1")
     dog_2 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog2")
     dog_3 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog3")
     dog_4 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog4")
-    dog_5 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog5")
+    dog_5 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog5")'''
     
-    dog_1_nine_am   = models.BooleanField()
-    dog_1_ten_am    = models.BooleanField()
-    dog_1_eleven_am = models.BooleanField()
-    dog_1_noon      = models.BooleanField()
-    dog_1_one_pm    = models.BooleanField()
-    dog_1_two_pm    = models.BooleanField()
-    dog_1_three_pm  = models.BooleanField()
-    dog_1_four_pm   = models.BooleanField()
-    dog_1_five_pm   = models.BooleanField()
-    
-    dog_2_nine_am   = models.BooleanField()
-    dog_2_ten_am    = models.BooleanField()
-    dog_2_eleven_am = models.BooleanField()
-    dog_2_noon      = models.BooleanField()
-    dog_2_one_pm    = models.BooleanField()
-    dog_2_two_pm    = models.BooleanField()
-    dog_2_three_pm  = models.BooleanField()
-    dog_2_four_pm   = models.BooleanField()
-    dog_2_five_pm   = models.BooleanField()
-    
-    dog_3_nine_am   = models.BooleanField()
-    dog_3_ten_am    = models.BooleanField()
-    dog_3_eleven_am = models.BooleanField()
-    dog_3_noon      = models.BooleanField()
-    dog_3_one_pm    = models.BooleanField()
-    dog_3_two_pm    = models.BooleanField()
-    dog_3_three_pm  = models.BooleanField()
-    dog_3_four_pm   = models.BooleanField()
-    dog_3_five_pm   = models.BooleanField()
-    
-    dog_4_nine_am   = models.BooleanField()
-    dog_4_ten_am    = models.BooleanField()
-    dog_4_eleven_am = models.BooleanField()
-    dog_4_noon      = models.BooleanField()
-    dog_4_one_pm    = models.BooleanField()
-    dog_4_two_pm    = models.BooleanField()
-    dog_4_three_pm  = models.BooleanField()
-    dog_4_four_pm   = models.BooleanField()
-    dog_4_five_pm   = models.BooleanField()
-    
-    dog_5_nine_am   = models.BooleanField()
-    dog_5_ten_am    = models.BooleanField()
-    dog_5_eleven_am = models.BooleanField()
-    dog_5_noon      = models.BooleanField()
-    dog_5_one_pm    = models.BooleanField()
-    dog_5_two_pm    = models.BooleanField()
-    dog_5_three_pm  = models.BooleanField()
-    dog_5_four_pm   = models.BooleanField()
-    dog_5_five_pm   = models.BooleanField()
+    # Array of walk times as booleans
+    def blank_times():
+        times = []
+        for day in range(DAYS * HOURS):
+            times.append(False)
+        return times
+
+    times = ArrayField(
+        models.BooleanField(),
+        size=DAYS*HOURS,
+        default=blank_times,
+    )
+
+    def get_name(self):
+        return self.name
+
+    def get_email(self):
+        return self.email
+
+    def get_phone_number(self):
+        return self.phone_number
+
+    def get_dog_choices(self):
+        return self.dog_choices
+
+    # takes 2D ArrayField times and maps to 3D array for use in front-end
+    def get_walktimes(self):
+        out_times = []
+        for day in range(DAYS):
+            out_times.append(self.times[day * HOURS : day * HOURS + HOURS])
+        return out_times
    
     def __str__(self):
         return self.name
