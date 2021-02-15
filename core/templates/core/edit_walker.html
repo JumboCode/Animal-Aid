@@ -68,12 +68,10 @@
         {% if data.saved %}
             <label for="save_walker" style="color: seagreen;">Profile Saved</label>
         {% endif %}
+        <br>
+        <button type="submit" name="cancel" id="cancel">Cancel</button>
     </form>
 
-    <!-- solution to get a link that matches the "save" button -->
-    <form action="{% url 'home' %}">
-        <input type="submit" value="Cancel" />
-    </form>
     <br>
 
     <script>
