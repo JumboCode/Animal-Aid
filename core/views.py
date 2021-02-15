@@ -51,6 +51,7 @@ def dog_gallery(request):
         if dog.get_visible():
             dog_info = {}
             dog_info["name"] = dog.name
+            # temp fix until we can display images reliably
             dog_info["image_path"] = ''#dog.image.url 
             dog_infos.append(dog_info)
     
@@ -266,32 +267,51 @@ def edit_walker(request):
         if phone_number == None:
             phone_number = ''
 
-        # POST request saves data to walker model
+        # POST request
         if request.method == 'POST':
-            walker.name = request.POST.get('walker_name')
-            walker.phone_number = request.POST.get('walker_phone')
-            chosen_times = []
-            for day in DAYS:
-                for hour in HOURS:
-                    chosen_times.append(request.POST.get(day + '-' + hour) == 'on')
-            walker.times = chosen_times
 
-            walker.dog_choices = []
-            for choice_num in range(PREF_COUNT):
-                dropdown_choice = request.POST.get(f'dog_select_{choice_num + 1}')
-                if Dog.objects.filter(name=dropdown_choice).exists():
-                    walker.dog_choices.append(Dog.objects.get(name=dropdown_choice).get_name())
-                else:
-                    walker.dog_choices.append(None)
+            # only save if save button was pressed
+            if 'save_walker' in request.POST:
 
-            walker.save()
+                # getting walker info from request
+                walker.name = request.POST.get('walker_name')
+                walker.phone_number = request.POST.get('walker_phone')
 
+                # iterate through checkboxes to fill out chosen_times
+                chosen_times = []
+                for day in DAYS:
+                    for hour in HOURS:
+                        chosen_times.append(request.POST.get(day + '-' + hour) == 'on')
+                walker.chosen_times = chosen_times
+
+                # iterate through dog preferences to fill out dog_choices
+                dog_choices = []
+                for choice_num in range(PREF_COUNT):
+                    dropdown_choice = request.POST.get(f'dog_select_{choice_num + 1}')
+
+                    # append chosen dog name to dog_choices
+                    if Dog.objects.filter(name=dropdown_choice).exists():
+                        dog_choices.append(Dog.objects.get(name=dropdown_choice).get_name())
+                        
+                    # if '----' is chosen for a dog pref, then the pref is saved as None
+                    else:
+                        dog_choices.append(None)
+                walker.dog_choices = dog_choices
+
+                walker.save()
+
+            # redirect to home if cancel button is pressed
+            elif 'cancel' in request.POST:
+                return redirect('home')
+
+        # getting dog names to display in pref dropdowns
         all_dogs = Dog.objects.all()
         visible_dog_names = []
         for dog in all_dogs:
-            if dog.get_visible():
+            if dog.get_visible(): # only displaying dogs which have visible = True
                 visible_dog_names.append(dog.get_name())
         
+        # helper array for Django template to loop through
         pref_nums = range(1, PREF_COUNT+1)
 
         data = {
