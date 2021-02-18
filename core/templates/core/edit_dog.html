@@ -20,23 +20,31 @@
         <input type="checkbox" name="dog_visible" id="dog_visible">
         <label for="dog_visible">Visible?</label>
         <br><br>
+
         <table style="background-color: rgba(204, 240, 252, 0.658); border: 1px solid black; border-collapse: collapse;">
 
-            <!-- iterate through days ['Monday', 'Tuesday', ...] -->
-            {% for day in data.days %}
-                <tr style="border: 1px solid black;">
-                    <td><h2>{{ day }}</h2></td>
-                    <!-- iterate through hours ['9:00am', '10:00am', ...] -->
-                    {% for hour in data.hours %}
-                        <td style="min-width: 120px;">
-                        <!-- checkbox naming scheme: "Thursday-2:00pm" -->
-                        <input type="checkbox" name="{{ day }}-{{ hour }}" id="{{ day }}-{{ hour }}">
-                        <label for="{{ day }}-{{ hour }}">{{ hour }}</label>
+            <!-- FOR HEADER - iterate through days ['Monday', 'Tuesday', ...] -->
+            <tr style="border: 1px solid black;">
+                {% for day in data.days %}
+                    <td><h2 style="text-align: center; min-width: 200px;">{{ day }}</h2></td>
+                {% endfor %}
+            </tr>
+            
+            <!-- iterate through hours ['9:00am', '10:00am', ...] -->
+            {% for hour in data.hours %}
+                <tr>
+                    <!-- iterate through days ['Monday', 'Tuesday', ...] -->
+                    {% for day in data.days %}
+                        <td>
+                            <!-- checkbox naming scheme: "Thursday-2:00pm" -->
+                            <input type="checkbox" name="{{ day }}-{{ hour }}" id="{{ day }}-{{ hour }}">
+                            <label for="{{ day }}-{{ hour }}">{{ hour }}</label>
                         </td>
                     {% endfor %}
                 </tr>
             {% endfor %}
         </table>
+        
         <br><br>
         <button type="submit" name="save_dog" id="save_dog">Save</button>
     </form>
