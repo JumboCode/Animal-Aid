@@ -29,21 +29,20 @@ class Dog(models.Model):
     )
 
     class Meta:
-        ordering = ['name']
+        ordering = ['dog_name']
 
-    # TODO create clean function using new walk time scheme
-    # Clean data.
-    def clean(self):
-        '''if not (self.nine_am or self.ten_am or self.eleven_am or self.noon or
-                self.one_pm or self.two_pm or self.three_pm or self.four_pm or
-                self.five_pm):
-            raise ValidationError("You must specify at least one walk time.")'''
+    # TODO: Check all times of all days
+    # def clean(self):
+    #     if not (self.nine_am or self.ten_am or self.eleven_am or self.noon or
+    #             self.one_pm or self.two_pm or self.three_pm or self.four_pm or
+    #             self.five_pm):
+    #         raise ValidationError("You must specify at least one walk time.")
 
-    def walkable(self):
-        return self.morning_walk or self.midday_walk or self.evening_walk or self.night_walk
+    # def walkable(self):
+    #     return self.morning_walk or self.midday_walk or self.evening_walk or self.night_walk
     
     def get_name(self):
-        return self.name
+        return self.dog_name
 
     def get_location(self):
         return self.location
@@ -65,21 +64,21 @@ class Dog(models.Model):
         return out_times
     
     def __str__(self):
-        return self.name
-    
+        return self.dog_name
+
+
 class Match(models.Model):
+    # ID, dog, day, time, walker
     dog    = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog")
-    
-    # Walker model is not in here yet
-    # walker = models.ForeignKey(Walker, on_delete=models.SET_NULL, blank=True, null=True, related_name="walker")
+    walker = models.ForeignKey(Walker, on_delete=models.SET_NULL, blank=True, null=True, related_name="walker")
     day    = models.CharField(max_length=10)
     time   = models.PositiveIntegerField()
 
     def get_dog(self):
         return self.dog
 
-    # def get_walker(self):
-    #     return self.walker
+    def get_walker(self):
+        return self.walker
     
     def get_day(self):
         return self.day 
@@ -88,7 +87,11 @@ class Match(models.Model):
         return self.time
 
     def __str__(self):
-        return self.dog.get_name() + " walked by " # + self.walker.get_name()
+        return self.dog.get_name() + " walked by " # + self.walker.get_name()# return "MATCH"
+        print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
+        print_str += str(self.day) + "s at " + str(self.time) + " o'clock"
+        return print_str
+
 
 class Walker(models.Model):
     class Meta:
