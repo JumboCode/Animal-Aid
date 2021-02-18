@@ -10,44 +10,74 @@
     <!-- <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 
+
+    <!-- trying bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap" rel="stylesheet">
+
     {% block styles %}
     <link href="{% static '/css/app.css' %}" rel="stylesheet" type="text/css" />
-   
+    <link href="{% static '/css/home.css' %}" rel="stylesheet" type="text/css" />
+
     {% endblock styles %}
 
     {% block extrahead %}{% endblock extrahead %}
-    
+
 </head>
 
 <body>
 
-  <nav class="navbar"> 
+  <nav class="navbar">
     <div class="navbar-left">
     <a class="navbar-logo" href="{% url 'home' %}"><img src="{% static 'img/templogo.png' %}"></a>
     </div>
     <div class="navbar-right">
-        <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li> 
-	<li {% if active_link == "dog" %}class="active"{% endif %}><a href="{% url 'dog_gallery' %}">Dog Gallery</a></li>
+        <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li>
+	<li {% if active_link == "dog" %}class="active"{% endif %}><a href="{% url 'dog_gallery' %}">Gallery</a></li>
+
+  <!-- gallery -->
 	{% if user.is_superuser %}
-        <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
+        <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li>
         <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
         <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Logout</a></li>
 	<li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
         {% else %}
           {% if user.is_authenticated %}
+
+
+          <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Schedule</a></li>
+          <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Form</a></li>
+
           <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Logout</a></li>
           {% else %}
-          <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li> 
+          <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li>
           <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
+
+          <!-- form, schedule -->
           {% endif %}
         {% endif %}
     </div>
   </nav>
-    
+
   {% block content %}
 
   {% endblock %}
-  
+
   <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
   <script src="{% static 'js/app.js' %}"></script>
   {% block javascript %}{% endblock %}

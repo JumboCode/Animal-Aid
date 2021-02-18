@@ -3,13 +3,47 @@
 
 {% block title %}{{ block.super }} Home{% endblock %}
 
+{% load static %}
+
 
 
 {% block content %}
-    <h1>Hello, World!</h1>
-    <p class="hello">Welcome to our home page</p>
+
+<!-- Big content -->
+<!-- Need to make the buttons responsive -->
+<div class="container mt-5 ">
+	<div class="row align-items-center" >
+	    <div class="col-12 col-md-5" style="border-style: solid;">
+	    	<br> <br> <br>
+	        <div class="homebigtxt"> Find your playtime pal.</div> <br>
+	        <div class="homesmalltxt">Come join Tufts Animal Aid from the Leonard Carmichael Society. </div>
+	        <br> <br> <br>
+	        <div class="bothbuttons"> 
+		        <button type="button" class="AAbuttons" style="margin-right: 
+		       	30px;"> LOGIN </button>
+		        <button type="button" class="AAbuttons" > SIGN UP </button>
+		    </div>
+	        <br> <br> <br>
+		</div>
+		<div class="col-12 col-md-7" style="border-style: solid;">
+	  		<img src="{% static 'img/HomePageDog.png' %}" style="width:100%" class="img-responsive">
+	  	</div>
+	</div>
+</div>
+
+<br> <br> <br>
+<div class="container mt-5" >
+	<div class="row justify-content-center align-self-center" > 
+		<img src="{% static 'img/smallPawPrint.svg' %}" style="border-style: solid " class="pawprintsmall"> 
+		<div class="AAhomesmallheader"  style=> Our Mission </div>
+		<img src="{% static 'img/smallPawPrint.svg' %}" style="border-style: solid " class="pawprintsmall"> 
+	</div>
+	
+	<div class="captionhometxt" > Animal Aid pairs volunteer undergraduate students with dogs in the nearby Medford/Somerville area to walk on a weekly basis. Walking is a semester-long commitment, and interested students are able to designate their top choices/schedules at the beginning of each semester. Animal Aid pairs volunteer undergraduate students with dogs in the nearby Medford/Somerville area to walk on a weekly basis. Walking is a semester-long commitment, and interested students are able to designate their top choices/schedules at the beginning of each semester. </div>
+
+	
+
+</div>
+
+
 {% endblock %}
-
-
-
-
