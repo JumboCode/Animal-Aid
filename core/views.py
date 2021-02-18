@@ -266,12 +266,6 @@ def edit_walker(request):
             )
             walker.save()
 
-        name = walker.get_name()
-        email = walker.get_email()
-        phone_number = walker.get_phone_number()
-        if phone_number == None:
-            phone_number = ''
-
         # POST request
         if request.method == 'POST':
 
@@ -309,6 +303,12 @@ def edit_walker(request):
             elif 'cancel' in request.POST:
                 return redirect('home')
 
+        name = walker.get_name()
+        email = walker.get_email()
+        phone_number = walker.get_phone_number()
+        if phone_number == None:
+            phone_number = ''
+        
         # getting dog names to display in pref dropdowns
         all_dogs = Dog.objects.all()
         visible_dog_names = []
@@ -359,11 +359,6 @@ def walker_signup(request):
             )
             walker.save()
 
-        name = walker.get_name()
-        phone_number = walker.get_phone_number()
-        if phone_number == None:
-            phone_number = ''
-
         # POST request
         if request.method == 'POST':
 
@@ -376,7 +371,7 @@ def walker_signup(request):
             for day in DAYS:
                 for hour in HOURS:
                     chosen_times.append(request.POST.get(day + '-' + hour) == 'on')
-            walker.chosen_times = chosen_times
+            walker.times = chosen_times
 
             # iterate through dog preferences to fill out dog_choices
             dog_choices = []
@@ -395,22 +390,25 @@ def walker_signup(request):
             walker.save()
 
             return redirect('home')
-        
+
+        name = walker.get_name()
+        phone_number = walker.get_phone_number()
+        if phone_number == None:
+            phone_number = ''
 
         # getting dog names to display in pref dropdowns
         all_dogs = Dog.objects.all()
         visible_dogs = {}
         for dog in all_dogs:
             if dog.get_visible(): # only displaying dogs which have visible = True
-                visible_dogs[dog.name()] = dog.get_walktimes()
+                visible_dogs[dog.get_name()] = dog.get_walktimes()
         
         # helper array for Django template to loop through
         pref_nums = range(1, PREF_COUNT+1)
 
         data = {
             'walker': {
-                'name': name,   
-                'email': email,
+                'name': name,
                 'phone': phone_number,
             },
             'days': DAYS,
@@ -425,6 +423,6 @@ def walker_signup(request):
             'prev_choices': walker.get_dog_choices(),
             'dog_list': visible_dogs,
         }
-        return render(request, 'core/edit_walker.html', {'data':data, 'json_data':dumps(json_data)})
+        return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data)})
     else:
         raise PermissionDenied()
