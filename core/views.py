@@ -48,8 +48,8 @@ def dog_gallery(request):
     dog_infos = []
     for dog in dogs:
         dog_info = {}
-        dog_info["name"] = dog.name
-        dog_info["image_path"] = dog.image.url 
+        dog_info["name"] = dog.get_name
+        # dog_info["image_path"] = dog.image.url 
         dog_infos.append(dog_info)
     
     return render(request, 'core/dog.html', {'dogs': dog_infos})
@@ -73,9 +73,9 @@ def results(request):
                 for dog in dogs:
                     data['matches'].append({
                         'name': dog.get_name,
-                        'image': dog.get_image,
-                        'location': dog.get_location,
-                        'times': dog.get_walktimes,
+                        #'image': dog.get_image,
+                        #'location': dog.get_location,
+                        #'times': dog.get_walktimes,
                     })
             
             # print match
@@ -84,8 +84,6 @@ def results(request):
             matches = Match.objects.all()
             for match in matches:
                 print(match)
-                print(match.get_day)
-                print(match.get_time)
             
 
             # look for dog with name == dog query
@@ -94,9 +92,9 @@ def results(request):
                     if (str(dog) == dog_query):
                         data['matches'].append({
                             'name': dog.get_name,
-                            'image': dog.get_image,
-                            'location': dog.get_location,
-                            'times': dog.get_walktimes,
+                            #'image': dog.get_image,
+                            #'location': dog.get_location,
+                            #'times': dog.get_walktimes,
                         })
 
             """Return names of all dogs for select dropdown """
@@ -109,13 +107,31 @@ def results(request):
         
         # GET request
         else: 
-            """Return names of all dogs for select dropdown """
+            # Return names of all dogs for select dropdown for initial page load
             dogs = Dog.objects.all()
-            data = {'dog_names':[]}
+            matches = Match.objects.all()
+            
+            data = {
+                "dog_names":[],
+                "match_results" : []
+            
+            }
+
             for dog in dogs:
-                data['dog_names'].append({
-                    'name': dog.get_name,
+                data["dog_names"].append({
+                    "name": dog.get_name,
                 })
+
+            # TODO: figure out how to get dog address from dog
+            for match in matches:
+                data["match_results"].append({
+                    "dog" : match.get_dog,
+                    "walker" : match.get_walker,
+                    "day" : match.get_day,
+                    "time" : match.get_time,
+                })
+
             return render(request, 'core/results.html', data) 
+            
     else:
         raise PermissionDenied()

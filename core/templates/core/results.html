@@ -24,32 +24,34 @@
     <p></p>
 
     <!-- Display matches -->
-    {% if matches %}
+    {% if match_results %}
         <table style="background-color: rgba(214, 226, 217, 0.658);">
             <tr>
                 <th>Dog Name</th>
-                <th>Image</th>
+                <th>Walker</th>
+                <!-- <th>Image</th> -->
                 <th>Location</th>
-                <th>Sunday</th>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
+                <th>Day</th>
+                <th>Time</th>
             </tr>
-            {% for match in matches %}
+            {% for match in match_results %}
             <tr>
                 <td>
-                    {{ match.name }}
+                    {{ match.dog }}
                 </td>
                 <td>
+                    {{ match.walker }}
+                </td>
+                <td>
+                    {{ match.day }}
+                </td>
+                <td>
+                    {{ match.time }}
+                </td>
+                <!-- <td>
                     <img src="/{{ match.image }}">
-                </td>
-                <td>
-                    {{ match.location }}
-                </td>
-                <td>
+                </td> -->
+                <!-- <td>
                     <table style="background-color: rgba(214, 226, 217, 0.658);">
                         <ul>
                         {% for key, value in match.times.items %}
@@ -59,7 +61,7 @@
                         {% endfor %}
                         </ul>
                     </table>
-                </td>
+                </td> -->
             </tr>
             {% endfor %}
         </table>
