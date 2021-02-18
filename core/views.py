@@ -345,3 +345,91 @@ def edit_walker(request):
         return render(request, 'core/edit_walker.html', {'data':data, 'json_data':dumps(json_data)})
     else:
         raise PermissionDenied()
+
+def walker_signup(request):
+    # only able to edit walker profile if logged in as a normal user, not staff
+    if request.user.is_authenticated and not request.user.is_staff:
+        
+        username = request.user.get_username()
+
+        # gets walker db entry if it already exists
+        if Walker.objects.filter(email=username).exists():
+            walker = Walker.objects.get(email=username)
+        
+        # creates a matching walker entry if one doesn't already exist
+        else:
+            walker = Walker(
+                name='',
+                email=username,
+            )
+            walker.save()
+
+        name = walker.get_name()
+        phone_number = walker.get_phone_number()
+        if phone_number == None:
+            phone_number = ''
+
+        # POST request
+        if request.method == 'POST':
+
+            # getting walker info from request
+            walker.name = request.POST.get('walker_name')
+            walker.phone_number = request.POST.get('walker_phone')
+
+            # iterate through checkboxes to fill out chosen_times
+            chosen_times = []
+            for day in DAYS:
+                for hour in HOURS:
+                    chosen_times.append(request.POST.get(day + '-' + hour) == 'on')
+            walker.chosen_times = chosen_times
+
+            # iterate through dog preferences to fill out dog_choices
+            dog_choices = []
+            for choice_num in range(PREF_COUNT):
+                dropdown_choice = request.POST.get(f'dog_select_{choice_num + 1}')
+
+                # append chosen dog name to dog_choices
+                if Dog.objects.filter(name=dropdown_choice).exists():
+                    dog_choices.append(Dog.objects.get(name=dropdown_choice).get_name())
+                    
+                # if '----' is chosen for a dog pref, then the pref is saved as None
+                else:
+                    dog_choices.append(None)
+            walker.dog_choices = dog_choices
+
+            walker.save()
+
+            return redirect('home')
+        
+
+        # getting dog names to display in pref dropdowns
+        all_dogs = Dog.objects.all()
+        visible_dogs = {}
+        for dog in all_dogs:
+            if dog.get_visible(): # only displaying dogs which have visible = True
+                visible_dogs[dog.name()] = dog.get_walktimes()
+        
+        # helper array for Django template to loop through
+        pref_nums = range(1, PREF_COUNT+1)
+
+        data = {
+            'walker': {
+                'name': name,   
+                'email': email,
+                'phone': phone_number,
+            },
+            'days': DAYS,
+            'hours': HOURS,
+            'saved': (request.method == 'POST'),
+            'pref_nums': pref_nums,
+        }
+        json_data = {
+            'days': DAYS,
+            'hours': HOURS,
+            'times': walker.get_walktimes(),
+            'prev_choices': walker.get_dog_choices(),
+            'dog_list': visible_dogs,
+        }
+        return render(request, 'core/edit_walker.html', {'data':data, 'json_data':dumps(json_data)})
+    else:
+        raise PermissionDenied()
