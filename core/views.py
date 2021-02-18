@@ -77,7 +77,7 @@ def results(request):
                     data['matches'].append({
                         'name': dog.get_name,
                         'image': dog.get_image,
-                        'location': dog.get_location,
+                        'address': dog.get_address,
                         'times': dog.get_walktimes,
                     })
             
@@ -98,7 +98,7 @@ def results(request):
                         data['matches'].append({
                             'name': dog.get_name,
                             'image': dog.get_image,
-                            'location': dog.get_location,
+                            'address': dog.get_address,
                             'times': dog.get_walktimes,
                         })
 
@@ -129,12 +129,12 @@ def dog_list(request):
         # get all dogs in db
         dogs = Dog.objects.all()
         data = {'dogs':[]}
-        # for each dog populate a dictionary w/ name, img, location, and db id
+        # for each dog populate a dictionary w/ name, img, address, and db id
         for dog in dogs:
             data['dogs'].append({
                 'name': dog.get_name,
-                'image': dog.get_image,
-                'location': dog.get_location,
+                #'image': dog.get_image,
+                'address': dog.get_address,
                 'id': dog.id,
             })
         return render(request, 'core/dog_list.html', data) 
@@ -151,22 +151,21 @@ def edit_dog(request):
     if request.user.is_authenticated and request.user.is_staff:
 
         # get dog with id matchin=g url parameter
-        dog_name = request.GET.get('q', '')
+        dog_id = request.GET.get('q', '')
 
         # redirect back to list if id doesn't exist in db
-        if not Dog.objects.filter(id=dog_name).exists():
+        if not Dog.objects.filter(id=dog_id).exists():
             return redirect('dog_list')
-        selected_dog = Dog.objects.get(id=dog_name)
+        selected_dog = Dog.objects.get(id=dog_id)
 
         # POST request
         if request.method == 'POST':
 
             # save dog info if save button is pressed
             if 'save_dog' in request.POST:
-                # assigning name, location, and zip from POST request
-                selected_dog.name = request.POST.get('dog_name')
-                selected_dog.location = request.POST.get('dog_location')
-                selected_dog.zip_code = request.POST.get('dog_zip')
+                # assigning name, address from POST request
+                selected_dog.dog_name = request.POST.get('dog_name')
+                selected_dog.address = request.POST.get('dog_address')
                 selected_dog.visible = request.POST.get('dog_visible') == 'on'
 
                 # assigning times from POST using checkbox id convention: "Thursday-2:00pm"
@@ -190,9 +189,8 @@ def edit_dog(request):
             data = {
                 'dog': {
                     'name': selected_dog.get_name,
-                    'image': selected_dog.get_image,
-                    'location': selected_dog.get_location,
-                    'zip': selected_dog.get_zip,
+                    #'image': selected_dog.get_image,
+                    'address': selected_dog.get_address,
                 },
                 'days': DAYS,
                 'hours': HOURS,
@@ -216,10 +214,9 @@ def add_dog(request):
         if request.method == 'POST':
 
             if 'save_dog' in request.POST:
-                # assigning name, location, and zip from POST request
+                # assigning name, address from POST request
                 name_in = request.POST.get('dog_name')
-                location_in = request.POST.get('dog_location')
-                zip_code_in = request.POST.get('dog_zip')
+                address_in = request.POST.get('dog_address')
                 visible_in = request.POST.get('dog_visible') == 'on'
 
                 # assigning times from POST using checkbox id convention: "Thursday-2:00pm"
@@ -229,12 +226,10 @@ def add_dog(request):
                         chosen_times.append(request.POST.get(day + '-' + hour) == 'on')
                 
                 new_dog = Dog(
-                    name=name_in,
-                    location=location_in,
-                    zip_code=zip_code_in,
+                    dog_name=name_in,
+                    address=address_in,
                     visible=visible_in,
                     times=chosen_times,
-                    image='',
                 )
 
                 new_dog.save()
@@ -300,8 +295,8 @@ def edit_walker(request):
                     dropdown_choice = request.POST.get(f'dog_select_{choice_num + 1}')
 
                     # append chosen dog name to dog_choices
-                    if Dog.objects.filter(name=dropdown_choice).exists():
-                        dog_choices.append(Dog.objects.get(name=dropdown_choice).get_name())
+                    if Dog.objects.filter(dog_name=dropdown_choice).exists():
+                        dog_choices.append(Dog.objects.get(dog_name=dropdown_choice).get_name())
                         
                     # if '----' is chosen for a dog pref, then the pref is saved as None
                     else:
@@ -389,8 +384,8 @@ def walker_signup(request):
                 dropdown_choice = request.POST.get(f'dog_select_{choice_num + 1}')
 
                 # append chosen dog name to dog_choices
-                if Dog.objects.filter(name=dropdown_choice).exists():
-                    dog_choices.append(Dog.objects.get(name=dropdown_choice).get_name())
+                if Dog.objects.filter(dog_name=dropdown_choice).exists():
+                    dog_choices.append(Dog.objects.get(dog_name=dropdown_choice).get_name())
                     
                 # if '----' is chosen for a dog pref, then the pref is saved as None
                 else:

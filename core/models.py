@@ -8,11 +8,17 @@ DAYS = 7
 HOURS = 9
 
 class Dog(models.Model):
-    name = models.CharField(max_length=30)
-    location = models.CharField(max_length=100)
-    zip_code = models.IntegerField() 
-    image = models.ImageField(upload_to='static/img/dogs/', null=True)
+    # Updated Fields
+    dog_name = models.CharField(max_length=30)
+    dog_info = models.CharField(max_length=200)
+    owner_name = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
+
     visible = models.BooleanField(default=True)
+
+    #location = models.CharField(max_length=100)
+    #zip_code = models.IntegerField() 
+    #image = models.ImageField(upload_to='static/img/dogs/', null=True)
 
     # Array of walk times as booleans
     
@@ -44,14 +50,14 @@ class Dog(models.Model):
     def get_name(self):
         return self.dog_name
 
-    def get_location(self):
-        return self.location
+    def get_address(self):
+        return self.address
         
-    def get_zip(self):
-        return self.zip_code
+    # def get_zip(self):
+    #     return self.zip_code
     
-    def get_image(self):
-        return self.image
+    # def get_image(self):
+    #     return self.image
 
     def get_visible(self):
         return self.visible
@@ -65,32 +71,6 @@ class Dog(models.Model):
     
     def __str__(self):
         return self.dog_name
-
-
-class Match(models.Model):
-    # ID, dog, day, time, walker
-    dog    = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog")
-    walker = models.ForeignKey(Walker, on_delete=models.SET_NULL, blank=True, null=True, related_name="walker")
-    day    = models.CharField(max_length=10)
-    time   = models.PositiveIntegerField()
-
-    def get_dog(self):
-        return self.dog
-
-    def get_walker(self):
-        return self.walker
-    
-    def get_day(self):
-        return self.day 
-
-    def get_time(self):
-        return self.time
-
-    def __str__(self):
-        return self.dog.get_name() + " walked by " # + self.walker.get_name()# return "MATCH"
-        print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
-        print_str += str(self.day) + "s at " + str(self.time) + " o'clock"
-        return print_str
 
 
 class Walker(models.Model):
@@ -108,12 +88,6 @@ class Walker(models.Model):
         models.CharField(max_length=16),
         default=blank_choices,
     )
-
-    '''dog_1 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog1")
-    dog_2 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog2")
-    dog_3 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog3")
-    dog_4 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog4")
-    dog_5 = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog5")'''
     
     # Array of walk times as booleans
     def blank_times():
@@ -149,3 +123,29 @@ class Walker(models.Model):
    
     def __str__(self):
         return self.name
+
+
+class Match(models.Model):
+    # ID, dog, day, time, walker
+    dog    = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog")
+    walker = models.ForeignKey(Walker, on_delete=models.SET_NULL, blank=True, null=True, related_name="walker")
+    day    = models.CharField(max_length=10)
+    time   = models.PositiveIntegerField()
+
+    def get_dog(self):
+        return self.dog
+
+    def get_walker(self):
+        return self.walker
+    
+    def get_day(self):
+        return self.day 
+
+    def get_time(self):
+        return self.time
+
+    def __str__(self):
+        return self.dog.get_name() + " walked by " # + self.walker.get_name()# return "MATCH"
+        print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
+        print_str += str(self.day) + "s at " + str(self.time) + " o'clock"
+        return print_str
