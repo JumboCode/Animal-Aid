@@ -107,6 +107,9 @@ class Dog(models.Model):
 
     def get_location(self):
         return self.address
+        
+    def get_owner(self):
+        return self.owner_name
     
     # def get_image(self):
     #     return self.image
