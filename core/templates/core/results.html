@@ -11,7 +11,7 @@
 
         <!-- Dropdown menu -->
         <select id="dog_select" name="dog_select">
-            <option>All dogs</option>
+            <option>Select Dog</option>
             {% for dog in dog_names %}
                 <option>{{ dog.name }}</option>
             {% endfor %}
@@ -25,9 +25,13 @@
 
     <!-- Display matches -->
     {% if match_results %}
+    {% for dog in dog %}
+    <p>Name: {{ dog.name }}</p>
+    <p>Location: {{ dog.location }}</p>  
+    <p>Owner: {{ dog.owner }}</p>
+    {% endfor %}
         <table style="background-color: rgba(214, 226, 217, 0.658);">
             <tr>
-                <th>Dog Name</th>
                 <th>Walker</th>
                 <!-- <th>Image</th> -->
                 <th>Location</th>
@@ -37,9 +41,6 @@
             {% for match in match_results %}
             <tr>
                 <td>
-                    {{ match.dog }}
-                </td>
-                <td>
                     {{ match.walker }}
                 </td>
                 <td>
@@ -48,20 +49,6 @@
                 <td>
                     {{ match.time }}
                 </td>
-                <!-- <td>
-                    <img src="/{{ match.image }}">
-                </td> -->
-                <!-- <td>
-                    <table style="background-color: rgba(214, 226, 217, 0.658);">
-                        <ul>
-                        {% for key, value in match.times.items %}
-                            {% if value %}
-                                <li>{{ key }}</li>
-                            {% endif %}
-                        {% endfor %}
-                        </ul>
-                    </table>
-                </td> -->
             </tr>
             {% endfor %}
         </table>
