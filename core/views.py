@@ -58,32 +58,38 @@ def results(request):
     if request.user.is_authenticated and request.user.is_staff:
         # POST request
         if request.method == 'POST':
-            # dog_query = request.POST.get('dog_select').value
             dog_query = request.POST.get("dog_select")
-            # database logic
-            dogs = Dog.objects.all()
+
+            # data to return
             data = {'match_results':[],
                     'dog_names':[] ,
                     'dog':[],
                     }
-            # Return names of all dogs for select dropdown
+                
+            # Get all dogs for select dropdown
+            dogs = Dog.objects.all()
             for dog in dogs:
                 data['dog_names'].append({
                     'name': dog.get_name,
                 })
             if (dog_query == "Select Dog"):
                 return render(request, 'core/results.html', data)
+            
             # Get dog objects based on query string
             dog_results = Dog.objects.filter(dog_name=dog_query)
-            dog_result = dog_results[0] # Use the first dog
+            # Use the first dog
+            dog_result = dog_results[0]
+
             # Find all matches associated with that dog
             matches = Match.objects.filter(dog=dog_result)
-            # Send information about the dog and matches
+
+            # Append information about the dog and matches
             data['dog'].append({
                 "name" : dog_result.get_name,
                 "location" : dog_result.get_location,
                 "owner" : dog_result.get_owner,
             })
+
             for match in matches:
                 data["match_results"].append({
                     "dog" : match.get_dog,
@@ -94,17 +100,19 @@ def results(request):
             return render(request, 'core/results.html', data)
         
         # GET request
-        else: 
+        else: # make elif?
             # Return names of all dogs for select dropdown for initial page load
             dogs = Dog.objects.all()
             data = {
                 "dog_names":[],
                 "match_results" : []
             }
+
             for dog in dogs:
                 data["dog_names"].append({
                     "name": dog.get_name,
                 })
+            
             return render(request, 'core/results.html', data) 
             
     else:

@@ -25,15 +25,17 @@
 
     <!-- Display matches -->
     {% if match_results %}
-    {% for dog in dog %}
-    <p>Name: {{ dog.name }}</p>
-    <p>Location: {{ dog.location }}</p>  
-    <p>Owner: {{ dog.owner }}</p>
-    {% endfor %}
+        <!-- Display dog and owner info -->
+        {% for dog in dog %}
+            <p>Name: {{ dog.name }}</p>
+            <p>Location: {{ dog.location }}</p>  
+            <p>Owner: {{ dog.owner }}</p>
+        {% endfor %}
+
+        <!-- Display walker info -->
         <table style="background-color: rgba(214, 226, 217, 0.658);">
             <tr>
                 <th>Walker</th>
-                <!-- <th>Image</th> -->
                 <th>Location</th>
                 <th>Day</th>
                 <th>Time</th>

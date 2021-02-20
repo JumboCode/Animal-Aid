@@ -105,11 +105,11 @@ class Dog(models.Model):
     def get_name(self):
         return self.dog_name
 
-    def get_location(self):
-        return self.address
-        
     def get_owner(self):
         return self.owner_name
+
+    def get_location(self):
+        return self.address
     
     # def get_image(self):
     #     return self.image
@@ -221,7 +221,6 @@ class Walker(models.Model):
         return self.name
 
 class Match(models.Model):
-    # ID, dog, day, time, walker
     dog    = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog")
     walker = models.ForeignKey(Walker, on_delete=models.SET_NULL, blank=True, null=True, related_name="walker")
     day    = models.CharField(max_length=10)
