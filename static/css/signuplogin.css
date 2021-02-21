@@ -1,5 +1,59 @@
+body {
+	background-color: #EFE7E5;
+	overflow: hidden; /* Hide scrollbars */
+}
+
 .signuplogin-headtxt {
 	font-family: 'Source Sans Pro', sans-serif;
     float:center;
     
+}
+
+.whitemodal {
+	width: 80%;
+	height: 31.25rem;
+	border-radius: 30px;
+	background-color: #FFFFFF;
+	float: center;
+	margin: 0 auto;
+	margin-top: 60px;
+}
+
+.welcometext {
+	font-family: 'Source Sans Pro', sans-serif;
+    float: center;
+    text-align: center;
+    margin: 0 auto;
+  	font-size: 50px;
+  	font-weight: 600;
+    width: 100%;
+    padding-top:8%;
+    color: #583531;
+}
+
+.signuploginbutton{
+	height: 3.125rem;
+	width: 12rem;
+	border: none;
+	background-color: #C0A39D;
+	border-radius: 1.875rem;
+	font-family: 'Source Sans Pro', sans-serif;
+    float:center;
+    margin: 0 au;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+   	color: #FFFFFF;
+/*   	padding-left: 30px;
+   	padding-right: 30px;*/
+}
+
+
+.signuploginbutton:hover {
+	background-color: #FF9664;
+}
+
+.signuplogintxtfield {
+	width: 70%;
+	
 }
