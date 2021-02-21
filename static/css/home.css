@@ -2,8 +2,10 @@ html {
     font-family: 'Roboto', sans-serif;
 }
 
+
+
 .homebigtxt {
-    font-size: 65px;
+    font-size: 4.063rem;
     font-family: 'Roboto', sans-serif;
     font-weight: 900;
     text-align: left;
@@ -34,7 +36,7 @@ html {
 }
 
 .AAbuttons:hover {
-    background-color: #000000;
+    background-color: #FF9664;
 }
 
 .bothbuttons {
@@ -69,3 +71,38 @@ html {
     text-align: center;
     
 }
+
+.subscribetextfield {
+	height: 3.125rem;
+	width: 30rem;
+	border-radius: 1.875rem;
+	border: none;
+	box-shadow: 0.325rem 0.313rem 0.313rem #ACACAC;
+	padding-left: 35px;
+	margin-right: 30px;
+	font-size: 20px;
+	color:#583531;
+	font-weight: 300;
+}
+
+.subscribebutton {
+	height: 3.125rem;
+	width: 12rem;
+	border: none;
+	background-color: #C0A39D;
+	border-radius: 1.875rem;
+	font-family: 'Source Sans Pro', sans-serif;
+    /*float:center;*/
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+   	color: #FFFFFF;
+   	padding-left: 30px;
+   	padding-right: 30px;
+}
+
+.subscribebutton:hover {
+	background-color: #FF9664;
+}
+
+

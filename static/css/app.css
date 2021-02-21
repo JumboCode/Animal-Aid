@@ -14,6 +14,8 @@ html {
 	font-family: 'Roboto', sans-serif, regular;
 }
 
+
+
 .navbar {
     overflow: hidden;
 }
@@ -71,6 +73,11 @@ html {
 li a {
     text-decoration: none;
     color: #2B140D;
+}
+
+li a:hover {
+  text-decoration: none;
+  color: #3E1D14;
 }
 
 .hello {

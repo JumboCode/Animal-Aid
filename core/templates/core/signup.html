@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 
+  {% load static %}
+
   {% block content %}
     <h2>Sign up</h2>
-    <form method="post">
+
+      
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col" style="border: solid red;">
+          <form method="post">
       {% csrf_token %}
       {% for field in form %}
         <p>
@@ -16,4 +25,28 @@
       {% endfor %}
       <button type="submit">Sign up</button>
     </form>
+      </div>
+      
+      <div class="col" style="border: solid red;">
+         <img src =" {% static 'img/loginsignupdog.png' %}" style="width:40%" class="img-responsive">
+      </div>
+
+    </div>
+  </div>
+
+
+  <!--   <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <p>
+          {{ field.label_tag }}<br>
+          {{ field }}&nbsp;<span class="status"></span>
+          {% for error in field.errors %}
+            <p style="color: red">{{ error }} {% if error == "A user with that email already exists" %} </p>
+            {% endif %}
+          {% endfor %}
+        </p>
+      {% endfor %}
+      <button type="submit">Sign up</button>
+    </form> -->
   {% endblock %}
