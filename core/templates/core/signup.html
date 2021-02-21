@@ -2,33 +2,44 @@
 
   {% load static %}
 
+  {% block styles %}
+  <link href="{% static '/css/app.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static '/css/signuplogin.css' %}" rel="stylesheet" type="text/css" />
+  {% endblock styles %}
+  
   {% block content %}
-    <h2>Sign up</h2>
 
-      
+
+  <br> <br> <br> 
   <div class="container">
 
     <div class="row">
 
-      <div class="col" style="border: solid red;">
+      <div class="col-12 col-md-7" style="border: solid red;">
+
+        <div class="whitemodal">
+            <div class="welcometext"> WELCOME </div>
           <form method="post">
-      {% csrf_token %}
-      {% for field in form %}
-        <p>
-          {{ field.label_tag }}<br>
-          {{ field }}&nbsp;<span class="status"></span>
-          {% for error in field.errors %}
-            <p style="color: red">{{ error }} {% if error == "A user with that email already exists" %} </p>
-            {% endif %}
-          {% endfor %}
-        </p>
-      {% endfor %}
-      <button type="submit">Sign up</button>
-    </form>
+            {% csrf_token %}
+            {% for field in form %}
+            <p>
+              {{ field.label_tag }}<br>
+              {{ field }}&nbsp;<span class="status"></span> 
+              {% for error in field.errors %}
+              <p style="color: red">{{ error }} {% if error == "A user with that email already exists" %} </p> 
+              {% endif %}
+              {% endfor %}
+            </p>
+            {% endfor %}
+            <button type="submit" class="signuploginbutton">SIGN UP</button>
+          </form>
+
+        </div>
+
       </div>
       
-      <div class="col" style="border: solid red;">
-         <img src =" {% static 'img/loginsignupdog.png' %}" style="width:40%" class="img-responsive">
+      <div class="col-12 col-md-5" style="border: solid red;">
+         <img src =" {% static 'img/loginsignupdog.png' %}" style="width:110%; margin-top: 30px;" class="img-responsive float-right">
       </div>
 
     </div>
