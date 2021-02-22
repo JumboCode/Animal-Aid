@@ -79,7 +79,7 @@ class Walker(models.Model):
         
     name = models.CharField(max_length=30)
     email = models.CharField(max_length=100)
-    phone_number = models.PositiveBigIntegerField(blank=True, null=True)
+    phone_number = models.BigIntegerField(blank=True, null=True)
     
     def blank_choices():
         return []
