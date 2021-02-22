@@ -48,8 +48,8 @@ def dog_gallery(request):
     dog_infos = []
     for dog in dogs:
         dog_info = {}
-        dog_info["name"] = dog.name
-        dog_info["image_path"] = dog.image.url 
+        dog_info["name"] = dog.dog_name
+        dog_info["image_path"] = dog.image_path
         dog_infos.append(dog_info)
     
     return render(request, 'core/dog.html', {'dogs': dog_infos})
@@ -73,7 +73,7 @@ def results(request):
                 for dog in dogs:
                     data['matches'].append({
                         'name': dog.get_name,
-                        'image': dog.get_image,
+                        'image_path': dog.get_image,
                         'location': dog.get_location,
                         'times': dog.get_walktimes,
                     })
@@ -94,7 +94,7 @@ def results(request):
                     if (str(dog) == dog_query):
                         data['matches'].append({
                             'name': dog.get_name,
-                            'image': dog.get_image,
+                            'image_path': dog.get_image,
                             'location': dog.get_location,
                             'times': dog.get_walktimes,
                         })
