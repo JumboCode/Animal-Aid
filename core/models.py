@@ -23,7 +23,7 @@ class Dog(models.Model):
     dog_name = models.CharField(max_length=30)
     dog_info = models.CharField(max_length=200)
     image_path = S3DirectField(dest='example_destination', blank=True)
-
+    print(image_path)
 
     owner_name = models.CharField(max_length=50)
     # owner_email
