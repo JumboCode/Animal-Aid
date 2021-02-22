@@ -1,9 +1,20 @@
+from aws.conf import *
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.conf import settings
+import boto3
+from s3direct.fields import S3DirectField
+
+
+
 
 # Create your models here.
 class Dog(models.Model):
+    def upload_image(file):
+        s3 = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+        bucket = s3.Bucket(AWS_STORAGE_BUCKET_NAME)
+        bucket.put_object(Key='dogs/test1.png', Body=file)
+
     # location = models.CharField(max_length=100)
     # zip_code = models.IntegerField() 
     # image = models.ImageField(height_field=350, max_length=100, upload_to='static/img/dogs/')
@@ -11,7 +22,9 @@ class Dog(models.Model):
     # Updated Fields
     dog_name = models.CharField(max_length=30)
     dog_info = models.CharField(max_length=200)
-    image_path = models.FileField(max_length=200)
+    image_path = S3DirectField(dest="dogs/")
+
+
     owner_name = models.CharField(max_length=50)
     # owner_email
     # owner_phone
