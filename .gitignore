@@ -146,4 +146,5 @@ cython_debug/
 .vscode
 
 # TypeScript config
-tsconfig.json
+tsconfig.jsoncore/migrations/
+core/migrations

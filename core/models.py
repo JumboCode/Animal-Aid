@@ -22,7 +22,7 @@ class Dog(models.Model):
     # Updated Fields
     dog_name = models.CharField(max_length=30)
     dog_info = models.CharField(max_length=200)
-    image_path = S3DirectField(dest="dogs/")
+    image_path = S3DirectField(dest='example_destination', blank=True)
 
 
     owner_name = models.CharField(max_length=50)
