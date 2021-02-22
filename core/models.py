@@ -11,11 +11,11 @@ class Dog(models.Model):
     # Updated Fields
     dog_name = models.CharField(max_length=30)
     dog_info = models.CharField(max_length=200)
+    image_path = models.FileField(max_length=200)
     owner_name = models.CharField(max_length=50)
     # owner_email
     # owner_phone
     address = models.CharField(max_length=100)
-    # image = models.ImageField()
     # need to install pillow for image field
     
     sunday_nine_am   = models.BooleanField(verbose_name="9:00 AM")
@@ -108,8 +108,8 @@ class Dog(models.Model):
     # def get_location(self):
     #     return self.address
     
-    # def get_image(self):
-    #     return self.image
+    def get_image(self):
+        return self.image_path
     
     # def get_walktimes(self):
     #     return {
