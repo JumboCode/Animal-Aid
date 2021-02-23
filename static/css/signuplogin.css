@@ -17,6 +17,9 @@ body {
 	float: center;
 	margin: 0 auto;
 	margin-top: 60px;
+	padding: 30px;
+	justify-content: center;
+	align-items: center;
 }
 
 .welcometext {
@@ -39,7 +42,7 @@ body {
 	border-radius: 1.875rem;
 	font-family: 'Source Sans Pro', sans-serif;
     float:center;
-    margin: 0 au;
+    margin: 0 auto;
     text-align: center;
     font-size: 1.25rem;
     font-weight: 700;
