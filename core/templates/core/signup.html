@@ -19,7 +19,8 @@
 
         <div class="whitemodal">
             <div class="welcometext"> WELCOME </div>
-          <form method="post">
+	    <div style="display:block; text-align:center;">
+	    <form method="post">
             {% csrf_token %}
             {% for field in form %}
             <p>
@@ -33,7 +34,7 @@
             {% endfor %}
             <button type="submit" class="signuploginbutton">SIGN UP</button>
           </form>
-
+	    </div>
         </div>
 
       </div>
