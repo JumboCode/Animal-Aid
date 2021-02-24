@@ -3,9 +3,9 @@ from .forms import CustomUserCreationForm, LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
-from .models import Dog, Match
+from .models import Dog, Walker, Match
 from django.core.exceptions import PermissionDenied
-from core.models import Dog, Match
+from core.models import Dog, Walker, Match
 
 def home(request):
     return render(request, 'core/home.html')
@@ -74,22 +74,32 @@ def results(request):
             if (dog_query == "Select Dog"):
                 return render(request, 'core/results.html', data)
             # Get dog objects based on query string
-            dog_results = Dog.objects.filter(dog_name=dog_query)
+            dog_results = Dog.objects.filter(dog_name = dog_query)
             dog_result = dog_results[0] # Use the first dog
             # Find all matches associated with that dog
-            matches = Match.objects.filter(dog=dog_result)
+            matches = Match.objects.filter(dog = dog_result)
             # Send information about the dog and matches
             data['dog'].append({
                 "name" : dog_result.get_name,
                 "location" : dog_result.get_location,
                 "owner" : dog_result.get_owner,
             })
+            
             for match in matches:
+                # print(type(match.get_time))
+                walker_query = match.get_walker
+                print(str(walker_query))
+                # walker_results = Walker.objects.filter(walker = walker_query)
+                # print(walker_results)
+                # walker = walker_results[0]
+                # print(walker)
                 data["match_results"].append({
                     "dog" : match.get_dog,
-                    "walker" : match.get_walker,
+                    "walker" : walker_query,
+                    # "walker_email" : walker.get_email,
                     "day" : match.get_day,
-                    "time" : match.get_time,
+                    "start_time" : match.get_start_time,
+                    "end_time" : match.get_end_time,
                 })
             return render(request, 'core/results.html', data)
         

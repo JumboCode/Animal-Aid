@@ -216,6 +216,9 @@ class Walker(models.Model):
    
     def get_name(self):
         return self.name
+    
+    def get_email(self):
+        return self.email
 
     def __str__(self):
         return self.name
@@ -236,11 +239,14 @@ class Match(models.Model):
     def get_day(self):
         return self.day 
 
-    def get_time(self):
+    def get_start_time(self):
         return self.time
 
+    def get_end_time(self):
+        return self.time + 1
+
     def __str__(self):
-        # return "MATCH"
-        print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
-        print_str += str(self.day) + "s at " + str(self.time) + " o'clock"
-        return print_str
+        return 'MATCH'
+        # print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
+        # print_str += str(self.day) + "s at " + str(self.time) + " o'clock"
+        # return print_str

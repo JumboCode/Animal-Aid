@@ -24,19 +24,51 @@
     <p></p>
 
     <!-- Display matches -->
+    
+    {% if dog %}
+        <table style="background-color: rgba(39, 121, 245, 0.658);" cellspacing="10" cellpadding="5">
+            <tr>
+                <th>Dog Name</th>
+                <th>Owner Name</th>
+                <th>Owner Email</th>
+                <th>Owner Phone</th>
+                <th>Owner Address</th>
+            </tr>
+            
+            {% for dog in dog %}
+                <tr>
+                    <td>
+                        {{ dog.name }}
+                    </td>
+                    <td>
+                        dog.owner
+                    </td>
+                    <td>
+                        [ email ]
+                    </td>
+                    <td>
+                        [ phone ]
+                    </td>
+                    <td>
+                        {{ dog.location }}:00
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    
+    <p>
+    
     {% if match_results %}
-    {% for dog in dog %}
-    <p>Name: {{ dog.name }}</p>
-    <p>Location: {{ dog.location }}</p>  
-    <p>Owner: {{ dog.owner }}</p>
-    {% endfor %}
-        <table style="background-color: rgba(214, 226, 217, 0.658);">
+        <table style="background-color: rgba(214, 226, 217, 0.658);" cellspacing="10" cellpadding="5">
             <tr>
                 <th>Walker</th>
                 <!-- <th>Image</th> -->
-                <th>Location</th>
+                <!-- <th>Location</th> -->
+                <th>Walker Email</th>
                 <th>Day</th>
-                <th>Time</th>
+                <th>Starting Time</th>
+                <th>Ending Time</th>
             </tr>
             {% for match in match_results %}
             <tr>
@@ -44,10 +76,16 @@
                     {{ match.walker }}
                 </td>
                 <td>
+                    [email]
+                </td>
+                <td>
                     {{ match.day }}
                 </td>
                 <td>
-                    {{ match.time }}
+                    {{ match.start_time }}:00
+                </td>
+                <td>
+                    {{ match.end_time }}:00
                 </td>
             </tr>
             {% endfor %}
