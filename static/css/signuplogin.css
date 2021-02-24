@@ -30,7 +30,7 @@ body {
   	font-size: 50px;
   	font-weight: 600;
     width: 100%;
-    padding-top:8%;
+    padding-top: 6%;
     color: #583531;
 }
 
@@ -56,7 +56,24 @@ body {
 	background-color: #FF9664;
 }
 
-.signuplogintxtfield {
+.signuploginlabeltxt {
+	float: left;
+}
+
+#id_email, #id_password1, #id_password2 {
 	width: 70%;
-	
+	padding-top: 0px;
+	float: center;
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+    font-weight: 300;
+    color: #583531;
+    padding-left: 10px;
+    border-radius: 30px;
+    border-color: #583531;
+
+}
+
+#id_password2 {
+	margin-bottom: 10px;
 }
