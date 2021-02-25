@@ -58,6 +58,7 @@
         <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li>
         <li {% if active_link == "login" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
         <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Logout</a></li>
+        <li {% if active_link == "walker_signup" %}class="active"{% endif %}><a href="{% url 'walker_signup' %}">Form</a></li>
       {% else %}
         {% if user.is_authenticated %}
           <li {% if active_link == "edit_walker" %}class="active"{% endif %}><a href="{% url 'edit_walker' %}">Profile</a></li>
