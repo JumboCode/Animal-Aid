@@ -1,20 +1,54 @@
 {% extends 'base.html' %}
 
+  {% load static %}
+
+  {% block styles %}
+  <link href="{% static '/css/app.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static '/css/signuplogin.css' %}" rel="stylesheet" type="text/css" />
+  {% endblock styles %}
+
 {% block content %}
 
-  <h1>Login</h1>
+<!--   <h1>Login</h1> -->
+
+  <br> <br> <br> 
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col-12 col-md-7" >
+
+        <div class="whitemodal">
+            <div class="welcometext"> WELCOME </div> <br>
+      <div style="display:block; text-align: center; margin: 0 auto">
   <form action="" method="post">
     {% csrf_token %}
     {% for field in form %}
       <div>
-        {{ field.label_tag }}
+        {{ field.label_tag }} <br>
         {{ field }}
         {% for error in field.errors %}
             <p style="color: red">{{ error }}</p>
         {% endfor %}
       </div>
-    {% endfor %}
-    <button type="submit">Log in</button>
-    <a href="{% url 'password_reset' %}"}>Forgot your password?</a>
+    {% endfor %} 
+
+    <div class="forgotpasstxt"> <a href="{% url 'password_reset' %}"} style="float: right; margin-right: 60px;">Forgot your password?</a> </div>
+    <br> <br> <br> 
+    <button type="submit" class="signuploginbutton">Log in</button>
+    
   </form>
+
+
+</div>
+        </div>
+
+      </div>
+      
+      <div class="col-12 col-md-5">
+         <img src =" {% static 'img/loginsignupdog.png' %}" style="width:110%; margin-top: 30px;" class="img-responsive float-right">
+      </div>
+
+    </div>
+  </div>
 {% endblock %}
