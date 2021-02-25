@@ -49,30 +49,26 @@
     <a class="navbar-logo" href="{% url 'home' %}"><img src="{% static 'img/templogo.png' %}"></a>
     </div>
     <div class="navbar-right">
-        <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li>
-	     <li {% if active_link == "dog" %}class="active"{% endif %}><a href="{% url 'dog_gallery' %}">Gallery</a></li>
+      <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li>
+	    <li {% if active_link == "dog" %}class="active"{% endif %}><a href="{% url 'dog_gallery' %}">Gallery</a></li>
 
-  <!-- gallery -->
-	{% if user.is_superuser %}
+      {% if user.is_superuser %}
+        <li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
+        <li {% if active_link == "dog_list" %}class="active"{% endif %}><a href="{% url 'dog_list' %}">Dog List</a></li>
         <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li>
-        <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
+        <li {% if active_link == "login" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
         <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Logout</a></li>
-	<li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
+      {% else %}
+        {% if user.is_authenticated %}
+          <li {% if active_link == "edit_walker" %}class="active"{% endif %}><a href="{% url 'edit_walker' %}">Profile</a></li>
+          <!-- <li {% if active_link == "schedule" %}class="active"{% endif %}><a href="{% url 'logout' %}">Schedule</a></li> -->
+          <li {% if active_link == "walker_signup" %}class="active"{% endif %}><a href="{% url 'walker_signup' %}">Form</a></li>
+          <li {% if active_link == "logout" %}class="active"{% endif %}><a href="{% url 'logout' %}">Logout</a></li>
         {% else %}
-          {% if user.is_authenticated %}
-
-
-          <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Schedule</a></li>
-          <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Form</a></li>
-
-          <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}">Logout</a></li>
-          {% else %}
           <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'signup' %}">Sign Up</a></li>
           <li {% if active_link == "signup" %}class="active"{% endif %}><a href="{% url 'login' %}">Log in</a></li>
-
-          <!-- form, schedule -->
-          {% endif %}
         {% endif %}
+      {% endif %}
     </div>
   </nav>
 
