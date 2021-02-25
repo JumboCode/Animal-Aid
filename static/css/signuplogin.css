@@ -60,7 +60,7 @@ body {
 	float: left;
 }
 
-#id_email, #id_password1, #id_password2 {
+#id_email, #id_password1, #id_password2, #id_username, #id_password {
 	width: 70%;
 	padding-top: 0px;
 	float: center;
@@ -76,4 +76,19 @@ body {
 
 #id_password2 {
 	margin-bottom: 10px;
+}
+
+.forgotpasstxt a{
+	font-family: 'Roboto', sans-serif;
+	text-decoration: none;
+	color: #583531;
+
+}
+
+.forgotpasstxt a:hover{
+	text-decoration: underline;
+	color: #583531;
+	font-weight: 700;
+
+
 }
