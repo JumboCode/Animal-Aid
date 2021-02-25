@@ -51,7 +51,7 @@ def dog_gallery(request):
 
         if dog.get_visible():
             dog_info = {}
-            dog_info["name"] = dog.name
+            dog_info["name"] = dog.dog_name
             # temp fix until we can display images reliably
             dog_info["image_path"] = dog.image_path
             dog_infos.append(dog_info)
