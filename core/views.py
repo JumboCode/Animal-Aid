@@ -88,7 +88,9 @@ def results(request):
             for match in matches:
                 # print(type(match.get_time))
                 walker_query = match.get_walker
-                print(str(walker_query))
+                walker_email = match.get_walker_email
+                # print(walker_query.get_email)
+                # print(walker_query)
                 # walker_results = Walker.objects.filter(walker = walker_query)
                 # print(walker_results)
                 # walker = walker_results[0]
@@ -96,7 +98,7 @@ def results(request):
                 data["match_results"].append({
                     "dog" : match.get_dog,
                     "walker" : walker_query,
-                    # "walker_email" : walker.get_email,
+                    "walker_email" : walker_email,
                     "day" : match.get_day,
                     "start_time" : match.get_start_time,
                     "end_time" : match.get_end_time,
