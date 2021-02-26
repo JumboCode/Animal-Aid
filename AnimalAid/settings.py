@@ -98,7 +98,7 @@ DATABASES = {
         'USER': 'admin',
         'PASSWORD': 'JumboCodeAnimalAid',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '',
     }
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
