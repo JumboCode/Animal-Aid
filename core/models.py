@@ -234,7 +234,10 @@ class Match(models.Model):
         return self.dog
 
     def get_walker(self):
-        return self.walker
+        return self.walker.get_name()
+    
+    def get_walker_email(self):
+        return self.walker.get_email()
     
     def get_day(self):
         return self.day 
