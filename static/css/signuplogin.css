@@ -23,8 +23,8 @@ body {
 }
 
 .Awhitemodal {
-    width: 80%;
-	height: 31.25rem;
+    width: 50%;
+	height: 100%;
 	border-radius: 30px;
 	background-color: #FFFFFF;
 	float: center;
@@ -33,9 +33,17 @@ body {
 	padding: 30px;
 	justify-content: center;
 	align-items: center;
-    position: absolute;
-    left: 50%;
-    right: 50%;
+    /*position: absolute;*/
+    /*left: 50%;*/
+    /*right: 50%;*/
+}
+
+.passwordsubtxt {
+	text-align: center;
+	font-weight: 500;
+	font-family: 'Roboto', sans-serif;
+	color: #583531;
+
 }
 
 .welcometext {
