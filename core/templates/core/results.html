@@ -11,7 +11,7 @@
 
         <!-- Dropdown menu -->
         <select id="dog_select" name="dog_select">
-            <option>All dogs</option>
+            <option>Select Dog</option>
             {% for dog in dog_names %}
                 <option>{{ dog.name }}</option>
             {% endfor %}
@@ -24,41 +24,68 @@
     <p></p>
 
     <!-- Display matches -->
-    {% if matches %}
-        <table style="background-color: rgba(214, 226, 217, 0.658);">
+    
+    {% if dog %}
+        <table style="background-color: rgba(39, 121, 245, 0.658);" cellspacing="10" cellpadding="5">
             <tr>
                 <th>Dog Name</th>
-                <th>Image</th>
-                <th>Location</th>
-                <th>Sunday</th>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
+                <th>Owner Name</th>
+                <th>Owner Email</th>
+                <th>Owner Phone</th>
+                <th>Owner Address</th>
             </tr>
-            {% for match in matches %}
+            
+            {% for dog in dog %}
+                <tr>
+                    <td>
+                        {{ dog.name }}
+                    </td>
+                    <td>
+                        {{ dog.owner }}
+                    </td>
+                    <td>
+                        [ email ]
+                    </td>
+                    <td>
+                        [ phone ]
+                    </td>
+                    <td>
+                        {{ dog.location }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    
+    <p>
+    
+    {% if match_results %}
+        <table style="background-color: rgba(214, 226, 217, 0.658);" cellspacing="10" cellpadding="5">
+            <tr>
+                <th>Walker</th>
+                <!-- <th>Image</th> -->
+                <!-- <th>Location</th> -->
+                <th>Walker Email</th>
+                <th>Day</th>
+                <th>Starting Time</th>
+                <th>Ending Time</th>
+            </tr>
+            {% for match in match_results %}
             <tr>
                 <td>
-                    {{ match.name }}
+                    {{ match.walker }}
                 </td>
                 <td>
-                    <img src="/{{ match.image }}">
+                    {{ match.walker_email }}
                 </td>
                 <td>
-                    {{ match.location }}
+                    {{ match.day }}
                 </td>
                 <td>
-                    <table style="background-color: rgba(214, 226, 217, 0.658);">
-                        <ul>
-                        {% for key, value in match.times.items %}
-                            {% if value %}
-                                <li>{{ key }}</li>
-                            {% endif %}
-                        {% endfor %}
-                        </ul>
-                    </table>
+                    {{ match.start_time }}:00
+                </td>
+                <td>
+                    {{ match.end_time }}:00
                 </td>
             </tr>
             {% endfor %}
