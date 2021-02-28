@@ -5,4 +5,5 @@ AWS_ACCESS_KEY_ID = "***REMOVED***"
 AWS_SECRET_ACCESS_KEY = "***REMOVED***"
 AWS_S3_REGION_NAME = "us-east-2"
 AWS_S3_ENDPOINT_URL = 'https://s3.us-east-2.amazonaws.com'
+AWS_S3_SIGNATURE_VERSION = 's3v4'
 S3DIRECT_DIR = 's3direct'
