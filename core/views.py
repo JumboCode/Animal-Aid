@@ -3,10 +3,11 @@ from .forms import CustomUserCreationForm, LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
-from .models import Dog, Match
+from .models import Dog, Walker, Match
 from django.core.exceptions import PermissionDenied, EmptyResultSet
 from core.models import Dog, Walker, Match
 from json import dumps
+
 
 def home(request):
     return render(request, 'core/home.html')
@@ -54,72 +55,68 @@ def dog_gallery(request):
             # temp fix until we can display images reliably
             dog_info["image_path"] = ''#dog.image.url 
             dog_infos.append(dog_info)
-    
+
     return render(request, 'core/dog.html', {'dogs': dog_infos})
     
 def results(request):
     if request.user.is_authenticated and request.user.is_staff:
-
         # POST request
         if request.method == 'POST':
             # dog_query = request.POST.get('dog_select').value
             dog_query = request.POST.get("dog_select")
-            
             # database logic
             dogs = Dog.objects.all()
-            data = {'matches':[],
-                    'dog_names':[] }
 
-            """Return info of specific queried dog """
-            # if we want all dogs, just add dogs to data
-            if (dog_query == "All dogs"):
-                for dog in dogs:
-                    data['matches'].append({
-                        'name': dog.get_name,
-                        'image': dog.get_image,
-                        'address': dog.get_address,
-                        'times': dog.get_walktimes,
-                    })
-            
-            # print match
-            # FOR TESTING
-            # TODO: delete later
-            matches = Match.objects.all()
-            for match in matches:
-                print(match)
-                print(match.get_day)
-                print(match.get_time)
-            
-
-            # look for dog with name == dog query
-            else:
-                for dog in dogs:
-                    if (str(dog) == dog_query):
-                        data['matches'].append({
-                            'name': dog.get_name,
-                            'image': dog.get_image,
-                            'address': dog.get_address,
-                            'times': dog.get_walktimes,
-                        })
-
-            """Return names of all dogs for select dropdown """
+            data = {'match_results':[],
+                    'dog_names':[] ,
+                    'dog':[],
+                    }
+            # Return names of all dogs for select dropdown
             for dog in dogs:
                 data['dog_names'].append({
                     'name': dog.get_name,
                 })
+            if (dog_query == "Select Dog"):
+                return render(request, 'core/results.html', data)
+            # Get dog objects based on query string
+            dog_results = Dog.objects.filter(dog_name = dog_query)
+            dog_result = dog_results[0] # Use the first dog
+            # Find all matches associated with that dog
+            matches = Match.objects.filter(dog = dog_result)
+            # Send information about the dog and matches
+            data['dog'].append({
+                "name" : dog_result.get_name,
+                "location" : dog_result.get_location,
+                "owner" : dog_result.get_owner,
+            })
             
+            for match in matches:
+                walker_query = match.get_walker
+                walker_email = match.get_walker_email
+                data["match_results"].append({
+                    "dog" : match.get_dog,
+                    "walker" : walker_query,
+                    "walker_email" : walker_email,
+                    "day" : match.get_day,
+                    "start_time" : match.get_start_time,
+                    "end_time" : match.get_end_time,
+                })
             return render(request, 'core/results.html', data)
         
         # GET request
         else: 
-            """Return names of all dogs for select dropdown """
+            # Return names of all dogs for select dropdown for initial page load
             dogs = Dog.objects.all()
-            data = {'dog_names':[]}
+            data = {
+                "dog_names":[],
+                "match_results" : []
+            }
             for dog in dogs:
-                data['dog_names'].append({
-                    'name': dog.get_name,
+                data["dog_names"].append({
+                    "name": dog.get_name,
                 })
             return render(request, 'core/results.html', data) 
+            
     else:
         raise PermissionDenied()
 

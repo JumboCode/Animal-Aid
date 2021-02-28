@@ -50,11 +50,11 @@ class Dog(models.Model):
     def get_name(self):
         return self.dog_name
 
-    def get_address(self):
+    def get_location(self):
         return self.address
         
-    # def get_zip(self):
-    #     return self.zip_code
+    def get_owner(self):
+        return self.owner_name
     
     # def get_image(self):
     #     return self.image
@@ -104,6 +104,9 @@ class Walker(models.Model):
 
     def get_name(self):
         return self.name
+    
+    def get_email(self):
+        return self.email
 
     def get_email(self):
         return self.email
@@ -136,16 +139,21 @@ class Match(models.Model):
         return self.dog
 
     def get_walker(self):
-        return self.walker
+        return self.walker.get_name()
+    
+    def get_walker_email(self):
+        return self.walker.get_email()
     
     def get_day(self):
         return self.day 
 
-    def get_time(self):
+    def get_start_time(self):
         return self.time
 
+    def get_end_time(self):
+        return self.time + 1
+
     def __str__(self):
-        return self.dog.get_name() + " walked by " # + self.walker.get_name()# return "MATCH"
         print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
         print_str += str(self.day) + "s at " + str(self.time) + " o'clock"
         return print_str
