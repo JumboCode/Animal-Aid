@@ -119,7 +119,9 @@ class DogAdmin(admin.ModelAdmin):
             }),
     ]
   
-admin.site.register(Dog, DogAdmin)
+# admin.site.register(Dog, DogAdmin)
+
+admin.site.register(Dog)
 
 admin.site.register(Walker)
 
