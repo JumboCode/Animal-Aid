@@ -11,8 +11,11 @@ class Dog(models.Model):
     # Updated Fields
     dog_name = models.CharField(max_length=30)
     dog_info = models.CharField(max_length=200)
+
     owner_name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
+    owner_phone = models.BigIntegerField(blank=True, null=True)
+    owner_email = models.CharField(max_length=100, null=True)
 
     visible = models.BooleanField(default=True)
 
@@ -50,14 +53,27 @@ class Dog(models.Model):
     def get_name(self):
         return self.dog_name
 
+    def get_info(self):
+        return self.dog_info
+
+    def get_owner_name(self):
+        return self.owner_name
+
     def get_address(self):
         return self.address
+
+    def get_phone_number(self):
+        return self.owner_phone
+        
+    def get_email(self):
+        return self.owner_email
         
     # def get_zip(self):
     #     return self.zip_code
     
-    # def get_image(self):
-    #     return self.image
+    def get_image(self):
+        return None
+        # return self.image
 
     def get_visible(self):
         return self.visible

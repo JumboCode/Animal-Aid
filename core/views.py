@@ -123,6 +123,8 @@ def results(request):
     else:
         raise PermissionDenied()
 
+STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864187-stock-illustration-dog-silhouette-vector.jpg'
+
 def dog_list(request):
     # only able to view master list if logged in as staff
     if request.user.is_authenticated and request.user.is_staff:
@@ -133,13 +135,25 @@ def dog_list(request):
         for dog in dogs:
             data['dogs'].append({
                 'name': dog.get_name,
-                #'image': dog.get_image,
+                'owner_name': dog.get_owner_name,
+                'owner_phone': dog.get_phone_number,
+                'owner_email': dog.get_email,
                 'address': dog.get_address,
                 'id': dog.id,
+                'image': STOCK_URL,
+                'visible': dog.get_visible(),
             })
+            # display dog image if dog has image
+            if not dog.get_image() == None:
+                data['dogs'][-1]['image'] = dog.get_image()
+
+        data['dogs'].sort(key=visibility_key)
         return render(request, 'core/dog_list.html', data) 
     else:
         raise PermissionDenied()
+
+def visibility_key(dog) :
+    return not dog['visible']
 
 # constants to change walking days and times
 # Sizes should match DAYS and HOURS constants in core/models.py
@@ -165,6 +179,10 @@ def edit_dog(request):
             if 'save_dog' in request.POST:
                 # assigning name, address from POST request
                 selected_dog.dog_name = request.POST.get('dog_name')
+                selected_dog.dog_info = request.POST.get('dog_info')
+                selected_dog.owner_name = request.POST.get('owner_name')
+                selected_dog.owner_phone = request.POST.get('owner_phone')
+                selected_dog.owner_email = request.POST.get('owner_email')
                 selected_dog.address = request.POST.get('dog_address')
                 selected_dog.visible = request.POST.get('dog_visible') == 'on'
 
@@ -183,14 +201,26 @@ def edit_dog(request):
 
             return redirect('dog_list')
         else:
+            name = selected_dog.get_name
+            info = selected_dog.get_info
+            owner_name = selected_dog.get_owner_name
+            phone_number = selected_dog.get_phone_number
+            if phone_number == None:
+                phone_number = ''
+            email = selected_dog.get_email
+            address = selected_dog.get_address
+
             # two dictionaries passed to render:
             #   data: used by django framework to format walk times table
             #   json_data: used by js to display all stored walk times
             data = {
                 'dog': {
-                    'name': selected_dog.get_name,
-                    #'image': selected_dog.get_image,
-                    'address': selected_dog.get_address,
+                    'name': name,
+                    'info': info,
+                    'owner_name': owner_name,
+                    'phone': phone_number,
+                    'email': email,
+                    'address': address,
                 },
                 'days': DAYS,
                 'hours': HOURS,
@@ -216,6 +246,10 @@ def add_dog(request):
             if 'save_dog' in request.POST:
                 # assigning name, address from POST request
                 name_in = request.POST.get('dog_name')
+                info_in = request.POST.get('dog_info')
+                owner_name_in = request.POST.get('owner_name')
+                owner_phone_in = request.POST.get('owner_phone')
+                owner_email_in = request.POST.get('owner_email')
                 address_in = request.POST.get('dog_address')
                 visible_in = request.POST.get('dog_visible') == 'on'
 
@@ -227,6 +261,10 @@ def add_dog(request):
                 
                 new_dog = Dog(
                     dog_name=name_in,
+                    dog_info=info_in,
+                    owner_name=owner_name_in,
+                    owner_phone=owner_phone_in,
+                    owner_email=owner_email_in,
                     address=address_in,
                     visible=visible_in,
                     times=chosen_times,
