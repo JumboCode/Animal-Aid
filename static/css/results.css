@@ -1,0 +1,52 @@
+body {
+	background-color: #EFE7E5;
+}
+
+#dog_select {
+	border-radius: 30px;
+	height: 3.125rem;
+	/*height: 50%;*/
+	width: 20rem;
+	/*width: 80%;*/
+	display: inline-block;
+	padding-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 30px;
+}
+
+/*#dog_select select {
+	appearance: none;
+	padding-right: 20px;
+}
+
+#dog_select::after {
+	content: "\25bc";
+}*/
+
+#filter_dog {
+	display: inline-block;
+	width: 10rem !important;
+}
+
+#title {
+    	text-align: center;
+}
+
+.whiteresultcontainer {
+	width: 92%;
+	height: auto;
+	background-color: #FFFFFF;
+	text-align: center;
+	float:center;
+	margin: 0 auto;
+	border-radius: 30px;
+}
+
+
+
+.headtext {
+	font-weight: 200;
+	font-size: 30px;
+	padding-top: 30px;
+	padding-bottom: 20px;
+}
