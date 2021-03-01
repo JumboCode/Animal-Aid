@@ -1,6 +1,8 @@
+from aws.conf import *
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from s3direct.fields import S3DirectField
 from django.contrib.postgres.fields import ArrayField
 
 # constants to control how many walking times are used
@@ -11,6 +13,7 @@ class Dog(models.Model):
     # Updated Fields
     dog_name = models.CharField(max_length=30)
     dog_info = models.CharField(max_length=200)
+    image_path = S3DirectField(dest='example_destination', blank=True)
 
     owner_name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
@@ -18,10 +21,6 @@ class Dog(models.Model):
     owner_email = models.CharField(max_length=100, null=True)
 
     visible = models.BooleanField(default=True)
-
-    #location = models.CharField(max_length=100)
-    #zip_code = models.IntegerField() 
-    #image = models.ImageField(upload_to='static/img/dogs/', null=True)
 
     # Array of walk times as booleans
     
@@ -60,6 +59,7 @@ class Dog(models.Model):
         return self.owner_name
 
     def get_address(self):
+
         return self.address
 
     def get_phone_number(self):
@@ -68,12 +68,11 @@ class Dog(models.Model):
     def get_email(self):
         return self.owner_email
         
-    # def get_zip(self):
-    #     return self.zip_code
+    def get_owner(self):
+        return self.owner_name
     
     def get_image(self):
-        return None
-        # return self.image
+        return self.image_path
 
     def get_visible(self):
         return self.visible
@@ -120,6 +119,9 @@ class Walker(models.Model):
 
     def get_name(self):
         return self.name
+    
+    def get_email(self):
+        return self.email
 
     def get_email(self):
         return self.email
@@ -152,13 +154,19 @@ class Match(models.Model):
         return self.dog
 
     def get_walker(self):
-        return self.walker
+        return self.walker.get_name()
+    
+    def get_walker_email(self):
+        return self.walker.get_email()
     
     def get_day(self):
         return self.day 
 
-    def get_time(self):
+    def get_start_time(self):
         return self.time
+
+    def get_end_time(self):
+        return self.time + 1
 
     def __str__(self):
         print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
