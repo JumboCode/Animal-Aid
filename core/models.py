@@ -17,6 +17,8 @@ class Dog(models.Model):
 
     owner_name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
+    owner_phone = models.BigIntegerField(blank=True, null=True)
+    owner_email = models.CharField(max_length=100, null=True)
 
     visible = models.BooleanField(default=True)
 
@@ -50,8 +52,21 @@ class Dog(models.Model):
     def get_name(self):
         return self.dog_name
 
-    def get_location(self):
+    def get_info(self):
+        return self.dog_info
+
+    def get_owner_name(self):
+        return self.owner_name
+
+    def get_address(self):
+
         return self.address
+
+    def get_phone_number(self):
+        return self.owner_phone
+        
+    def get_email(self):
+        return self.owner_email
         
     def get_owner(self):
         return self.owner_name

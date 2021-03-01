@@ -22,50 +22,27 @@
         </table>
         <br>
         
-        <h2><u>Dog Preferences</u></h2>
-        <table>
-            {% for num in data.pref_nums %}
-                <tr>
-                    <td>
-                        <p>Choice #{{ num }}</p>
-                    </td>
-                    <td>
-                        <!-- Dog pref dropdown menu -->
-                        <select id="dog_select_{{ num }}" name="dog_select_{{ num }}">
-                            <option>----</option>
-                            {% for dog_name in data.dog_names %}
-                                <option>{{ dog_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    
-                </tr>
+        <h2><u>{{ data.walker.name }}'s Dog Matches</u></h2>
+        <table style="border: 2px solid black; text-align: center; border-collapse: separate;">
+            <tr>
+                <th>Dog</th>
+                <th>Walk Days</th>
+                <th>Walk Times</th>
+            </tr>
+
+            {% for match in data.match_list %}
+            <tr>
+                    <!-- list match attributes in each cell -->
+                    <td>{{ match.dog.dog_name }}</td>
+                    <td>{{ match.day }}</td>
+                    <td>{{ match.time }}</td>
+            </tr>
             {% endfor %}
         </table>
-
-        <h2><u>Walk Times</u></h2>
         
-        <table style="background-color: rgba(204, 240, 252, 0.658); border: 1px solid black; border-collapse: collapse;">
-
-            <!-- iterate through days ['Monday', 'Tuesday', ...] -->
-            {% for day in data.days %}
-                <tr style="border: 1px solid black;">
-                    <td><h2>{{ day }}</h2></td>
-                    <!-- iterate through hours ['9:00am', '10:00am', ...] -->
-                    {% for hour in data.hours %}
-                        <td style="min-width: 120px;">
-                        <!-- checkbox naming scheme: "Thursday-2:00pm" -->
-                        <input type="checkbox" name="{{ day }}-{{ hour }}" id="{{ day }}-{{ hour }}">
-                        <label for="{{ day }}-{{ hour }}">{{ hour }}</label>
-                        </td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </table>
-
         <br>
         <button type="submit" name="save_walker" id="save_walker">Save</button>
-        {% if data.saved %}
+        {% if data.walker.saved %}
             <label for="save_walker" style="color: seagreen;">Profile Saved</label>
         {% endif %}
         <br>
@@ -73,31 +50,4 @@
     </form>
 
     <br>
-
-    <script>
-        var data = JSON.parse("{{ json_data|escapejs }}");
-        var days = data["days"];
-        var hours = data["hours"];
-        var times = data["times"];
-        for (var day = 0; day < days.length; day++) {
-            for (var hour = 0; hour < hours.length; hour++) {
-                document.getElementById(days[day] + "-" + hours[hour]).checked = times[day][hour];
-            }
-        }
-
-        var dog_choices = data["dog_choices"];
-        for (var choice = 0; choice < dog_choices.length; choice++) {
-            var ddl = document.getElementById(`dog_select_${choice + 1}`);
-            var opts = ddl.options.length;
-            for (var i = 0; i < opts; i++){
-                if (dog_choices[choice] == null) {
-                    break;
-                }
-                if (ddl.options[i].value == dog_choices[choice]){
-                    ddl.options[i].selected = true;
-                    break;
-                }
-            }
-        }
-    </script>
 {% endblock %}
