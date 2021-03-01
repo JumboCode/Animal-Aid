@@ -326,7 +326,6 @@ def edit_walker(request):
         if phone_number == None:
             phone_number = ''
 
-
         # display matches
         match_list = Match.objects.filter(walker__email=username)
 
@@ -335,6 +334,7 @@ def edit_walker(request):
                 'name': name,   
                 'email': email,
                 'phone': phone_number,
+                'saved': ('save_walker' in request.POST),
             },
             'match_list': match_list,
         }

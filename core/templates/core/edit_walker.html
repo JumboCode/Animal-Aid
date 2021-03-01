@@ -39,39 +39,15 @@
             </tr>
             {% endfor %}
         </table>
+        
         <br>
-
+        <button type="submit" name="save_walker" id="save_walker">Save</button>
+        {% if data.walker.saved %}
+            <label for="save_walker" style="color: seagreen;">Profile Saved</label>
+        {% endif %}
+        <br>
         <button type="submit" name="cancel" id="cancel">Cancel</button>
     </form>
 
     <br>
-<!-- 
-    <script>
-        var data = JSON.parse("{{ json_data|escapejs }}");
-        var days = data["days"];
-        var hours = data["hours"];
-        var times = data["times"];
-        for (var day = 0; day < days.length; day++) {
-            for (var hour = 0; hour < hours.length; hour++) {
-                document.getElementById(days[day] + "-" + hours[hour]).checked = times[day][hour];
-            }
-        }
-
-        var dog_choices = data["dog_choices"];
-        for (var choice = 0; choice < dog_choices.length; choice++) {
-            var ddl = document.getElementById(`dog_select_${choice + 1}`);
-            var opts = ddl.options.length;
-            for (var i = 0; i < opts; i++){
-                if (dog_choices[choice] == null) {
-                    break;
-                }
-                if (ddl.options[i].value == dog_choices[choice]){
-                    ddl.options[i].selected = true;
-                    break;
-                }
-            }
-        }
-    </script> -->
-
-
 {% endblock %}
