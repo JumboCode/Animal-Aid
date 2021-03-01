@@ -87,7 +87,7 @@ def results(request):
             # Send information about the dog and matches
             data['dog'].append({
                 "name" : dog_result.get_name,
-                "location" : dog_result.get_location,
+                "address" : dog_result.get_address,
                 "owner" : dog_result.get_owner,
             })
             
@@ -121,6 +121,8 @@ def results(request):
     else:
         raise PermissionDenied()
 
+STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864187-stock-illustration-dog-silhouette-vector.jpg'
+
 def dog_list(request):
     # only able to view master list if logged in as staff
     if request.user.is_authenticated and request.user.is_staff:
@@ -131,13 +133,25 @@ def dog_list(request):
         for dog in dogs:
             data['dogs'].append({
                 'name': dog.get_name,
-                #'image': dog.get_image,
+                'owner_name': dog.get_owner_name,
+                'owner_phone': dog.get_phone_number,
+                'owner_email': dog.get_email,
                 'address': dog.get_address,
                 'id': dog.id,
+                'image': STOCK_URL,
+                'visible': dog.get_visible(),
             })
+            # display dog image if dog has image
+            if not dog.get_image() == None:
+                data['dogs'][-1]['image'] = dog.get_image()
+
+        data['dogs'].sort(key=visibility_key)
         return render(request, 'core/dog_list.html', data) 
     else:
         raise PermissionDenied()
+
+def visibility_key(dog) :
+    return not dog['visible']
 
 # constants to change walking days and times
 # Sizes should match DAYS and HOURS constants in core/models.py
@@ -163,6 +177,10 @@ def edit_dog(request):
             if 'save_dog' in request.POST:
                 # assigning name, address from POST request
                 selected_dog.dog_name = request.POST.get('dog_name')
+                selected_dog.dog_info = request.POST.get('dog_info')
+                selected_dog.owner_name = request.POST.get('owner_name')
+                selected_dog.owner_phone = request.POST.get('owner_phone')
+                selected_dog.owner_email = request.POST.get('owner_email')
                 selected_dog.address = request.POST.get('dog_address')
                 selected_dog.visible = request.POST.get('dog_visible') == 'on'
 
@@ -181,14 +199,26 @@ def edit_dog(request):
 
             return redirect('dog_list')
         else:
+            name = selected_dog.get_name
+            info = selected_dog.get_info
+            owner_name = selected_dog.get_owner_name
+            phone_number = selected_dog.get_phone_number
+            if phone_number == None:
+                phone_number = ''
+            email = selected_dog.get_email
+            address = selected_dog.get_address
+
             # two dictionaries passed to render:
             #   data: used by django framework to format walk times table
             #   json_data: used by js to display all stored walk times
             data = {
                 'dog': {
-                    'name': selected_dog.get_name,
-                    #'image': selected_dog.get_image,
-                    'address': selected_dog.get_address,
+                    'name': name,
+                    'info': info,
+                    'owner_name': owner_name,
+                    'phone': phone_number,
+                    'email': email,
+                    'address': address,
                 },
                 'days': DAYS,
                 'hours': HOURS,
@@ -214,6 +244,10 @@ def add_dog(request):
             if 'save_dog' in request.POST:
                 # assigning name, address from POST request
                 name_in = request.POST.get('dog_name')
+                info_in = request.POST.get('dog_info')
+                owner_name_in = request.POST.get('owner_name')
+                owner_phone_in = request.POST.get('owner_phone')
+                owner_email_in = request.POST.get('owner_email')
                 address_in = request.POST.get('dog_address')
                 visible_in = request.POST.get('dog_visible') == 'on'
 
@@ -225,6 +259,10 @@ def add_dog(request):
                 
                 new_dog = Dog(
                     dog_name=name_in,
+                    dog_info=info_in,
+                    owner_name=owner_name_in,
+                    owner_phone=owner_phone_in,
+                    owner_email=owner_email_in,
                     address=address_in,
                     visible=visible_in,
                     times=chosen_times,
@@ -274,27 +312,6 @@ def edit_walker(request):
                 walker.name = request.POST.get('walker_name')
                 walker.phone_number = request.POST.get('walker_phone')
 
-                # iterate through checkboxes to fill out chosen_times
-                chosen_times = []
-                for day in DAYS:
-                    for hour in HOURS:
-                        chosen_times.append(request.POST.get(day + '-' + hour) == 'on')
-                walker.chosen_times = chosen_times
-
-                # iterate through dog preferences to fill out dog_choices
-                dog_choices = []
-                for choice_num in range(PREF_COUNT):
-                    dropdown_choice = request.POST.get(f'dog_select_{choice_num + 1}')
-
-                    # append chosen dog name to dog_choices
-                    if Dog.objects.filter(dog_name=dropdown_choice).exists():
-                        dog_choices.append(Dog.objects.get(dog_name=dropdown_choice).get_name())
-                        
-                    # if '----' is chosen for a dog pref, then the pref is saved as None
-                    else:
-                        dog_choices.append(None)
-                walker.dog_choices = dog_choices
-
                 walker.save()
 
             # redirect to home if cancel button is pressed
@@ -306,36 +323,21 @@ def edit_walker(request):
         phone_number = walker.get_phone_number()
         if phone_number == None:
             phone_number = ''
-        
-        # getting dog names to display in pref dropdowns
-        all_dogs = Dog.objects.all()
-        visible_dog_names = []
-        for dog in all_dogs:
-            if dog.get_visible(): # only displaying dogs which have visible = True
-                visible_dog_names.append(dog.get_name())
-        
-        # helper array for Django template to loop through
-        pref_nums = range(1, PREF_COUNT+1)
+
+        # display matches
+        match_list = Match.objects.filter(walker__email=username)
 
         data = {
             'walker': {
                 'name': name,   
                 'email': email,
                 'phone': phone_number,
+                'saved': ('save_walker' in request.POST),
             },
-            'days': DAYS,
-            'hours': HOURS,
-            'saved': (request.method == 'POST'),
-            'dog_names': visible_dog_names,
-            'pref_nums': pref_nums,
+            'match_list': match_list,
         }
-        json_data = {
-            'days': DAYS,
-            'hours': HOURS,
-            'times': walker.get_walktimes(),
-            'dog_choices': walker.get_dog_choices(),
-        }
-        return render(request, 'core/edit_walker.html', {'data':data, 'json_data':dumps(json_data)})
+
+        return render(request, 'core/edit_walker.html', {'data':data})
     else:
         raise PermissionDenied()
 

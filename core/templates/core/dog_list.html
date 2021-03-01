@@ -4,15 +4,17 @@
     <h1>Dog List</h1>
     <table style="background-color: rgba(204, 240, 252, 0.658); border: 1px solid black; border-collapse: collapse;">
         {% for dog in dogs %}
-            <tr style="border: 1px solid black;">
+            <tr style="border: 1px solid black;{% if dog.visible is False %} background-color: lightgrey;{% endif %}">
                 <td>
                     {{ dog.name }}
                 </td>
                 <td>
-                    <img src="/{{ dog.image }}">
+                    <img width="100" height="100" src="{{ dog.image }}">
                 </td>
                 <td>
-                    {{ dog.address }}
+                    {{ dog.owner_name }} <br>
+                    {{ dog.owner_phone }} <br>
+                    {{ dog.owner_email }}
                 </td>
                 <td>
                     <a href="{% url 'edit_dog' %}?q={{ dog.id }}">
