@@ -1,6 +1,8 @@
+from aws.conf import *
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from s3direct.fields import S3DirectField
 from django.contrib.postgres.fields import ArrayField
 
 # constants to control how many walking times are used
@@ -11,14 +13,12 @@ class Dog(models.Model):
     # Updated Fields
     dog_name = models.CharField(max_length=30)
     dog_info = models.CharField(max_length=200)
+    image_path = S3DirectField(dest='example_destination', blank=True)
+
     owner_name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
 
     visible = models.BooleanField(default=True)
-
-    #location = models.CharField(max_length=100)
-    #zip_code = models.IntegerField() 
-    #image = models.ImageField(upload_to='static/img/dogs/', null=True)
 
     # Array of walk times as booleans
     
@@ -56,8 +56,8 @@ class Dog(models.Model):
     def get_owner(self):
         return self.owner_name
     
-    # def get_image(self):
-    #     return self.image
+    def get_image(self):
+        return self.image_path
 
     def get_visible(self):
         return self.visible
