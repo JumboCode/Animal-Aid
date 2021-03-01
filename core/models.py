@@ -161,7 +161,6 @@ class Match(models.Model):
         return self.time
 
     def __str__(self):
-        return self.dog.get_name() + " walked by " # + self.walker.get_name()# return "MATCH"
         print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
         print_str += str(self.day) + "s at " + str(self.time) + " o'clock"
         return print_str
