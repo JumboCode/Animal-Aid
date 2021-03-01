@@ -87,7 +87,7 @@ def results(request):
             # Send information about the dog and matches
             data['dog'].append({
                 "name" : dog_result.get_name,
-                "location" : dog_result.get_location,
+                "address" : dog_result.get_address,
                 "owner" : dog_result.get_owner,
             })
             
