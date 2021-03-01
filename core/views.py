@@ -290,7 +290,7 @@ def edit_walker(request):
 
 
         # display matches
-        match_list = Match.objects.filter(walker__name=name)
+        match_list = Match.objects.filter(walker__email=username)
 
         data = {
             'walker': {
