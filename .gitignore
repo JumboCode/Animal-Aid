@@ -146,4 +146,12 @@ cython_debug/
 .vscode
 
 # TypeScript config
+tsconfig.jsoncore/migrations/
+core/migrations
 tsconfig.json
+
+# Migrations
+*/migrations/*
+
+# Static Images
+*static/img/dogs/*
