@@ -48,6 +48,7 @@ Access the database, drop all the tables, recreate a Schema and give the admin u
     DROP SCHEMA public CASCADE;
     CREATE SCHEMA public;
     GRANT ALL ON SCHEMA public TO public;
+    GRANT ALL ON SCHEMA public TO admin;
     \q
     
 
