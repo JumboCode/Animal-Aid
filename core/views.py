@@ -424,6 +424,7 @@ def walker_signup(request):
             'times': walker.get_walktimes(),
             'prev_choices': walker.get_dog_choices(),
             'dog_list': visible_dogs,
+            'pref_count': PREF_COUNT,
         }
         return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data)})
     else:
