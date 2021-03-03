@@ -1,5 +1,5 @@
 from django import forms
-from .forms import CustomUserCreationForm, LoginForm
+from .forms import CustomUserCreationForm, LoginForm, S3DirectUploadForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
@@ -121,8 +121,6 @@ def results(request):
     else:
         raise PermissionDenied()
 
-STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864187-stock-illustration-dog-silhouette-vector.jpg'
-
 def dog_list(request):
     # only able to view master list if logged in as staff
     if request.user.is_authenticated and request.user.is_staff:
@@ -138,12 +136,9 @@ def dog_list(request):
                 'owner_email': dog.get_email,
                 'address': dog.get_address,
                 'id': dog.id,
-                'image': STOCK_URL,
+                'image': dog.get_image(),
                 'visible': dog.get_visible(),
             })
-            # display dog image if dog has image
-            if not dog.get_image() == None:
-                data['dogs'][-1]['image'] = dog.get_image()
 
         data['dogs'].sort(key=visibility_key)
         return render(request, 'core/dog_list.html', data) 
@@ -183,6 +178,8 @@ def edit_dog(request):
                 selected_dog.owner_email = request.POST.get('owner_email')
                 selected_dog.address = request.POST.get('dog_address')
                 selected_dog.visible = request.POST.get('dog_visible') == 'on'
+                if not request.POST.get('image') == '':
+                    selected_dog.image_path = request.POST.get('image')
 
                 # assigning times from POST using checkbox id convention: "Thursday-2:00pm"
                 chosen_times = []
@@ -207,6 +204,7 @@ def edit_dog(request):
                 phone_number = ''
             email = selected_dog.get_email
             address = selected_dog.get_address
+            image = selected_dog.get_image
 
             # two dictionaries passed to render:
             #   data: used by django framework to format walk times table
@@ -219,6 +217,7 @@ def edit_dog(request):
                     'phone': phone_number,
                     'email': email,
                     'address': address,
+                    'image': image,
                 },
                 'days': DAYS,
                 'hours': HOURS,
@@ -229,7 +228,7 @@ def edit_dog(request):
                 'visible': selected_dog.get_visible(),
                 'times': selected_dog.get_walktimes(),
             }
-            return render(request, 'core/edit_dog.html', {'data':data, 'json_data':dumps(json_data)})
+            return render(request, 'core/edit_dog.html', {'data':data, 'json_data':dumps(json_data), 'image_form':S3DirectUploadForm()})
     else:
         # permission denied if user isn't staff
         raise PermissionDenied()
@@ -250,6 +249,7 @@ def add_dog(request):
                 owner_email_in = request.POST.get('owner_email')
                 address_in = request.POST.get('dog_address')
                 visible_in = request.POST.get('dog_visible') == 'on'
+                image_in = request.POST.get('image')
 
                 # assigning times from POST using checkbox id convention: "Thursday-2:00pm"
                 chosen_times = []
@@ -266,6 +266,7 @@ def add_dog(request):
                     address=address_in,
                     visible=visible_in,
                     times=chosen_times,
+                    image_path=image_in,
                 )
 
                 new_dog.save()
@@ -275,6 +276,7 @@ def add_dog(request):
             data = {
                 'days': DAYS,
                 'hours': HOURS,
+                'image_form': S3DirectUploadForm(),
             }
             return render(request, 'core/add_dog.html', data)
     else:

@@ -8,6 +8,7 @@ from django.contrib.postgres.fields import ArrayField
 # constants to control how many walking times are used
 DAYS = 7
 HOURS = 9
+STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864187-stock-illustration-dog-silhouette-vector.jpg'
 
 class Dog(models.Model):
     # Updated Fields
@@ -72,6 +73,8 @@ class Dog(models.Model):
         return self.owner_name
     
     def get_image(self):
+        if self.image_path == '' or self.image_path == None:
+            return STOCK_URL
         return self.image_path
 
     def get_visible(self):

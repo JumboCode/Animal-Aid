@@ -97,3 +97,9 @@ class LoginForm(AuthenticationForm):
     
     def confirm_login_allowed(self, user):
         pass
+
+
+from s3direct.widgets import S3DirectWidget
+
+class S3DirectUploadForm(forms.Form):
+    image = forms.URLField(widget=S3DirectWidget(dest='example_destination'))
