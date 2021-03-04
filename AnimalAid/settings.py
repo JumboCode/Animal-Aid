@@ -186,32 +186,9 @@ STATICFILES_DIRS = (
     (os.path.join(BASE_DIR, 'static')),
 )
 
-# # AWS_STORAGE_BUCKET_NAME = 'animal-aid-local'
-# # STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-# # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-
-# STATIC_URL = 'http://' + AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com/'
-
 LOGOUT_REDIRECT_URL = '/'
 # https://stackoverflow.com/questions/61111988/django-keeps-using-wrong-storage-backend-when-trying-to-upload-static-files-to-s
 django_heroku.settings(locals())
 
-
-# from django.conf import settings
-# from storages.backends.s3boto3 import S3Boto3Storage
-
-# class StaticStorage(S3Boto3Storage):
-
-#     location = settings.STATICFILES_STORAGE
-
-#     def _clean_name(self, name):
-#         return name
-
-#     def _normalize_name(self, name):
-#         if not name.endswith('/'):
-#             name += "/"
-
-#         name += self.location
-#         return name
 
 
