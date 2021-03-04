@@ -11,7 +11,7 @@ HOURS = 9
 
 class Dog(models.Model):
     # Updated Fields
-    dog_name = models.CharField(max_length=40)
+    dog_name = models.CharField(max_length=30)
     dog_info = models.CharField(max_length=200)
     image_path = S3DirectField(dest='example_destination', blank=True)
 
