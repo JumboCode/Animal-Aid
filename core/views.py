@@ -56,7 +56,6 @@ def dog_gallery(request):
             dog_info["image_path"] = dog.image_path
             dog_infos.append(dog_info)
 
->>>>>>> master
     return render(request, 'core/dog.html', {'dogs': dog_infos})
     
 def results(request):
