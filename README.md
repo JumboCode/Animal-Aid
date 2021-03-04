@@ -22,8 +22,8 @@ Install all dependencies:
 Run migrations:
 
     cd src
-    python3 manage.py makemigrations
-    python3 manage.py migrate
+    python3 manage.py makemigrations core
+    python3 manage.py migrate core
     
 Run Server and view webpage:
 
@@ -33,6 +33,24 @@ Run Server and view webpage:
 ### Detailed instructions
 
 Take a look at the docs for more information.
+
+
+## Fixing SQLite Database
+Just delete the database and then rerun makemigrations and migrate (you will lose all your data)
+
+## Fixing Postgres Database
+Access the database, drop all the tables, recreate a Schema and give the admin user access:
+    
+    psql animalaid <-- Open up the psql terminal
+    
+    // In that terminal run the following:
+    
+    DROP SCHEMA public CASCADE;
+    CREATE SCHEMA public;
+    GRANT ALL ON SCHEMA public TO public;
+    GRANT ALL ON SCHEMA public TO admin;
+    \q
+    
 
 [0]: https://www.python.org/
 [1]: https://www.djangoproject.com/

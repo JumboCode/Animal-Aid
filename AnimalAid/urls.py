@@ -33,10 +33,16 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', core_views.signup, name = "signup"),
     path('results/', core_views.results, name="results"),
+    path('dogs/', core_views.dog_list, name="dog_list"),
+    path('dogs/edit_dog/', core_views.edit_dog, name="edit_dog"),
+    path('dogs/add_dog/', core_views.add_dog, name="add_dog"),
+    path('walker_profile/', core_views.edit_walker, name="edit_walker"),
+    path('walker_signup/', core_views.walker_signup, name="walker_signup"),
     url(r'^ajax/validate_username/$', forms.validate_username, name='validate_username'),
     url(r'^ajax/validate_password1/$', forms.validate_password1, name='validate_password1'),
     url(r'^ajax/validate_password2/$', forms.validate_password2, name='validate_password2'),
     url('dog_gallery/', core_views.dog_gallery, name="dog_gallery"),
     path('', core_views.home, name="home"),
+    path('s3direct/', include('s3direct.urls'))
     
 ]

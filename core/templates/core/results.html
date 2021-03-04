@@ -1,67 +1,164 @@
 {% extends 'base.html' %}
 
 {% load static %}
+
+{% block styles %}
+    <link href="{% static '/css/app.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static '/css/results.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static '/css/home.css' %}" rel="stylesheet" type="text/css" />
+
+{% endblock styles %}
+
+
 {% block content %}
     <p></p>
 
-    <h1>Results</h1>
+    <br> <br>
 
-    <form action="" method="post">
-        {% csrf_token %}
+    <div class="row justify-content-center align-self-center" > 
+        <img src="{% static 'img/smallPawPrint.svg' %}" class="pawprintsmall"> 
+        <div class="AAhomesmallheader"  style=> Find Schedule </div>
+        <img src="{% static 'img/smallPawPrint.svg' %}" class="pawprintsmall"> 
+    </div>
+    <br> <br>
 
-        <!-- Dropdown menu -->
-        <select id="dog_select" name="dog_select">
-            <option>All dogs</option>
-            {% for dog in dog_names %}
-                <option>{{ dog.name }}</option>
-            {% endfor %}
-        </select> 
 
-        <!-- Button to ilter by dog name -->
-        <button type="submit" name="filter_dog" id="filter_dog">Go!</button>
-    </form>
+    <div class="container"  id="title"> 
+    <!-- <div class="row justify-content-center align-self-center" style="border: solid red">  -->
+        <form action="" method="post">
+            {% csrf_token %}
+
+            <!-- Dropdown menu -->
+            <select id="dog_select" name="dog_select">
+                <option>Select Dog</option>
+                {% for dog in dog_names %}
+                    <option>{{ dog.name }}</option>
+                {% endfor %}
+            </select> 
+
+            <!-- boostrap compatible dropdown trial-->
+            <!-- <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dog_select">
+                    Select Dog
+                </button>
+
+                <ul class="dropdown-menu" aria-labelledby="dog_select">
+                    {% for dog in dog_names %}
+                        <li><a class="dropdown-item" href="#">{{ dog.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div> -->
+
+            <!-- Button to filter by dog name -->
+            <button type="submit" name="filter_dog" id="filter_dog" class="subscribebutton">FILTER</button>
+        </form>
+
+    <!-- </div> -->
+    </div>
 
     <p></p>
 
+
+    <br> <br>
+
     <!-- Display matches -->
-    {% if matches %}
-        <table style="background-color: rgba(214, 226, 217, 0.658);">
+    {% if dog %}
+
+    <div class="container-fluid" >
+
+        <div class="whiteresultcontainer"> 
+
+    
+
+        <!-- Moved this here -->
+        {% for dog in dog %}
+
+        <div class="headtext">Schedule for {{ dog.name }} with owner {{ dog.owner }}</div>
+
+        <div class="container"> 
+
+        <table class="table table-hover table-responsive-md">
             <tr>
                 <th>Dog Name</th>
-                <th>Image</th>
-                <th>Location</th>
-                <th>Sunday</th>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
+                <th>Owner Name</th>
+                <th>Owner Email</th>
+                <th>Owner Phone</th>
+                <th>Owner Address</th>
             </tr>
-            {% for match in matches %}
+            
+
+            <!-- moved for dog from here -->
+                <tr>
+                    <td>
+                        {{ dog.name }}
+                    </td>
+                    <td>
+                        {{ dog.owner }}
+                    </td>
+                    <td>
+                        [ email ]
+                    </td>
+                    <td>
+                        [ phone ]
+                    </td>
+                    <td>
+                        {{ dog.address }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    
+    <p>
+
+    <br> <br>
+    
+    {% if match_results %}
+        <table class="table table-hover table-responsive-md">
+            <tr>
+                <th>Walker</th>
+                <!-- <th>Image</th> -->
+                <!-- <th>Location</th> -->
+                <th>Walker Email</th>
+                <th>Day</th>
+                <th>Starting Time</th>
+                <th>Ending Time</th>
+            </tr>
+            {% for match in match_results %}
             <tr>
                 <td>
-                    {{ match.name }}
+                    {{ match.walker }}
                 </td>
                 <td>
-                    <img src="/{{ match.image }}">
+                    {{ match.walker_email }}
                 </td>
                 <td>
-                    {{ match.location }}
+                    {{ match.day }}
                 </td>
                 <td>
-                    <table style="background-color: rgba(214, 226, 217, 0.658);">
-                        <ul>
-                        {% for key, value in match.times.items %}
-                            {% if value %}
-                                <li>{{ key }}</li>
-                            {% endif %}
-                        {% endfor %}
-                        </ul>
-                    </table>
+                    {{ match.start_time }}:00
+                </td>
+                <td>
+                    {{ match.end_time }}:00
                 </td>
             </tr>
             {% endfor %}
         </table>
-    {% endif %}
+    
+
+
+        <br> <br>
+        </div>
+
+        <!-- print button -->
+        <button class="subscribebutton" onclick="window.print()">Print Schedule</button>
+
+{% endif %}
+        <br> <br>
+        </div>
+    </div>
+
+<br> <br>
+
 {% endblock %}
+

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <h2><u>Profile</u></h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>Name: </td>
+                <td><input name="walker_name" id="walker_name" value="{{ data.walker.name }}" required></td>
+            </tr>
+            <tr>
+                <td>Email: </td>
+                <td>{{ data.walker.email }}</td>
+            </tr>
+            <tr>
+                <td>Phone Number: </td>
+                <td><input type="tel" name="walker_phone" id="walker_phone" value="{{ data.walker.phone }}" maxlength="10" size="10" pattern="[0-9]{10}" required></td>
+            </tr>
+        </table>
+        <br>
+        
+        <h2><u>{{ data.walker.name }}'s Dog Matches</u></h2>
+        <table style="border: 2px solid black; text-align: center; border-collapse: separate;">
+            <tr>
+                <th>Dog</th>
+                <th>Walk Days</th>
+                <th>Walk Times</th>
+            </tr>
+
+            {% for match in data.match_list %}
+            <tr>
+                    <!-- list match attributes in each cell -->
+                    <td>{{ match.dog.dog_name }}</td>
+                    <td>{{ match.day }}</td>
+                    <td>{{ match.time }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <br>
+        <button type="submit" name="save_walker" id="save_walker">Save</button>
+        {% if data.walker.saved %}
+            <label for="save_walker" style="color: seagreen;">Profile Saved</label>
+        {% endif %}
+        <br>
+        <button type="submit" name="cancel" id="cancel">Cancel</button>
+    </form>
+
+    <br>
+{% endblock %}

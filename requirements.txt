@@ -11,3 +11,4 @@ boto3
 django-storages
 django-utils-six 
 google-compute-engine
+django-s3direct>=1.1.8

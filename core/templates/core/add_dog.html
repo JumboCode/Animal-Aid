@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <h1>Add Dog</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>Name: </td>
+                <td><input name="dog_name" id="dog_name" required></td>
+            </tr>
+            <tr>
+                <td>Info: </td>
+                <td><textarea name="dog_info" id="dog_info" rows="5" cols="50"></textarea></td>
+            </tr>
+            <tr>
+                <td>Owner Name: </td>
+                <td><input name="owner_name" id="owner_name" required></td>
+            </tr>
+            <tr>
+                <td>Owner Phone: </td>
+                <td><input name="owner_phone" id="owner_phone" required></td>
+            </tr>
+            <tr>
+                <td>Owner Email: </td>
+                <td><input name="owner_email" id="owner_email" required></td>
+            </tr>
+            <tr>
+                <td>Address: </td>
+                <td><input name="dog_address" id="dog_address" required></td>
+            </tr>
+        </table>
+
+        <br>
+        <input type="checkbox" name="dog_visible" id="dog_visible" checked>
+        <label for="dog_visible">Visible?</label>
+        <br><br>
+        
+        <table style="background-color: rgba(204, 240, 252, 0.658); border: 1px solid black; border-collapse: collapse;">
+
+            <!-- FOR HEADER - iterate through days ['Monday', 'Tuesday', ...] -->
+            <tr style="border: 1px solid black;">
+                {% for day in days %}
+                    <td><h2 style="text-align: center; min-width: 200px;">{{ day }}</h2></td>
+                {% endfor %}
+            </tr>
+            
+            <!-- iterate through hours ['9:00am', '10:00am', ...] -->
+            {% for hour in hours %}
+                <tr>
+                    <!-- iterate through days ['Monday', 'Tuesday', ...] -->
+                    {% for day in days %}
+                        <td>
+                            <!-- checkbox naming scheme: "Thursday-2:00pm" -->
+                            <input type="checkbox" name="{{ day }}-{{ hour }}" id="{{ day }}-{{ hour }}">
+                            <label for="{{ day }}-{{ hour }}">{{ hour }}</label>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+
+        <br>
+        <button type="submit" name="save_dog" id="save_dog">Save</button>
+    </form>
+    <!-- Seperate form avoids data validation -->
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" name="cancel" id="cancel">Cancel</button>
+    </form>
+{% endblock %}

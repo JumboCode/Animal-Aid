@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os, time, sys
 from pathlib import Path
+from aws.conf import *
 
 import django_heroku
 
@@ -43,9 +44,35 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
     'storages',
+=======
+    's3direct'
+>>>>>>> master
 ]
 
+
+S3DIRECT_DESTINATIONS = {
+    'example_destination': {
+        # "key" [required] The location to upload file
+        #       1. String: folder path to upload to
+        #       2. Function: generate folder path + filename using a function  
+        'key': 'dogs',
+
+        # "allowed" [optional] Limit to specific mime types
+        #           List: list of mime types
+        'allowed': ['image/jpeg', 'image/jpg', 'image/png'],
+
+        # "allow_existence_optimization" [optional] Checks to see if file already exists,
+        #                                returns the URL to the object if so (no upload)
+        #                                Boolean: True, False
+        # 'allow_existence_optimization': True,
+    },
+    # 'example_destination_two': {
+    #     'key': lambda filename, args: args + '/' + filename,
+    # 	'key_args': 'uploads/images',
+    # }
+}
 
 ## for saving emails locally instead of over smtp ##
 # EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
@@ -98,13 +125,26 @@ WSGI_APPLICATION = 'AnimalAid.wsgi.application'
 
 DATABASES = {
     'default': {
+<<<<<<< HEAD
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'dfdj445f5e079o',
         'HOST': "ec2-34-202-88-122.compute-1.amazonaws.com",
         'PORT': 5432,
         'USER': 'fmhzcysxtzamqb',
         'PASSWORD': '67fae76176e05933fa21cbcd15af5c91648617331a4364b0c83743a73b9d0c6c'
+=======
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'animalaid',
+        'USER': 'admin',
+        'PASSWORD': 'JumboCodeAnimalAid',
+        'HOST': 'localhost',
+        'PORT': '',
+>>>>>>> master
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': str(BASE_DIR / 'db.sqlite3'),
+    # }
 }
 
 # Password validation
