@@ -87,8 +87,12 @@ def results(request):
             # Send information about the dog and matches
             data['dog'].append({
                 "name" : dog_result.get_name,
-                "address" : dog_result.get_address,
-                "owner" : dog_result.get_owner,
+                "address" : dog_result.get_street_address,
+                "city" : dog_result.get_city,
+                "zipcode" : dog_result.get_zipcode,
+                "owner_name" : dog_result.get_owner,
+                "owner_email" : dog_result.get_email,
+                "owner_phone" : dog_result.get_phone_number,
             })
             
             for match in matches:
@@ -136,7 +140,7 @@ def dog_list(request):
                 'owner_name': dog.get_owner_name,
                 'owner_phone': dog.get_phone_number,
                 'owner_email': dog.get_email,
-                'address': dog.get_address,
+                'address': dog.get_street_address,
                 'id': dog.id,
                 'image': STOCK_URL,
                 'visible': dog.get_visible(),
@@ -206,7 +210,7 @@ def edit_dog(request):
             if phone_number == None:
                 phone_number = ''
             email = selected_dog.get_email
-            address = selected_dog.get_address
+            address = selected_dog.get_street_address
 
             # two dictionaries passed to render:
             #   data: used by django framework to format walk times table
