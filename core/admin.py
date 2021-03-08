@@ -18,14 +18,16 @@ from .models import Dog, Walker, Match
 
 
 class DogAdmin(admin.ModelAdmin):
-    # #display when viewling all dogs
+    # display when viewling all dogs
     list_display = ('dog_name', 'owner_name')
 
-    #fields when opening a single dogmodel
+    # fields when opening a single dogmodel
     fieldsets = [
         ('Dog Info', {'fields': ('dog_name', 'dog_info', 'image_path')}),
 
-        ('Owner Info', {'fields': ('owner_name', 'address')}),
+        ('Owner Info',
+            {'fields': ('owner_name', 'owner_phone', 'owner_email',
+                        'street_address', 'city', 'zipcode')}),
     ]
   
 admin.site.register(Dog, DogAdmin)
