@@ -9,6 +9,7 @@ from django.core.validators import RegexValidator
 # constants to control how many walking times are used
 DAYS = 7
 HOURS = 9
+STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864187-stock-illustration-dog-silhouette-vector.jpg'
 
 # regex validator for phone number
 phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number (country code optional): +X XXX-XXX-XXXX")
@@ -87,6 +88,8 @@ class Dog(models.Model):
         return self.owner_name
     
     def get_image(self):
+        if self.image_path == '' or self.image_path == None:
+            return STOCK_URL
         return self.image_path
 
     def get_visible(self):
