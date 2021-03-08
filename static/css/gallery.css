@@ -1,0 +1,13 @@
+body {
+	background-color: #EFE7E5;
+}
+
+.dogborder {
+	border-radius: 50%;
+	background-color: blue;
+	max-width:250px; 
+	max-height:250px;
+	width: 250px;
+	height: 250px;
+	display: inline-block;
+}
