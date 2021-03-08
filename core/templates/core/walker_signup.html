@@ -75,23 +75,17 @@
         var times = data["times"];
         var prevChoices = data["prev_choices"];
         var dogList = data["dog_list"];
-        /*
-        for (var day = 0; day < days.length; day++) {
-            for (var hour = 0; hour < hours.length; hour++) {
-                document.getElementById(days[day] + "-" + hours[hour]).checked = times[day][hour];
-            }
-        }
-        */
+        var pref_count = data["pref_count"]
 
         // looping through dropdowns
-        for (var prefNum = 0; prefNum < prevChoices.length; prefNum++) {
+        for (var prefNum = 0; prefNum < pref_count; prefNum++) {
             var ddl = document.getElementById(`dog_select_${prefNum + 1}`);
 
             // populating dropdown with dog names
             for (var dogName in dogList) {
                 var opt = document.createElement("option");
                 opt.text = dogName;
-                ddl.add(opt);
+                ddl.appendChild(opt);
             }
             
             // defaulting to previously selected dog, if it's still visible
@@ -125,7 +119,7 @@
             disableBoxes();
 
             // looping through dropdowns
-            for (var prefNum = 0; prefNum < prevChoices.length; prefNum++) {
+            for (var prefNum = 0; prefNum < pref_count; prefNum++) {
                 var selectedDog = document.getElementById(`dog_select_${prefNum + 1}`).value;
 
                 // skip pref if no dog is selected
