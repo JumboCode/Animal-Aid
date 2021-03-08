@@ -87,8 +87,12 @@ def results(request):
             # Send information about the dog and matches
             data['dog'].append({
                 "name" : dog_result.get_name,
-                "address" : dog_result.get_address,
-                "owner" : dog_result.get_owner,
+                "address" : dog_result.get_street_address,
+                "city" : dog_result.get_city,
+                "zipcode" : dog_result.get_zipcode,
+                "owner_name" : dog_result.get_owner,
+                "owner_email" : dog_result.get_email,
+                "owner_phone" : dog_result.get_phone_number,
             })
             
             for match in matches:
@@ -134,7 +138,7 @@ def dog_list(request):
                 'owner_name': dog.get_owner_name,
                 'owner_phone': dog.get_phone_number,
                 'owner_email': dog.get_email,
-                'address': dog.get_address,
+                'address': dog.get_street_address,
                 'id': dog.id,
                 'image': dog.get_image(),
                 'visible': dog.get_visible(),
@@ -176,7 +180,7 @@ def edit_dog(request):
                 selected_dog.owner_name = request.POST.get('owner_name')
                 selected_dog.owner_phone = request.POST.get('owner_phone')
                 selected_dog.owner_email = request.POST.get('owner_email')
-                selected_dog.address = request.POST.get('dog_address')
+                selected_dog.street_address = request.POST.get('dog_address')
                 selected_dog.visible = request.POST.get('dog_visible') == 'on'
                 if not request.POST.get('image') == '':
                     selected_dog.image_path = request.POST.get('image')
@@ -203,7 +207,7 @@ def edit_dog(request):
             if phone_number == None:
                 phone_number = ''
             email = selected_dog.get_email
-            address = selected_dog.get_address
+            address = selected_dog.get_street_address
             image = selected_dog.get_image
 
             # two dictionaries passed to render:
@@ -263,7 +267,7 @@ def add_dog(request):
                     owner_name=owner_name_in,
                     owner_phone=owner_phone_in,
                     owner_email=owner_email_in,
-                    address=address_in,
+                    street_address=address_in,
                     visible=visible_in,
                     times=chosen_times,
                     image_path=image_in,
