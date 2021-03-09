@@ -22,6 +22,7 @@ class Dog(models.Model):
 
     visible = models.BooleanField(default=True)
 
+
     # Array of walk times as booleans
     
     def blank_times():
@@ -103,6 +104,7 @@ class Walker(models.Model):
         models.CharField(max_length=16),
         default=blank_choices,
     )
+
     
     # Array of walk times as booleans
     def blank_times():
@@ -111,7 +113,14 @@ class Walker(models.Model):
             times.append(False)
         return times
 
+
     times = ArrayField(
+        models.BooleanField(),
+        size=DAYS*HOURS,
+        default=blank_times,
+    )
+
+    walking_times = ArrayField(
         models.BooleanField(),
         size=DAYS*HOURS,
         default=blank_times,
@@ -139,6 +148,12 @@ class Walker(models.Model):
             out_times.append(self.times[day * HOURS : day * HOURS + HOURS])
         return out_times
    
+    def set_walk(self, day, time):
+        self.walking_times[HOURS * day + time] = True
+    
+    def check_walk(self, day, time):
+        return self.walking_times[HOURS * day + time]
+        
     def __str__(self):
         return self.name
 

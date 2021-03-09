@@ -30,6 +30,16 @@ class DogAdmin(admin.ModelAdmin):
   
 admin.site.register(Dog, DogAdmin)
 
-admin.site.register(Walker)
+class WalkerAdmin(admin.ModelAdmin):
+    # #display when viewling all dogs
+    list_display = ('name', 'email', 'phone_number')
+
+    #fields when opening a single dogmodel
+    fieldsets = [
+        ('Walker Info', {'fields': ('name', 'email', 'phone_number', 
+            'dog_choices', 'times')})
+    ]
+
+admin.site.register(Walker, WalkerAdmin)
 
 admin.site.register(Match)
