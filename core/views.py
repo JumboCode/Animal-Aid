@@ -135,10 +135,12 @@ def dog_list(request):
         for dog in dogs:
             data['dogs'].append({
                 'name': dog.get_name,
-                'owner_name': dog.get_owner_name,
+                'owner_name' : dog.get_owner_name,
                 'owner_phone': dog.get_phone_number,
                 'owner_email': dog.get_email,
-                'address': dog.get_street_address,
+                'street_address': dog.get_street_address,
+                'city': dog.get_city,
+                'zipcode' : dog.get_zipcode,
                 'id': dog.id,
                 'image': dog.get_image(),
                 'visible': dog.get_visible(),
@@ -178,9 +180,18 @@ def edit_dog(request):
                 selected_dog.dog_name = request.POST.get('dog_name')
                 selected_dog.dog_info = request.POST.get('dog_info')
                 selected_dog.owner_name = request.POST.get('owner_name')
+                print(selected_dog.owner_name)
                 selected_dog.owner_phone = request.POST.get('owner_phone')
                 selected_dog.owner_email = request.POST.get('owner_email')
-                selected_dog.street_address = request.POST.get('dog_address')
+                selected_dog.street_address = request.POST.get('street_address')
+                print(selected_dog.street_address)
+                print('\n')
+                selected_dog.city = request.POST.get('city')
+                print(selected_dog.city)
+                print('\n')
+                selected_dog.zipcode = request.POST.get('zipcode')
+                print(selected_dog.zipcode)
+                print('\n')
                 selected_dog.visible = request.POST.get('dog_visible') == 'on'
                 if not request.POST.get('image') == '':
                     selected_dog.image_path = request.POST.get('image')
@@ -207,7 +218,15 @@ def edit_dog(request):
             if phone_number == None:
                 phone_number = ''
             email = selected_dog.get_email
-            address = selected_dog.get_street_address
+            street_address = selected_dog.get_street_address
+            print(street_address)
+            print('\n')
+            city = selected_dog.get_city
+            print(city)
+            print('\n')
+            zipcode = selected_dog.get_zipcode
+            print(zipcode)
+            print('\n')
             image = selected_dog.get_image
 
             # two dictionaries passed to render:
@@ -220,7 +239,9 @@ def edit_dog(request):
                     'owner_name': owner_name,
                     'phone': phone_number,
                     'email': email,
-                    'address': address,
+                    'street_address': street_address,
+                    'city': city,
+                    'zipcode': zipcode,
                     'image': image,
                 },
                 'days': DAYS,
@@ -251,7 +272,9 @@ def add_dog(request):
                 owner_name_in = request.POST.get('owner_name')
                 owner_phone_in = request.POST.get('owner_phone')
                 owner_email_in = request.POST.get('owner_email')
-                address_in = request.POST.get('dog_address')
+                street_address_in = request.POST.get('street_address')
+                city_in = request.POST.get('city')
+                zipcode_in = request.POST.get('zipcode')
                 visible_in = request.POST.get('dog_visible') == 'on'
                 image_in = request.POST.get('image')
 
@@ -267,7 +290,9 @@ def add_dog(request):
                     owner_name=owner_name_in,
                     owner_phone=owner_phone_in,
                     owner_email=owner_email_in,
-                    street_address=address_in,
+                    street_address=street_address_in,
+                    city=city_in,
+                    zipcode=zipcode_in,
                     visible=visible_in,
                     times=chosen_times,
                     image_path=image_in,
