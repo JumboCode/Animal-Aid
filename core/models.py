@@ -15,7 +15,7 @@ STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864
 phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number (country code optional): +X XXX-XXX-XXXX")
 
 # regex validator for zipcode
-zip_validator = RegexValidator(r'^[0-9]*$', "Please enter a valid zip code.")
+zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code.")
 
 class Dog(models.Model):
     # Updated Fields
