@@ -458,3 +458,37 @@ def walker_signup(request):
         return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data)})
     else:
         raise PermissionDenied()
+
+def match(request):
+    if request.method == 'GET':
+        return render(request, 'core/match.html')
+    elif request.method == 'POST':
+        success = True
+        all_dogs = Dog.objects.all()
+        all_walkers = Walker.objects.all()
+        # for each dog
+        for dog in all_dogs:
+            dog_walktimes = dog.get_walktimes()
+            # for each day the dog needs to be walked
+            for i, day in enumerate(dog_walktimes):
+                # for each time the dog needs to be walked
+                for j, time in enumerate(day):
+                    # for each walker
+                    for walker in all_walkers:
+                        walker_walktimes = walker.get_walktimes()
+                        # if they are free
+                        if (time and walker_walktimes[i][j] and not walker.check_walk(i, j)):
+                            day_names = ['monday', 'tuesday', 
+                                        'wednesday', 'thursday', 'friday', 
+                                        'saturday','sunday']
+                            day_name = day_names[i]
+                            walker.set_walk(i,j)
+                            new_match = Match(
+                                dog=dog,
+                                walker=walker,
+                                day=day_name,
+                                time=j+9
+                            )   
+                            new_match.save()
+
+        return render(request, 'core/match.html', {'success':success})
