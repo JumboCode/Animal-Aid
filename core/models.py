@@ -4,23 +4,34 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 from s3direct.fields import S3DirectField
 from django.contrib.postgres.fields import ArrayField
+from django.core.validators import RegexValidator
 
 # constants to control how many walking times are used
 DAYS = 7
 HOURS = 9
+STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864187-stock-illustration-dog-silhouette-vector.jpg'
+
+# regex validator for phone number
+phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number (country code optional): +X XXX-XXX-XXXX")
+
+# regex validator for zipcode
+zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code.")
 
 class Dog(models.Model):
     # Updated Fields
-    dog_name = models.CharField(max_length=30)
-    dog_info = models.CharField(max_length=200)
+    dog_name = models.CharField(max_length=30, null=True)
+    dog_info = models.CharField(max_length=200, null=True)
     image_path = S3DirectField(dest='example_destination', blank=True)
 
-    owner_name = models.CharField(max_length=50)
-    address = models.CharField(max_length=100)
-    owner_phone = models.BigIntegerField(blank=True, null=True)
-    owner_email = models.CharField(max_length=100, null=True)
+    owner_name = models.CharField(max_length=50, null=True)
+    owner_phone = models.CharField(max_length=100, null=True, validators=[phone_validator])
+    owner_email = models.EmailField(max_length=100, null=True)
+    street_address = models.CharField(max_length=100, null=True)
+    city = models.CharField(max_length=100, null=True)
+    zipcode = models.CharField(max_length=5, null=True, validators=[zip_validator])
 
     visible = models.BooleanField(default=True)
+
 
     # Array of walk times as booleans
     
@@ -58,9 +69,15 @@ class Dog(models.Model):
     def get_owner_name(self):
         return self.owner_name
 
-    def get_address(self):
+    def get_street_address(self):
+        return self.street_address
+        
+    def get_city(self):
+        return self.city
 
-        return self.address
+    def get_zipcode(self):
+        return self.zipcode
+
 
     def get_phone_number(self):
         return self.owner_phone
@@ -72,6 +89,8 @@ class Dog(models.Model):
         return self.owner_name
     
     def get_image(self):
+        if self.image_path == '' or self.image_path == None:
+            return STOCK_URL
         return self.image_path
 
     def get_visible(self):
@@ -93,8 +112,8 @@ class Walker(models.Model):
         ordering = ['name']
         
     name = models.CharField(max_length=30)
-    email = models.CharField(max_length=100)
-    phone_number = models.BigIntegerField(blank=True, null=True)
+    email = models.EmailField(max_length=100, null=True)
+    phone_number = models.CharField(max_length=100, null=True, validators=[phone_validator])
     
     def blank_choices():
         return []
@@ -103,6 +122,7 @@ class Walker(models.Model):
         models.CharField(max_length=16),
         default=blank_choices,
     )
+
     
     # Array of walk times as booleans
     def blank_times():
@@ -111,7 +131,14 @@ class Walker(models.Model):
             times.append(False)
         return times
 
+
     times = ArrayField(
+        models.BooleanField(),
+        size=DAYS*HOURS,
+        default=blank_times,
+    )
+
+    walking_times = ArrayField(
         models.BooleanField(),
         size=DAYS*HOURS,
         default=blank_times,
@@ -139,6 +166,12 @@ class Walker(models.Model):
             out_times.append(self.times[day * HOURS : day * HOURS + HOURS])
         return out_times
    
+    def set_walk(self, day, time):
+        self.walking_times[HOURS * day + time] = True
+    
+    def check_walk(self, day, time):
+        return self.walking_times[HOURS * day + time]
+        
     def __str__(self):
         return self.name
 

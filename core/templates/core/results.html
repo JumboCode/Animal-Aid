@@ -93,16 +93,16 @@
                         {{ dog.name }}
                     </td>
                     <td>
-                        {{ dog.owner }}
+                        {{ dog.owner_name }}
                     </td>
                     <td>
-                        [ email ]
+                        {{ dog.owner_email }}
                     </td>
                     <td>
-                        [ phone ]
+                        {{ dog.owner_phone }}
                     </td>
                     <td>
-                        {{ dog.address }}
+                        {{ dog.address }}, {{ dog.city }}, MA {{ dog.zipcode }}
                     </td>
                 </tr>
             {% endfor %}

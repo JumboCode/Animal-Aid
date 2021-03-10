@@ -1,5 +1,5 @@
 from django import forms
-from .forms import CustomUserCreationForm, LoginForm
+from .forms import CustomUserCreationForm, LoginForm, S3DirectUploadForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
@@ -86,8 +86,12 @@ def results(request):
             # Send information about the dog and matches
             data['dog'].append({
                 "name" : dog_result.get_name,
-                "address" : dog_result.get_address,
-                "owner" : dog_result.get_owner,
+                "address" : dog_result.get_street_address,
+                "city" : dog_result.get_city,
+                "zipcode" : dog_result.get_zipcode,
+                "owner_name" : dog_result.get_owner,
+                "owner_email" : dog_result.get_email,
+                "owner_phone" : dog_result.get_phone_number,
             })
             
             for match in matches:
@@ -120,8 +124,6 @@ def results(request):
     else:
         raise PermissionDenied()
 
-STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864187-stock-illustration-dog-silhouette-vector.jpg'
-
 def dog_list(request):
     # only able to view master list if logged in as staff
     if request.user.is_authenticated and request.user.is_staff:
@@ -132,17 +134,16 @@ def dog_list(request):
         for dog in dogs:
             data['dogs'].append({
                 'name': dog.get_name,
-                'owner_name': dog.get_owner_name,
+                'owner_name' : dog.get_owner_name,
                 'owner_phone': dog.get_phone_number,
                 'owner_email': dog.get_email,
-                'address': dog.get_address,
+                'street_address': dog.get_street_address,
+                'city': dog.get_city,
+                'zipcode' : dog.get_zipcode,
                 'id': dog.id,
-                'image': STOCK_URL,
+                'image': dog.get_image(),
                 'visible': dog.get_visible(),
             })
-            # display dog image if dog has image
-            if not dog.get_image() == None:
-                data['dogs'][-1]['image'] = dog.get_image()
 
         data['dogs'].sort(key=visibility_key)
         return render(request, 'core/dog_list.html', data) 
@@ -178,10 +179,21 @@ def edit_dog(request):
                 selected_dog.dog_name = request.POST.get('dog_name')
                 selected_dog.dog_info = request.POST.get('dog_info')
                 selected_dog.owner_name = request.POST.get('owner_name')
+                print(selected_dog.owner_name)
                 selected_dog.owner_phone = request.POST.get('owner_phone')
                 selected_dog.owner_email = request.POST.get('owner_email')
-                selected_dog.address = request.POST.get('dog_address')
+                selected_dog.street_address = request.POST.get('street_address')
+                print(selected_dog.street_address)
+                print('\n')
+                selected_dog.city = request.POST.get('city')
+                print(selected_dog.city)
+                print('\n')
+                selected_dog.zipcode = request.POST.get('zipcode')
+                print(selected_dog.zipcode)
+                print('\n')
                 selected_dog.visible = request.POST.get('dog_visible') == 'on'
+                if not request.POST.get('image') == '':
+                    selected_dog.image_path = request.POST.get('image')
 
                 # assigning times from POST using checkbox id convention: "Thursday-2:00pm"
                 chosen_times = []
@@ -205,7 +217,16 @@ def edit_dog(request):
             if phone_number == None:
                 phone_number = ''
             email = selected_dog.get_email
-            address = selected_dog.get_address
+            street_address = selected_dog.get_street_address
+            print(street_address)
+            print('\n')
+            city = selected_dog.get_city
+            print(city)
+            print('\n')
+            zipcode = selected_dog.get_zipcode
+            print(zipcode)
+            print('\n')
+            image = selected_dog.get_image
 
             # two dictionaries passed to render:
             #   data: used by django framework to format walk times table
@@ -217,7 +238,10 @@ def edit_dog(request):
                     'owner_name': owner_name,
                     'phone': phone_number,
                     'email': email,
-                    'address': address,
+                    'street_address': street_address,
+                    'city': city,
+                    'zipcode': zipcode,
+                    'image': image,
                 },
                 'days': DAYS,
                 'hours': HOURS,
@@ -228,7 +252,7 @@ def edit_dog(request):
                 'visible': selected_dog.get_visible(),
                 'times': selected_dog.get_walktimes(),
             }
-            return render(request, 'core/edit_dog.html', {'data':data, 'json_data':dumps(json_data)})
+            return render(request, 'core/edit_dog.html', {'data':data, 'json_data':dumps(json_data), 'image_form':S3DirectUploadForm()})
     else:
         # permission denied if user isn't staff
         raise PermissionDenied()
@@ -247,8 +271,11 @@ def add_dog(request):
                 owner_name_in = request.POST.get('owner_name')
                 owner_phone_in = request.POST.get('owner_phone')
                 owner_email_in = request.POST.get('owner_email')
-                address_in = request.POST.get('dog_address')
+                street_address_in = request.POST.get('street_address')
+                city_in = request.POST.get('city')
+                zipcode_in = request.POST.get('zipcode')
                 visible_in = request.POST.get('dog_visible') == 'on'
+                image_in = request.POST.get('image')
 
                 # assigning times from POST using checkbox id convention: "Thursday-2:00pm"
                 chosen_times = []
@@ -262,9 +289,12 @@ def add_dog(request):
                     owner_name=owner_name_in,
                     owner_phone=owner_phone_in,
                     owner_email=owner_email_in,
-                    address=address_in,
+                    street_address=street_address_in,
+                    city=city_in,
+                    zipcode=zipcode_in,
                     visible=visible_in,
                     times=chosen_times,
+                    image_path=image_in,
                 )
 
                 new_dog.save()
@@ -274,6 +304,7 @@ def add_dog(request):
             data = {
                 'days': DAYS,
                 'hours': HOURS,
+                'image_form': S3DirectUploadForm(),
             }
             return render(request, 'core/add_dog.html', data)
     else:
@@ -421,7 +452,42 @@ def walker_signup(request):
             'times': walker.get_walktimes(),
             'prev_choices': walker.get_dog_choices(),
             'dog_list': visible_dogs,
+            'pref_count': PREF_COUNT,
         }
         return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data)})
     else:
         raise PermissionDenied()
+
+def match(request):
+    if request.method == 'GET':
+        return render(request, 'core/match.html')
+    elif request.method == 'POST':
+        success = True
+        all_dogs = Dog.objects.all()
+        all_walkers = Walker.objects.all()
+        # for each dog
+        for dog in all_dogs:
+            dog_walktimes = dog.get_walktimes()
+            # for each day the dog needs to be walked
+            for i, day in enumerate(dog_walktimes):
+                # for each time the dog needs to be walked
+                for j, time in enumerate(day):
+                    # for each walker
+                    for walker in all_walkers:
+                        walker_walktimes = walker.get_walktimes()
+                        # if they are free
+                        if (time and walker_walktimes[i][j] and not walker.check_walk(i, j)):
+                            day_names = ['monday', 'tuesday', 
+                                        'wednesday', 'thursday', 'friday', 
+                                        'saturday','sunday']
+                            day_name = day_names[i]
+                            walker.set_walk(i,j)
+                            new_match = Match(
+                                dog=dog,
+                                walker=walker,
+                                day=day_name,
+                                time=j+9
+                            )   
+                            new_match.save()
+
+        return render(request, 'core/match.html', {'success':success})
