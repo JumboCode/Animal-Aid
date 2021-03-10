@@ -122,7 +122,7 @@ WSGI_APPLICATION = 'AnimalAid.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'dfdj445f5e079o',
         'HOST': "ec2-34-202-88-122.compute-1.amazonaws.com",
         'PORT': 5432,
