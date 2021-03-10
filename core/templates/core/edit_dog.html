@@ -10,7 +10,7 @@
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
-            <tr>    
+            <tr>
                 <td>Name: </td>
                 <td><input name="dog_name" id="dog_name" value="{{ data.dog.name }}" required></td>
             </tr>
@@ -24,7 +24,11 @@
             </tr>
             <tr>
                 <td>Owner Phone: </td>
-                <td><input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}" required></td>
+                <td>
+                    <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}"
+                           pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX (country code optional)"
+                           required>
+                </td>
             </tr>
             <tr>
                 <td>Owner Email: </td>
@@ -32,7 +36,15 @@
             </tr>
             <tr>
                 <td>Address: </td>
-                <td><input name="dog_address" id="dog_address" value="{{ data.dog.address }}" required></td>
+                <td><input name="street_address" id="street_address" value="{{ data.dog.street_address }}" required></td>
+            </tr>
+            <tr>
+                <td>City: </td>
+                <td><input name="city" id="city" value="{{ data.dog.city }}" required></td>
+            </tr>
+            <tr>
+                <td>Zipcode: </td>
+                <td><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" required></td>
             </tr>
             <tr>
                 {{ image_form.media }}
