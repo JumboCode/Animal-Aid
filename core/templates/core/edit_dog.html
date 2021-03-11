@@ -26,7 +26,7 @@
                 <td>Owner Phone: </td>
                 <td>
                     <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}"
-                           pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX (country code optional)"
+                           pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+1 XXX-XXX-XXXX (country code optional)" placeholder="+1 123-456-7890"
                            required>
                 </td>
             </tr>
@@ -44,7 +44,7 @@
             </tr>
             <tr>
                 <td>Zipcode: </td>
-                <td><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" required></td>
+                <td><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" placeholder="12345" required></td>
             </tr>
             <tr>
                 {{ image_form.media }}
