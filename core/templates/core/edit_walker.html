@@ -17,7 +17,7 @@
             </tr>
             <tr>
                 <td>Phone Number: </td>
-                <td><input type="tel" name="walker_phone" id="walker_phone" value="{{ data.walker.phone }}" maxlength="10" size="10" pattern="[0-9]{10}" placeholder="1234567890" required></td>
+                <td><input type="tel" name="walker_phone" id="walker_phone" value="{{ data.walker.phone }}" maxlength="10" size="10" pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" placeholder="+X XXX-XXX-XXXX (country code optional)" required></td>
             </tr>
         </table>
         <br>
