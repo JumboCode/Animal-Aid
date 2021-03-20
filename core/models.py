@@ -116,6 +116,10 @@ class Dog(models.Model):
 	# check if dog is currently being walked at that time
 	def check_walk(self, day, time):
 		return self.walking_times[HOURS * day + time]
+
+	def clear_matches(self):
+		for i in range(len(self.walking_times)):
+			self.walking_times[i] = False
 	
 	def __str__(self):
 		return self.dog_name
@@ -186,6 +190,10 @@ class Walker(models.Model):
 	# check if walker is walking a dog at that time
 	def check_walk(self, day, time):
 		return self.walking_times[HOURS * day + time]
+
+	def clear_matches(self):
+		for i in range(len(self.walking_times)):
+			self.walking_times[i] = False
 		
 	def __str__(self):
 		return self.name

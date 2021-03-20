@@ -463,41 +463,76 @@ def match(request):
 	if request.method == 'GET':
 		return render(request, 'core/match.html')
 	elif request.method == 'POST':
-		success = True
-		all_dogs = Dog.objects.all()
-		all_walkers = Walker.objects.all()
-		
-		for dog in all_dogs:
-			dog_walktimes = dog.get_walktimes()
+		if request.POST.get("match_or_clear") == "Match":
+			print("MAKE MATCHESS")
+			success = True
+			clear = False
+			
+			all_dogs = Dog.objects.all()
+			all_walkers = Walker.objects.all()
+			
+			for dog in all_dogs:
+				
+				dog_walktimes = dog.get_walktimes()
 
-			# for each day the dog needs to be walked
-			for i, day in enumerate(dog_walktimes):
-				# for each time the dog needs to be walked
-				for j, time in enumerate(day):
-					# for each walker
-					for walker in all_walkers:
-						walker_walktimes = walker.get_walktimes()
-						
-						# if they are free
-						if (time and walker_walktimes[i][j] and not walker.check_walk(i, j) and not dog.check_walk(i, j)):
-							day_names = ['monday', 'tuesday', 
-										'wednesday', 'thursday', 'friday', 
-										'saturday','sunday']
-							day_name = day_names[i]
-
-							# mark that walker is walking a dog and dog is being walked
-							walker.set_walk(i,j)
-							dog.set_walk(i,j)
-
-							new_match = Match(
-								dog=dog,
-								walker=walker,
-								day=day_name,
-								time=j+9
-							)   
-							new_match.save()
+				# for each day the dog needs to be walked
+				for i, day in enumerate(dog_walktimes):
+					# for each time the dog needs to be walked
+					for j, time in enumerate(day):
+						# for each walker
+						for walker in all_walkers:
+							walker_walktimes = walker.get_walktimes()
 							
-							walker.save()
-							dog.save()
+							# if they are free
+							if (time and walker_walktimes[i][j] and not walker.check_walk(i, j) and not dog.check_walk(i, j)):
+								day_names = ['monday', 'tuesday', 
+											'wednesday', 'thursday', 'friday', 
+											'saturday','sunday']
+								day_name = day_names[i]
 
-		return render(request, 'core/match.html', {'success':success})
+								# mark that walker is walking a dog and dog is being walked
+								walker.set_walk(i,j)
+								dog.set_walk(i,j)
+
+								new_match = Match(
+									dog=dog,
+									walker=walker,
+									day=day_name,
+									time=j+9
+								)   
+								new_match.save()
+								
+								walker.save()
+								dog.save()
+			
+			return render(request, 'core/match.html', {'success':success})
+		elif request.POST.get("match_or_clear") == "Clear":
+			print("CLEAR MATCHES")
+			
+			# get all matches, dogs, and walkers
+			matches = Match.objects.all()
+			dogs = Dog.objects.all()
+			walkers = Walker.objects.all()
+
+			# delete all matches
+			for match in matches:
+				match.delete()
+			
+			# clear walking_times arrays for all dogs and walkers
+			for dog in dogs:
+				print(dog.check_walk(0, 3))
+				dog.clear_matches()
+				print(dog.check_walk(0, 3))
+				dog.save()
+
+			for walker in walkers:
+				walker.clear_matches()
+				walker.save()
+
+			clear = True
+			success = False
+
+			return render(request, 'core/match.html', {'clear':clear})
+		else:
+			return render(request, 'core/match.html')
+			
