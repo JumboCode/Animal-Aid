@@ -40,25 +40,25 @@ def signup(request):
 	return render(request, 'core/signup.html', {'form': form})
 
 def dog_gallery(request):
-	'''
-	   render (req, webpage, context)
-	   dictionary of {'dogs' : [dog_info] }
-	   DogInfo 'struct': name, pic (path to image)
-	   Getting dog info: import Dog model, do some querying of the db
-	'''
-	dogs = Dog.objects.all()
-	dog_infos = []
-	for dog in dogs:
+    '''
+       render (req, webpage, context)
+       dictionary of {'dogs' : [dog_info] }
+       DogInfo 'struct': name, pic (path to image)
+       Getting dog info: import Dog model, do some querying of the db
+    '''
+    dogs = Dog.objects.all()
+    dog_infos = []
+    for dog in dogs:
 
-		if dog.get_visible():
-			dog_info = {}
-			dog_info["name"] = dog.dog_name
-			# temp fix until we can display images reliably
-			dog_info["image_path"] = dog.image_path
-			dog_infos.append(dog_info)
+        if dog.get_visible():
+            dog_info = {}
+            dog_info["name"] = dog.get_name()
+            # temp fix until we can display images reliably
+            dog_info["image_path"] = dog.get_image()
+            dog_infos.append(dog_info)
 
-	return render(request, 'core/dog.html', {'dogs': dog_infos})
-	
+    return render(request, 'core/dog.html', {'dogs': dog_infos})
+
 def results(request):
 	if request.user.is_authenticated and request.user.is_staff:
 		# POST request
