@@ -14,9 +14,9 @@
     <form action="" method="post">
         {% csrf_token %}
         <button id="match" name="match" type="submit">Match Dogs With Walkers</button>
-        <button id="delete" name="delete" type="submit">Delete Matches</button>
+        <button id="delete" name="delete" type="submit" onclick="return confirm('Are you sure you want to delete all matches?')">Delete Matches</button>
         <p></p>
-        <button id="clearUserTimes" name="clearUserTimes" type="submit">Clear User Time Selections</button>
+        <button id="clearUserTimes" name="clearUserTimes" type="submit" onclick="return confirm('Are you sure you want to clear walker time selections?')">Clear User Time Selections</button>
     </form>
 
     <p></p>
