@@ -194,6 +194,10 @@ class Walker(models.Model):
 	def clear_matches(self):
 		for i in range(len(self.walking_times)):
 			self.walking_times[i] = False
+
+	def clear_user_times(self):
+		for i in range(len(self.times)):
+			self.times[i] = False
 		
 	def __str__(self):
 		return self.name

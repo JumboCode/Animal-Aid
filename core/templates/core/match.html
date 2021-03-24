@@ -13,19 +13,21 @@
     <h1>Match Page</h1>
     <form action="" method="post">
         {% csrf_token %}
-        <!-- <button id="match" name="match" type="submit" >Match Dogs With Walkers</button> -->
-        <!-- <button id="delete" name="delete" type="submit" >Delete Matches</button> -->
-        <select id="match_or_clear" name="match_or_clear">
-            <option>Match</option>
-            <option>Clear</option>
-        </select> 
-        <button type="submit" name="submit_match_or_clear" id="submit_match_or_clear">Submit</button>
+        <button id="match" name="match" type="submit">Match Dogs With Walkers</button>
+        <button id="delete" name="delete" type="submit">Delete Matches</button>
+        <p></p>
+        <button id="clearUserTimes" name="clearUserTimes" type="submit">Clear User Time Selections</button>
     </form>
+
+    <p></p>
     {% if success %}
         <div>Success! Matches made!</div>
     {% endif %}
     {% if clear %} 
-        <div>Cleared matches</div>
+        <div>Successfully deleted matches.</div>
+    {% endif %}
+    {% if clear_user_times %} 
+        <div>Cleared all walker times.</div>
     {% endif %}
 
 
