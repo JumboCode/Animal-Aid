@@ -13,6 +13,8 @@ import os, time, sys
 from pathlib import Path
 from aws.conf import *
 
+import django_heroku
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
@@ -29,7 +31,7 @@ SECRET_KEY = '***REMOVED***'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["animalaidtufts.herokuapp.com", "0.0.0.0", "127.0.0.1"]
 
 
 # Application definition
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     's3direct'
 ]
 
@@ -78,8 +81,8 @@ EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
-DEFAULT_FROM_EMAIL = 'tyler.thompson@tufts.edu'
+EMAIL_HOST_PASSWORD = "***REMOVED***"
+DEFAULT_FROM_EMAIL = 'jumbocodeanimalaid@gmail.com'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,6 +92,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
 
 ROOT_URLCONF = 'AnimalAid.urls'
@@ -117,19 +122,24 @@ WSGI_APPLICATION = 'AnimalAid.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'animalaid',
-        'USER': 'admin',
-        'PASSWORD': 'JumboCodeAnimalAid',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'dfdj445f5e079o',
+        'HOST': "ec2-34-202-88-122.compute-1.amazonaws.com",
+        'PORT': 5432,
+        'USER': 'fmhzcysxtzamqb',
+        'PASSWORD': '67fae76176e05933fa21cbcd15af5c91648617331a4364b0c83743a73b9d0c6c'
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'animalaid',
+        # 'USER': 'admin',
+        # 'PASSWORD': 'JumboCodeAnimalAid',
+        # 'HOST': 'localhost',
+        # 'PORT': '',
     }
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': str(BASE_DIR / 'db.sqlite3'),
     # }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -170,9 +180,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-  os.path.join(BASE_DIR, 'static/'),
+    (os.path.join(BASE_DIR, 'static')),
 )
 
 LOGOUT_REDIRECT_URL = '/'
+# https://stackoverflow.com/questions/61111988/django-keeps-using-wrong-storage-backend-when-trying-to-upload-static-files-to-s
+django_heroku.settings(locals())
+
+
+
