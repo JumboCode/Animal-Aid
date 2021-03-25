@@ -122,18 +122,12 @@ WSGI_APPLICATION = 'AnimalAid.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'dfdj445f5e079o',
-        'HOST': "ec2-34-202-88-122.compute-1.amazonaws.com",
-        'PORT': 5432,
-        'USER': 'fmhzcysxtzamqb',
-        'PASSWORD': '67fae76176e05933fa21cbcd15af5c91648617331a4364b0c83743a73b9d0c6c'
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': 'animalaid',
-        # 'USER': 'admin',
-        # 'PASSWORD': 'JumboCodeAnimalAid',
-        # 'HOST': 'localhost',
-        # 'PORT': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'animalaid',
+        'USER': 'admin',
+        'PASSWORD': 'JumboCodeAnimalAid',
+        'HOST': 'localhost',
+        'PORT': '',
     }
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
