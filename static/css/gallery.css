@@ -3,10 +3,20 @@ body {
 }
 
 .dogborder {
-	border-radius: 50%;
-	max-width:250px; 
-	max-height:250px;
-	width: 250px;
-	height: 250px;
-	display: inline-block;
+    /* height: 250px;
+    width: 200px; */
+	/* border-radius: 50%; */
+    /* display: inline-block;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden; */
+    object-fit: contain;
+    border-radius: 50%; 
+    border: 6px solid white; 
+}
+
+.dogborder img {
+    width: 400px;
+    height: 300px;
 }
