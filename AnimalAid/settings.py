@@ -29,7 +29,7 @@ SECRET_KEY = '***REMOVED***'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["animalaidtufts.herokuapp.com", "0.0.0.0", "127.0.0.1"]
 
 
 # Application definition
@@ -78,8 +78,8 @@ EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
-DEFAULT_FROM_EMAIL = 'tyler.thompson@tufts.edu'
+EMAIL_HOST_PASSWORD = "***REMOVED***"
+DEFAULT_FROM_EMAIL = 'jumbocodeanimalaid@gmail.com'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -130,7 +130,6 @@ DATABASES = {
     # }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -172,7 +171,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-  os.path.join(BASE_DIR, 'static/'),
+    (os.path.join(BASE_DIR, 'static/')),
 )
 
 LOGOUT_REDIRECT_URL = '/'
+
+
+
