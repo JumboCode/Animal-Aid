@@ -16,7 +16,8 @@
 			{% for dog in dogs %}
 			<div class=“col-md” style="margin: 40px;" > 
 				<div class="dogborder" > 
-					<img src="{{dog.image_path}}" style="max-width:300px; max-height:300px;">
+					<img src="{{dog.image_path}}" class="rounded-circle"; style = "max-width:300px; max-height:300px;" 
+                    class = "img-responsive";>
 				</div>
 				<br><br>
 				<p style="text-align: center;"> {{dog.name}}</p>
