@@ -6,6 +6,11 @@ from s3direct.fields import S3DirectField
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import RegexValidator
 
+
+import os
+import urllib.request
+
+
 # constants to control how many walking times are used
 DAYS = 7
 HOURS = 9
@@ -104,6 +109,11 @@ class Dog(models.Model):
     
     def __str__(self):
         return self.dog_name
+    
+    def get_thumb(self):
+        out_path = os.path.join("static/thumbs/static/img/", self.get_image().split('/')[-1])
+        urllib.request.urlretrieve(self.get_image(), out_path)
+        return out_path
 
 
 class Walker(models.Model):
