@@ -132,6 +132,7 @@ class Walker(models.Model):
 	name = models.CharField(max_length=30)
 	email = models.EmailField(max_length=100, null=True)
 	phone_number = models.CharField(max_length=100, null=True, validators=[phone_validator])
+	filledForm = models.BooleanField(default=False)
 	
 	def blank_choices():
 		return []
@@ -198,6 +199,12 @@ class Walker(models.Model):
 	def clear_user_times(self):
 		for i in range(len(self.times)):
 			self.times[i] = False
+
+	def get_filledForm(self):
+		return self.filledForm
+
+	def set_filledForm(self, newBool):
+		self.filledForm = newBool
 		
 	def __str__(self):
 		return self.name
