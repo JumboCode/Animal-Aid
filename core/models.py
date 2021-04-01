@@ -20,7 +20,7 @@ STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864
 phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number (country code optional): +X XXX-XXX-XXXX")
 
 # regex validator for zipcode
-zip_validator = RegexValidator(r'^[0-9]*$', "Please enter a valid zip code.")
+zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code.")
 
 class Dog(models.Model):
     # Updated Fields
@@ -37,15 +37,23 @@ class Dog(models.Model):
 
     visible = models.BooleanField(default=True)
 
+
     # Array of walk times as booleans
-    
     def blank_times():
         times = []
         for day in range(DAYS * HOURS):
             times.append(False)
         return times
 
+    # times dog needs to be walked
     times = ArrayField(
+        models.BooleanField(),
+        size=DAYS*HOURS,
+        default=blank_times,
+    )
+
+    # times dog is being walked
+    walking_times = ArrayField(
         models.BooleanField(),
         size=DAYS*HOURS,
         default=blank_times,
@@ -107,6 +115,17 @@ class Dog(models.Model):
         for day in range(DAYS):
             out_times.append(self.times[day * HOURS : day * HOURS + HOURS])
         return out_times
+
+    def set_walk(self, day, time):
+        self.walking_times[HOURS * day + time] = True
+    
+    # check if dog is currently being walked at that time
+    def check_walk(self, day, time):
+        return self.walking_times[HOURS * day + time]
+
+    def clear_matches(self):
+        for i in range(len(self.walking_times)):
+            self.walking_times[i] = False
     
     def __str__(self):
         return self.dog_name
@@ -126,6 +145,7 @@ class Walker(models.Model):
     name = models.CharField(max_length=30)
     email = models.EmailField(max_length=100, null=True)
     phone_number = models.CharField(max_length=100, null=True, validators=[phone_validator])
+    filledForm = models.BooleanField(default=False)
     
     def blank_choices():
         return []
@@ -134,7 +154,7 @@ class Walker(models.Model):
         models.CharField(max_length=16),
         default=blank_choices,
     )
-    
+
     # Array of walk times as booleans
     def blank_times():
         times = []
@@ -142,7 +162,15 @@ class Walker(models.Model):
             times.append(False)
         return times
 
+    # times walker is free
     times = ArrayField(
+        models.BooleanField(),
+        size=DAYS*HOURS,
+        default=blank_times,
+    )
+
+    # times walker is walking a dog
+    walking_times = ArrayField(
         models.BooleanField(),
         size=DAYS*HOURS,
         default=blank_times,
@@ -170,6 +198,27 @@ class Walker(models.Model):
             out_times.append(self.times[day * HOURS : day * HOURS + HOURS])
         return out_times
    
+    def set_walk(self, day, time):
+        self.walking_times[HOURS * day + time] = True
+    
+    # check if walker is walking a dog at that time
+    def check_walk(self, day, time):
+        return self.walking_times[HOURS * day + time]
+
+    def clear_matches(self):
+        for i in range(len(self.walking_times)):
+            self.walking_times[i] = False
+
+    def clear_user_times(self):
+        for i in range(len(self.times)):
+            self.times[i] = False
+
+    def get_filledForm(self):
+        return self.filledForm
+
+    def set_filledForm(self, newBool):
+        self.filledForm = newBool
+        
     def __str__(self):
         return self.name
 
