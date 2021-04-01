@@ -34,14 +34,21 @@ class Dog(models.Model):
 
 
     # Array of walk times as booleans
-    
     def blank_times():
         times = []
         for day in range(DAYS * HOURS):
             times.append(False)
         return times
 
+    # times dog needs to be walked
     times = ArrayField(
+        models.BooleanField(),
+        size=DAYS*HOURS,
+        default=blank_times,
+    )
+
+    # times dog is being walked
+    walking_times = ArrayField(
         models.BooleanField(),
         size=DAYS*HOURS,
         default=blank_times,
@@ -102,6 +109,17 @@ class Dog(models.Model):
         for day in range(DAYS):
             out_times.append(self.times[day * HOURS : day * HOURS + HOURS])
         return out_times
+
+    def set_walk(self, day, time):
+        self.walking_times[HOURS * day + time] = True
+    
+    # check if dog is currently being walked at that time
+    def check_walk(self, day, time):
+        return self.walking_times[HOURS * day + time]
+
+    def clear_matches(self):
+        for i in range(len(self.walking_times)):
+            self.walking_times[i] = False
     
     def __str__(self):
         return self.dog_name
@@ -114,6 +132,7 @@ class Walker(models.Model):
     name = models.CharField(max_length=30)
     email = models.EmailField(max_length=100, null=True)
     phone_number = models.CharField(max_length=100, null=True, validators=[phone_validator])
+    filledForm = models.BooleanField(default=False)
     
     def blank_choices():
         return []
@@ -123,7 +142,6 @@ class Walker(models.Model):
         default=blank_choices,
     )
 
-    
     # Array of walk times as booleans
     def blank_times():
         times = []
@@ -131,13 +149,14 @@ class Walker(models.Model):
             times.append(False)
         return times
 
-
+    # times walker is free
     times = ArrayField(
         models.BooleanField(),
         size=DAYS*HOURS,
         default=blank_times,
     )
 
+    # times walker is walking a dog
     walking_times = ArrayField(
         models.BooleanField(),
         size=DAYS*HOURS,
@@ -169,8 +188,23 @@ class Walker(models.Model):
     def set_walk(self, day, time):
         self.walking_times[HOURS * day + time] = True
     
+    # check if walker is walking a dog at that time
     def check_walk(self, day, time):
         return self.walking_times[HOURS * day + time]
+
+    def clear_matches(self):
+        for i in range(len(self.walking_times)):
+            self.walking_times[i] = False
+
+    def clear_user_times(self):
+        for i in range(len(self.times)):
+            self.times[i] = False
+
+    def get_filledForm(self):
+        return self.filledForm
+
+    def set_filledForm(self, newBool):
+        self.filledForm = newBool
         
     def __str__(self):
         return self.name
