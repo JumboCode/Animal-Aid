@@ -8,10 +8,11 @@ from django.core.exceptions import PermissionDenied, EmptyResultSet
 from core.models import Dog, Walker, Match
 from json import dumps
 
+global form_is_open
+form_is_open = False
 
 def home(request):
     return render(request, 'core/home.html')
-
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
@@ -58,7 +59,7 @@ def dog_gallery(request):
             dog_infos.append(dog_info)
 
     return render(request, 'core/dog.html', {'dogs': dog_infos})
-    
+
 def results(request):
     if request.user.is_authenticated and request.user.is_staff:
         # POST request
@@ -373,8 +374,11 @@ def edit_walker(request):
         raise PermissionDenied()
 
 def walker_signup(request):
+    global form_is_open
+    #print(form_is_open)
+    
     # only able to edit walker profile if logged in as a normal user, not staff
-    if request.user.is_authenticated and not request.user.is_staff:
+    if request.user.is_authenticated and not request.user.is_staff and form_is_open:
         
         username = request.user.get_username()
 
@@ -416,8 +420,9 @@ def walker_signup(request):
                 # if '----' is chosen for a dog pref, then the pref is saved as None
                 else:
                     dog_choices.append(None)
+            
             walker.dog_choices = dog_choices
-
+            walker.set_filledForm(True)
             walker.save()
 
             return redirect('home')
@@ -455,40 +460,123 @@ def walker_signup(request):
             'dog_list': visible_dogs,
             'pref_count': PREF_COUNT,
         }
-        return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data)})
+        return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data), 'form_is_open':form_is_open})
+    elif not form_is_open:
+        return render(request, 'core/walker_signup.html', {'form_is_open':form_is_open})
     else:
         raise PermissionDenied()
 
 def match(request):
-    if request.method == 'GET':
-        return render(request, 'core/match.html')
-    elif request.method == 'POST':
-        success = True
-        all_dogs = Dog.objects.all()
-        all_walkers = Walker.objects.all()
-        # for each dog
-        for dog in all_dogs:
-            dog_walktimes = dog.get_walktimes()
-            # for each day the dog needs to be walked
-            for i, day in enumerate(dog_walktimes):
-                # for each time the dog needs to be walked
-                for j, time in enumerate(day):
-                    # for each walker
-                    for walker in all_walkers:
-                        walker_walktimes = walker.get_walktimes()
-                        # if they are free
-                        if (time and walker_walktimes[i][j] and not walker.check_walk(i, j)):
-                            day_names = ['monday', 'tuesday', 
-                                        'wednesday', 'thursday', 'friday', 
-                                        'saturday','sunday']
-                            day_name = day_names[i]
-                            walker.set_walk(i,j)
-                            new_match = Match(
-                                dog=dog,
-                                walker=walker,
-                                day=day_name,
-                                time=j+9
-                            )   
-                            new_match.save()
+    # Booleans to check which button was pressed
+    success = False
+    clear = False
+    clear_user_times = False
+    global form_is_open
 
-        return render(request, 'core/match.html', {'success':success})
+    # only able to edit dogs if logged in as staff
+    if request.user.is_authenticated and request.user.is_staff:
+        if request.method == 'GET':
+            return render(request, 'core/match.html')
+        elif request.method == 'POST':
+            if 'match' in request.POST:	
+                all_dogs = Dog.objects.all()
+                all_walkers = Walker.objects.all()
+                
+                for dog in all_dogs:
+                    
+                    dog_walktimes = dog.get_walktimes()
+
+                    # for each day the dog needs to be walked
+                    for i, day in enumerate(dog_walktimes):
+                        # for each time the dog needs to be walked
+                        for j, time in enumerate(day):
+                            # for each walker
+                            for walker in all_walkers:
+                                walker_walktimes = walker.get_walktimes()
+                                
+                                # if they are free
+                                if (time and walker_walktimes[i][j] and not walker.check_walk(i, j) and not dog.check_walk(i, j)):
+                                    day_names = ['monday', 'tuesday', 
+                                                'wednesday', 'thursday', 'friday', 
+                                                'saturday','sunday']
+                                    day_name = day_names[i]
+
+                                    # mark that walker is walking a dog and dog is being walked
+                                    walker.set_walk(i,j)
+                                    dog.set_walk(i,j)
+
+                                    new_match = Match(
+                                        dog=dog,
+                                        walker=walker,
+                                        day=day_name,
+                                        time=j+9
+                                    )   
+                                    new_match.save()
+                                    
+                                    walker.save()
+                                    dog.save()
+                
+                success = True
+
+                return render(request, 'core/match.html', {'success':success})
+            elif 'delete' in request.POST:				
+                # get all matches, dogs, and walkers
+                matches = Match.objects.all()
+                dogs = Dog.objects.all()
+                walkers = Walker.objects.all()
+
+                # delete all matches
+                for match in matches:
+                    match.delete()
+                
+                # clear walking_times arrays for all dogs and walkers
+                for dog in dogs:
+                    dog.clear_matches()
+                    dog.save()
+                for walker in walkers:
+                    walker.clear_matches()
+                    walker.save()
+
+                clear = True
+
+                return render(request, 'core/match.html', {'clear':clear})
+            elif 'clearUserTimes' in request.POST:
+                walkers = Walker.objects.all()
+
+                for walker in walkers:
+                    walker.clear_user_times()
+                    walker.save()
+                
+                clear_user_times = True
+
+                return render(request, 'core/match.html', {'clear_user_times':clear_user_times})
+            elif 'openForm' in request.POST:
+                # reset walker filledForm booleans to False
+                walkers = Walker.objects.all()
+
+                for walker in walkers:
+                    print(walker.get_name(), walker.get_filledForm())
+                    walker.set_filledForm(False)
+                    walker.save()
+                    print(walker.get_name(), walker.get_filledForm())
+
+                # set the form to open
+                form_is_open = True
+
+                return render(request, 'core/match.html')
+                
+            elif 'closeForm' in request.POST:
+                walkers = Walker.objects.all()
+
+                for walker in walkers:
+                    print(walker.get_name(), walker.get_filledForm())
+                
+                form_is_open = False
+                return render(request, 'core/match.html')
+                
+            else:
+                clear = False
+                success = False
+                clear_user_times = False
+                return render(request, 'core/match.html', {'success':success, 'clear':clear, 'clear_user_times':clear_user_times})
+            

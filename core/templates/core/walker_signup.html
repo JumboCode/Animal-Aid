@@ -10,13 +10,14 @@
 
 
 {% block content %}
-	
-	<br> <br>
+    
+    <br> <br>
 
-	<div class="container-fluid" >
+    <div class="container-fluid" >
 
         <div class="whiteresultcontainer"> 
 
+        {% if form_is_open %}
 
         <div class="formheaders">Walker Information</div>
 
@@ -64,122 +65,121 @@
                     <td><div class="formtext" style="text-align: center; font-size: 18px; min-width: 90px; border-bottom: 1px solid black" >{{ day }}</td>
                 {% endfor %}
             </tr>
-            
-            <!-- iterate through hours ['9:00am', '10:00am', ...] -->
-            {% for hour in data.hours %}
-                <tr>
-                    <!-- iterate through days ['Monday', 'Tuesday', ...] -->
-                    {% for day in data.days %}
-                        <td>
-                            <!-- checkbox naming scheme: "Thursday-2:00pm" -->
-                            <input type="checkbox" name="{{ day }}-{{ hour }}" id="{{ day }}-{{ hour }}">
-                            <label for="{{ day }}-{{ hour }}">{{ hour }}</label>
-                        </td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </table>
+
+                </table>
+
+            </div>
+
+
+            <br><br><br><br>
+
+            <button type="submit" name="submit_form" id="submit_form" class="subscribebutton" style="float: left; margin-left: 65px;">Submit</button>
+
+            <br><br><br><br>
+        </form>
+
+        {% else %}
+            <br>
+            <p>The form is closed right now.</p>
+            <br>
+        {% endif %}
+
+
+        </div>
 
     </div>
 
-
-		<br><br><br><br>
-
-        <button type="submit" name="submit_form" id="submit_form" class="subscribebutton" style="float: left; margin-left: 65px;">Submit</button>
-
-        <br><br><br><br>
-    </form>
-
-</div>
-</div>
-
     <br>
 
-    <script>
-        var data = JSON.parse("{{ json_data|escapejs }}");
-        var days = data["days"];
-        var hours = data["hours"];
-        var times = data["times"];
-        var prevChoices = data["prev_choices"];
-        var dogList = data["dog_list"];
-        var pref_count = data["pref_count"]
+    {% if form_is_open %}
 
-        // looping through dropdowns
-        for (var prefNum = 0; prefNum < pref_count; prefNum++) {
-            var ddl = document.getElementById(`dog_select_${prefNum + 1}`);
-
-            // populating dropdown with dog names
-            for (var dogName in dogList) {
-                var opt = document.createElement("option");
-                opt.text = dogName;
-                ddl.appendChild(opt);
-            }
-            
-            // defaulting to previously selected dog, if it's still visible
-            for (var i = 0; i < ddl.length; i++){
-                if (prevChoices[prefNum] == null) {
-                    break;
-                }
-                if (ddl.options[i].value == prevChoices[prefNum]){
-                    ddl.options[i].selected = true;
-                    break;
-                }
-            }
-        }
-
-        // update checkboxes on load
-        updateWalkTimes();
-
-        // disables all walk time checkboxes
-        function disableBoxes() {
-            for (var day = 0; day < days.length; day++) {
-                for (var hour = 0; hour < hours.length; hour++) {
-                    var cb = document.getElementById(days[day] + "-" + hours[hour]);
-                    cb.disabled = true;
-                    cb.parentElement.style.backgroundColor = "";
-                }
-            }
-        }
-
-        // highlights and enables times needed by selected dogs
-        function updateWalkTimes() {
-            disableBoxes();
+        <script>
+            var data = JSON.parse("{{ json_data|escapejs }}");
+            var days = data["days"];
+            var hours = data["hours"];
+            var times = data["times"];
+            var prevChoices = data["prev_choices"];
+            var dogList = data["dog_list"];
+            var pref_count = data["pref_count"]
 
             // looping through dropdowns
             for (var prefNum = 0; prefNum < pref_count; prefNum++) {
-                var selectedDog = document.getElementById(`dog_select_${prefNum + 1}`).value;
+                var ddl = document.getElementById(`dog_select_${prefNum + 1}`);
 
-                // skip pref if no dog is selected
-                if (selectedDog == '----') {
-                    continue;
+                // populating dropdown with dog names
+                for (var dogName in dogList) {
+                    var opt = document.createElement("option");
+                    opt.text = dogName;
+                    ddl.appendChild(opt);
                 }
                 
-                // get dog times using dogList dict
-                var selectedTimes = dogList[selectedDog];
+                // defaulting to previously selected dog, if it's still visible
+                for (var i = 0; i < ddl.length; i++){
+                    if (prevChoices[prefNum] == null) {
+                        break;
+                    }
+                    if (ddl.options[i].value == prevChoices[prefNum]){
+                        ddl.options[i].selected = true;
+                        break;
+                    }
+                }
+            }
 
-                // looping through selectedDog's times
+            // update checkboxes on load
+            updateWalkTimes();
+
+            // disables all walk time checkboxes
+            function disableBoxes() {
                 for (var day = 0; day < days.length; day++) {
                     for (var hour = 0; hour < hours.length; hour++) {
+                        var cb = document.getElementById(days[day] + "-" + hours[hour]);
+                        cb.disabled = true;
+                        cb.parentElement.style.backgroundColor = "";
+                    }
+                }
+            }
 
-                        // enable boxes which are needed by dog schedule
-                        if (selectedTimes[day][hour]) {
-                            var cb = document.getElementById(days[day] + "-" + hours[hour]);
-                            cb.disabled = false;
-                            cb.parentElement.style.backgroundColor = "beige";
+            // highlights and enables times needed by selected dogs
+            function updateWalkTimes() {
+                disableBoxes();
+
+                // looping through dropdowns
+                for (var prefNum = 0; prefNum < pref_count; prefNum++) {
+                    var selectedDog = document.getElementById(`dog_select_${prefNum + 1}`).value;
+
+                    // skip pref if no dog is selected
+                    if (selectedDog == '----') {
+                        continue;
+                    }
+                    
+                    // get dog times using dogList dict
+                    var selectedTimes = dogList[selectedDog];
+
+                    // looping through selectedDog's times
+                    for (var day = 0; day < days.length; day++) {
+                        for (var hour = 0; hour < hours.length; hour++) {
+
+                            // enable boxes which are needed by dog schedule
+                            if (selectedTimes[day][hour]) {
+                                var cb = document.getElementById(days[day] + "-" + hours[hour]);
+                                cb.disabled = false;
+                                cb.parentElement.style.backgroundColor = "beige";
+                            }
+                        }
+                    }
+                }
+
+                // for each walk time: if disabled, uncheck
+                for (var day = 0; day < days.length; day++) {
+                    for (var hour = 0; hour < hours.length; hour++) {
+                        var cb = document.getElementById(days[day] + "-" + hours[hour]);
+                        if (cb.disabled && cb.checked) {
+                            cb.checked = false;
                         }
                     }
                 }
             }
+        </script>
+    {% endif %}
 
-            // for each walk time: if disabled, uncheck
-            for (var day = 0; day < days.length; day++) {
-                for (var hour = 0; hour < hours.length; hour++) {
-                    var cb = document.getElementById(days[day] + "-" + hours[hour]);
-                    if (cb.disabled && cb.checked) {
-                        cb.checked = false;
-                    }
-                }
-            }
-        }
-    </script>
 {% endblock %}
