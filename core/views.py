@@ -378,7 +378,7 @@ def walker_signup(request):
     #print(form_is_open)
     
     # only able to edit walker profile if logged in as a normal user, not staff
-    if request.user.is_authenticated and not request.user.is_staff and form_is_open:
+    if request.user.is_authenticated and form_is_open:
         
         username = request.user.get_username()
 
