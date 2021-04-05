@@ -2,8 +2,26 @@ body {
 	background-color: #EFE7E5;
 }
 
+table {
+  border: none !important;
+}
+
+td {
+	text-align: left;
+	padding-right: 40px;
+
+}
+
+
+.headtext {
+	font-weight: 200;
+	font-size: 30px;
+	padding-top: 30px;
+	padding-bottom: 20px;
+}
+
 .whiteresultcontainer {
-	width: 92%;
+	width: 80%;
 	height: auto;
 	background-color: #FFFFFF;
 	text-align: center;
@@ -38,17 +56,28 @@ body {
 	width: 200px;
 }
 
-
-
-table {
-  border: none !important;
+.formtextarea {
+	font-weight: 300;
+	background-color: #E8E2DF;
+	border-radius: 20px;
+	border: none;
+	padding-left:10px;
+	height: 150px;
+	width: 300px;
 }
 
 
-.headtext {
-	font-weight: 200;
-	font-size: 30px;
-	padding-top: 30px;
-	padding-bottom: 20px;
+textarea {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	width: 300px;
+}
+
+@media screen and (max-width: 770px) {
+  .formtextarea {
+    width: 200px;
+  }
 }
 
