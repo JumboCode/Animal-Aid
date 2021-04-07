@@ -36,37 +36,49 @@
 	      	</div>
     	<!-- </div> -->
         	
-		<br><br><br><br><br>
+            <br><br><br><br><br>
         
 
-    	<div class="formheaders" style="margin-top: 30px;">Dog Preferences</div>
-    	{% for num in data.pref_nums %}
-	    	<div class = "form-group" style="margin-left:65px; float: left; text-align: left;">
-		     		<label for="inlineFormInput" class="formtext">Choice #{{ num }}</label> <br>
-		      		<select id="dog_select_{{ num }}" name="dog_select_{{ num }}" onchange="updateWalkTimes()" class="formfield" style="width: 130px" >
-                    <option>----</option>
-                    </select>
-		    </div>
-		{% endfor %}
+            <div class="formheaders" style="margin-top: 30px;">Dog Preferences</div>
+            {% for num in data.pref_nums %}
+                <div class = "form-group" style="margin-left:65px; float: left; text-align: left;">
+                        <label for="inlineFormInput" class="formtext">Choice #{{ num }}</label> <br>
+                        <select id="dog_select_{{ num }}" name="dog_select_{{ num }}" onchange="updateWalkTimes()" class="formfield" style="width: 130px" >
+                        <option>----</option>
+                        </select>
+                </div>
+            {% endfor %}
 
 
-		<br><br><br><br><br>
+            <br><br><br><br><br>
         
 
-		<div class="formheaders" style="margin-top:30px;">Times Available</div>
+            <div class="formheaders" style="margin-top:30px;">Times Available</div>
         
-		<div class="table-responsive-lg">
+            <div class="table-responsive-lg">
 
-        <table style="border-collapse: collapse; margin-left: 65px; width: 80%" >
+            <table style="border-collapse: collapse; margin-left: 65px; width: 80%" >
 
-            <!-- FOR HEADER - iterate through days ['Monday', 'Tuesday', ...] -->
-            <tr>
-                {% for day in data.days %}
-                    <td><div class="formtext" style="text-align: center; font-size: 18px; min-width: 90px; border-bottom: 1px solid black" >{{ day }}</td>
+                <!-- FOR HEADER - iterate through days ['Monday', 'Tuesday', ...] -->
+                <tr>
+                    {% for day in data.days %}
+                        <td><div class="formtext" style="text-align: center; font-size: 18px; min-width: 90px; border-bottom: 1px solid black" >{{ day }}</td>
+                    {% endfor %}
+                </tr>
+                <!-- iterate through hours ['9:00am', '10:00am', ...] -->
+                {% for hour in data.hours %}
+                    <tr>
+                        <!-- iterate through days ['Monday', 'Tuesday', ...] -->
+                        {% for day in data.days %}
+                            <td>
+                                <!-- checkbox naming scheme: "Thursday-2:00pm" -->
+                                <input type="checkbox" name="{{ day }}-{{ hour }}" id="{{ day }}-{{ hour }}">
+                                <label for="{{ day }}-{{ hour }}">{{ hour }}</label>
+                            </td>
+                        {% endfor %}
+                    </tr>
                 {% endfor %}
-            </tr>
-
-                </table>
+            </table>
 
             </div>
 
