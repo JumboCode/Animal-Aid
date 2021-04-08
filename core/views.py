@@ -9,6 +9,7 @@ from core.models import Dog, Walker, Match
 from json import dumps
 
 global form_is_open
+form_is_open = False
 
 def home(request):
     return render(request, 'core/home.html')
