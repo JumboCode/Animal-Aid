@@ -2,68 +2,89 @@
 
 {% load static %}
 
-{% block content %}
-    <h1>{{ data.dog.name }}</h1>
+{% block styles %}
 
-    <img width="100" height="100" src="{{ data.dog.image }}"/>
-    
-    <form action="" method="post" enctype="multipart/form-data">
+    <link href="{% static '/css/app.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static '/css/adddogform.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static '/css/home.css' %}" rel="stylesheet" type="text/css" />
+{% endblock styles %}
+
+
+{% block content %}
+    <div class="headtext" style="margin-left: 80px;"> Edit Dog Information: <b>{{ data.dog.name }} </b></div>
+
+    <div class="container-fluid">
+        <div class="whiteresultcontainer">
+            <br>
+
+            <div class="container" style="width: 100%;"> 
+
+                <div class="formheaders" style="margin-left: 65px;">Dog Information</div> <br>
+
+    <form action="" method="post" enctype="multipart/form-data" style="margin-left: 65px;">
         {% csrf_token %}
         <table>
             <tr>
-                <td>Name: </td>
-                <td><input name="dog_name" id="dog_name" value="{{ data.dog.name }}" required></td>
+                <td class="formtext">Name: </td>
+                <td><input name="dog_name" id="dog_name" value="{{ data.dog.name }}" required class="formfield"></td>
             </tr>
             <tr>
-                <td>Info: </td>
-                <td><textarea name="dog_info" id="dog_info" rows="5" cols="50">{{ data.dog.info }}</textarea></td>
+                <td class="formtext">Info: </td>
+                <td><textarea name="dog_info" id="dog_info" rows="5" cols="50" class="formtextarea">{{ data.dog.info }}</textarea></td>
             </tr>
             <tr>
-                <td>Owner Name: </td>
-                <td><input name="owner_name" id="owner_name" value="{{ data.dog.owner_name }}" required></td>
+                <td class="formtext">Owner Name: </td>
+                <td><input name="owner_name" id="owner_name" value="{{ data.dog.owner_name }}" required class="formfield"></td>
             </tr>
             <tr>
-                <td>Owner Phone: </td>
+                <td class="formtext">Owner Phone: </td>
                 <td>
                     <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}"
                            pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX (country code optional)" placeholder="+X XXX-XXX-XXXX (country code optional)"
-                           required>
+                           required class="formfield">
                 </td>
             </tr>
             <tr>
-                <td>Owner Email: </td>
-                <td><input name="owner_email" id="owner_email" value="{{ data.dog.email }}" 
-                    pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" title="email@example.com" placeholder="email"
-                    required></td>
+                <td class="formtext">Owner Email: </td>
+                <td><input name="owner_email" id="owner_email" value="{{ data.dog.email }}" required class="formfield"></td>
+                
             </tr>
             <tr>
-                <td>Address: </td>
-                <td><input name="street_address" id="street_address" value="{{ data.dog.street_address }}" required></td>
+                <td class="formtext">Address: </td>
+                <td><input name="street_address" id="street_address" value="{{ data.dog.street_address }}" required class="formfield"></td>
             </tr>
             <tr>
-                <td>City: </td>
-                <td><input name="city" id="city" value="{{ data.dog.city }}" required></td>
+                <td class="formtext">City: </td>
+                <td><input name="city" id="city" value="{{ data.dog.city }}" required class="formfield"></td>
             </tr>
             <tr>
-                <td>Zipcode: </td>
-                <td><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" placeholder="XXXXX" required></td>
+                <td class="formtext">Zipcode: </td>
+                <td><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" placeholder="XXXXX" required class="formfield"></td>
             </tr>
             <tr>
                 {{ image_form.media }}
                 {{ image_form }}
+                <img width="100" height="100" src="{{ data.dog.image }}"/>
             </tr>
-        </table>
-        <br>
-        <input type="checkbox" name="dog_visible" id="dog_visible">
-        <label for="dog_visible">Visible?</label>
-        <br><br>
+            <tr>
+                <td class="formtext"><label for="dog_visible">Visible?</label></td>
+                <td><input type="checkbox" name="dog_visible" id="dog_visible" style="width: 20px; height: 20px; "checked class="formfield"></td>
+            </tr>
 
-        <table style="background-color: rgba(204, 240, 252, 0.658); border: 1px solid black; border-collapse: collapse;">
+        </table>
+
+        <br><br><br>
+
+
+        <div class="formheaders" style="margin-left: 0px;">Times Available</div>
+
+
+        <table class="table-responsive-xl">
 
             <!-- FOR HEADER - iterate through days ['Monday', 'Tuesday', ...] -->
-            <tr style="border: 1px solid black;">
+            <tr >
                 {% for day in data.days %}
-                    <td><h2 style="text-align: center; min-width: 200px;">{{ day }}</h2></td>
+                    <td ><div class="formtext" style="text-align: center; font-size: 18px; min-width: 90px; border-bottom: 1px solid black" >{{ day }}</div></td>
                 {% endfor %}
             </tr>
             
@@ -83,14 +104,29 @@
         </table>
         
         <br><br>
-        <button type="submit" name="save_dog" id="save_dog">Save</button>
+
+        <div class="row justify-content-center" style="margin-left: -70px;">
+            <button type="submit" name="save_dog" id="save_dog" class="subscribebutton">Save</button>
+        </div>
     </form>
+
+    <br> <br>
     <!-- Seperate form avoids data validation -->
     <form action="" method="post">
         {% csrf_token %}
-        <button type="submit" name="cancel" id="cancel">Cancel</button>
-        <button type="submit" name="delete" id="delete" onclick="return confirm('Delete {{ data.dog.name }}?')">Delete</button>
+        <button type="submit" name="cancel" id="cancel" class="subscribebutton">Cancel</button>
+        <button type="submit" name="delete" id="delete" onclick="return confirm('Delete {{ data.dog.name }}?')" class="subscribebutton">Delete</button>
     </form>
+
+
+    <br><br>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br><br>
+
 
     <script>
         var data = JSON.parse("{{ json_data|escapejs }}");
