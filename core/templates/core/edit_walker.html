@@ -34,7 +34,7 @@
 				</tr>
 				<tr style="text-align: left;">
 					<td style="padding-right: 20px;" class="formtext">Phone Number: </td>
-					<td><input type="tel" name="walker_phone" id="walker_phone" value="{{ data.walker.phone }}"  pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" placeholder="+X XXX-XXX-XXXX (country code optional)" required class="formfield"></td>
+					<td><input type="tel" name="walker_phone" id="walker_phone" value="{{ data.walker.phone }}" maxlength="16" size="16" pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" placeholder="+X XXX-XXX-XXXX (country code optional)" required class="formfield"></td>
 				</tr>
 			</table>
 			</div>

@@ -40,6 +40,7 @@
                 <td class="formtext">Owner Phone: </td>
                 <td>
                     <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}"
+                           maxlength="16" size="16"
                            pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX (country code optional)" placeholder="+X XXX-XXX-XXXX (country code optional)"
                            required class="formfield">
                 </td>
