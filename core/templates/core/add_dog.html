@@ -40,12 +40,14 @@
                         <tr>
                             <td class="formtext">Owner Phone: </td>
                             <td>
-                                <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}"pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX (country code optional)" required  class="formfield">
+                                <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}" maxlength="16" size="16" pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX (country code optional)" required  class="formfield">
                             </td>
                         </tr>
                         <tr>
                             <td class="formtext">Owner Email: </td>
-                            <td ><input name="owner_email" id="owner_email" required class="formfield"></td>
+                            <td >
+                                <input name="owner_email" id="owner_email" required class="formfield" pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b">
+                            </td>
                         </tr>
                         <tr>
                             <td class="formtext">Address: </td>
