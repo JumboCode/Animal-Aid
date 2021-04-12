@@ -81,18 +81,18 @@
         
         
 	<br>
+	<div class="d-flex justify-content-center">
+		{% if data.walker.saved %}
+		<label for="save_walker" style="color: seagreen;">Profile Saved!</label>
+		<br> <br>
+		{% endif %}
+	</div>
 
 	<div class="d-flex justify-content-center">
 		<button type="submit" name="save_walker" id="save_walker" class="subscribebutton" style="margin-left: 5px; margin-right: 5px">Save</button>
-		{% if data.walker.saved %}
-		<label for="save_walker" style="color: seagreen;">Profile Saved</label>
-		{% endif %}
-		<br>
 		<button type="submit" name="cancel" id="cancel" class="subscribebutton" style="margin-left: 5px; margin-right: 5px">Cancel</button>
-
 	</div>
-
-		
+	
 	</form>
 
     <br>
