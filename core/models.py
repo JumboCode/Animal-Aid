@@ -212,7 +212,7 @@ class Walker(models.Model):
     def __str__(self):
         return self.name
 
-
+HOURS_LIST = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
 class Match(models.Model):
     # ID, dog, day, time, walker
     dog    = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog")
@@ -233,10 +233,10 @@ class Match(models.Model):
         return self.day 
 
     def get_start_time(self):
-        return self.time
+        return HOURS_LIST[(self.time-9)]
 
     def get_end_time(self):
-        return self.time + 1
+        return HOURS_LIST[(self.time-8)]
 
     def __str__(self):
         print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
