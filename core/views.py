@@ -55,13 +55,11 @@ def dog_gallery(request):
     dogs = Dog.objects.all()
     dog_infos = []
     for dog in dogs:
-
-        if dog.get_visible():
-            dog_info = {}
-            dog_info["name"] = dog.get_name()
-            # temp fix until we can display images reliably
-            dog_info["image_path"] = dog.get_image()
-            dog_infos.append(dog_info)
+        dog_info = {}
+        dog_info["name"] = dog.get_name()
+        # temp fix until we can display images reliably
+        dog_info["image_path"] = dog.get_image()
+        dog_infos.append(dog_info)
 
     return render(request, 'core/dog.html', {'dogs': dog_infos})
 
