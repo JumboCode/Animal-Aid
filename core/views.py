@@ -61,7 +61,7 @@ def dog_gallery(request):
         # temp fix until we can display images reliably
         dog_info["image_path"] = dog.get_thumb()
         dog_infos.append(dog_info)
-        
+
     return render(request, 'core/dog.html', {'dogs': dog_infos})
 
 def results(request):
@@ -150,7 +150,7 @@ def dog_list(request):
                 'image': dog.get_thumb(),
                 'visible': dog.get_visible(),
             })
-
+            print(dog.get_thumb())
         data['dogs'].sort(key=visibility_key)
         return render(request, 'core/dog_list.html', data) 
     else:
@@ -180,18 +180,11 @@ def edit_dog(request):
                 selected_dog.dog_name = request.POST.get('dog_name')
                 selected_dog.dog_info = request.POST.get('dog_info')
                 selected_dog.owner_name = request.POST.get('owner_name')
-                print(selected_dog.owner_name)
                 selected_dog.owner_phone = request.POST.get('owner_phone')
                 selected_dog.owner_email = request.POST.get('owner_email')
                 selected_dog.street_address = request.POST.get('street_address')
-                print(selected_dog.street_address)
-                print('\n')
                 selected_dog.city = request.POST.get('city')
-                print(selected_dog.city)
-                print('\n')
                 selected_dog.zipcode = request.POST.get('zipcode')
-                print(selected_dog.zipcode)
-                print('\n')
                 selected_dog.visible = request.POST.get('dog_visible') == 'on'
                 if not request.POST.get('image') == '':
                     selected_dog.image_path = request.POST.get('image')
@@ -219,14 +212,8 @@ def edit_dog(request):
                 phone_number = ''
             email = selected_dog.get_email
             street_address = selected_dog.get_street_address
-            print(street_address)
-            print('\n')
             city = selected_dog.get_city
-            print(city)
-            print('\n')
             zipcode = selected_dog.get_zipcode
-            print(zipcode)
-            print('\n')
             image = selected_dog.get_thumb
 
             # two dictionaries passed to render:
