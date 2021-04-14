@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load thumbnail %}
 
  {% block styles %}
   <link href="{% static '/css/app.css' %}" rel="stylesheet" type="text/css" />
@@ -16,7 +17,7 @@
 			{% for dog in dogs %}
 			<div class=“col-md” style="margin: 40px;" > 
 				<div class="dogborder" > 
-					<img src="{{dog.image_path}}" class="rounded-circle"; style = "max-width:300px; max-height:300px;" 
+					<img src="/{{ dog.image_path|thumbnail_url:'gallery' }}" class="rounded-circle"; style = "max-width:300px; max-height:300px;" 
                     class = "img-responsive";>
 				</div>
 				<br><br>

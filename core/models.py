@@ -6,6 +6,11 @@ from s3direct.fields import S3DirectField
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import RegexValidator
 
+
+import os
+import urllib.request
+
+
 # constants to control how many walking times are used
 DAYS = 7
 HOURS = 9
@@ -98,6 +103,7 @@ class Dog(models.Model):
     def get_owner(self):
         return self.owner_name
     
+    # returns S3 image url if it exists, otherwise return a stock image url
     def get_image(self):
         if self.image_path == '' or self.image_path == None:
             return STOCK_URL
@@ -126,6 +132,16 @@ class Dog(models.Model):
     
     def __str__(self):
         return self.dog_name
+    
+    # downloads dog image to static and returns resulting path
+    # used for creating thumbnails
+    def get_thumb(self):
+        directory = os.path.dirname("static/thumbs/static/img/")
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        out_path = os.path.join("static/thumbs/static/img/", self.get_image().split('/')[-1])
+        urllib.request.urlretrieve(self.get_image(), out_path)
+        return out_path
 
 
 class Walker(models.Model):
