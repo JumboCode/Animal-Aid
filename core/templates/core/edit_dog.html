@@ -26,8 +26,10 @@
         {% csrf_token %}
         <table>
             <tr>
-                <td class="formtext">Name: </td>
-                <td><input name="dog_name" id="dog_name" value="{{ data.dog.name }}" required class="formfield"></td>
+                <td class="formtext">Dog Name: </td>
+                <td>
+                    <input name="dog_name" id="dog_name" value="{{ data.dog.name }}" maxlength="30" size="30" required class="formfield">
+                </td>
             </tr>
             <tr>
                 <td class="formtext">Info: </td>
@@ -35,21 +37,25 @@
             </tr>
             <tr>
                 <td class="formtext">Owner Name: </td>
-                <td><input name="owner_name" id="owner_name" value="{{ data.dog.owner_name }}" required class="formfield"></td>
+                <td><input name="owner_name" id="owner_name" value="{{ data.dog.owner_name }}" maxlength="50" size="50" required class="formfield"></td>
             </tr>
             <tr>
                 <td class="formtext">Owner Phone: </td>
                 <td>
                     <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}"
                            maxlength="16" size="16"
-                           pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX (country code optional)" placeholder="+X XXX-XXX-XXXX (country code optional)"
+                           pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX" placeholder="+X XXX-XXX-XXXX"
                            required class="formfield">
                 </td>
             </tr>
             <tr>
                 <td class="formtext">Owner Email: </td>
-                <td><input name="owner_email" id="owner_email" value="{{ data.dog.email }}" required class="formfield"
-                pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" title="email@example.com"></td>
+                <td>
+                    <input name="owner_email" id="owner_email" value="{{ data.dog.email }}" required class="formfield"
+                           maxlength="100" size="100"
+                           pattern="\b[\w\.-]{1,100}@[\w\.-]{1,100}\.\w{2,4}\b" title="email@example.com"
+                    >
+                </td>
                 
             </tr>
             <tr>
