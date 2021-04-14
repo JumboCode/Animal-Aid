@@ -50,14 +50,6 @@ INSTALLED_APPS = [
 THUMBNAIL_BASEDIR = 'static/thumbs/'
 THUMBNAIL_DEBUG = True
 
-THUMBNAIL_ALIASES = {
-    '': {
-        'gallery': {'size': (250, 250), 'crop': True, 'upscale': True},
-        'dog_list': {'size': (100, 100), 'crop': True, 'upscale': True},
-        'edit_dog': {'size': (200, 200), 'crop': True, 'upscale': True},
-    },
-}
-
 S3DIRECT_DESTINATIONS = {
     'example_destination': {
         # "key" [required] The location to upload file

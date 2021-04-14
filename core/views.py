@@ -150,7 +150,6 @@ def dog_list(request):
                 'image': dog.get_thumb(),
                 'visible': dog.get_visible(),
             })
-            print(dog.get_thumb())
         data['dogs'].sort(key=visibility_key)
         return render(request, 'core/dog_list.html', data) 
     else:

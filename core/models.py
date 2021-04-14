@@ -5,6 +5,7 @@ from django.conf import settings
 from s3direct.fields import S3DirectField
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import RegexValidator
+from easy_thumbnails.files import get_thumbnailer
 
 
 import os
@@ -133,14 +134,19 @@ class Dog(models.Model):
     def __str__(self):
         return self.dog_name
     
-    # downloads dog image to static and returns resulting path
-    # used for creating thumbnails
+    # downloads dog image to static, converts to a thumnail of size 250x250
+    # and returns url to thumbnail
     def get_thumb(self):
         directory = os.path.dirname("static/thumbs/static/img/")
         if not os.path.exists(directory):
             os.makedirs(directory)
-        out_path = os.path.join("static/thumbs/static/img/", self.get_image().split('/')[-1])
-        urllib.request.urlretrieve(self.get_image(), out_path)
+        img_path = os.path.join("static/thumbs/static/img/", self.get_image().split('/')[-1])
+        urllib.request.urlretrieve(self.get_image(), img_path)
+
+        out_path = get_thumbnailer(img_path).get_thumbnail({'size': (250, 250), 'crop': True, 'upscale': True}).url
+        if(not out_path[0] == '/'):
+            out_path = '/' + out_path
+        
         return out_path
 
 
