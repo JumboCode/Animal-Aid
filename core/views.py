@@ -130,8 +130,6 @@ def results(request):
     else:
         raise PermissionDenied()
 
-from easy_thumbnails.files import get_thumbnailer
-
 def dog_list(request):
     # only able to view master list if logged in as staff
     if request.user.is_authenticated and request.user.is_staff:
@@ -140,9 +138,6 @@ def dog_list(request):
         data = {'dogs':[]}
         # for each dog populate a dictionary w/ name, img, address, and db id
         for dog in dogs:
-            image_path = get_thumbnailer(dog.get_thumb())['dog_list'].url
-            if(not image_path[0] == '/'):
-                image_path = '/' + image_path
             data['dogs'].append({
                 'name': dog.get_name,
                 'owner_name' : dog.get_owner_name,
@@ -152,10 +147,9 @@ def dog_list(request):
                 'city': dog.get_city,
                 'zipcode' : dog.get_zipcode,
                 'id': dog.id,
-                'image': image_path,
+                'image': dog.get_thumb(),
                 'visible': dog.get_visible(),
             })
-            print(data['dogs'][-1]['image'])
         data['dogs'].sort(key=visibility_key)
         return render(request, 'core/dog_list.html', data) 
     else:
