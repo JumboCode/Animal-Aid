@@ -44,6 +44,6 @@ urlpatterns = [
     url('dog_gallery/', core_views.dog_gallery, name="dog_gallery"),
     path('', core_views.home, name="home"),
     path('s3direct/', include('s3direct.urls')),
-    path('match/', core_views.match, name="match")
+    path('admin_ctrl/', core_views.admin_ctrl, name="admin_ctrl")
     
 ]
