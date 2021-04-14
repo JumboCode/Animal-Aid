@@ -130,6 +130,8 @@ def results(request):
     else:
         raise PermissionDenied()
 
+from easy_thumbnails.files import get_thumbnailer
+
 def dog_list(request):
     # only able to view master list if logged in as staff
     if request.user.is_authenticated and request.user.is_staff:
@@ -147,10 +149,10 @@ def dog_list(request):
                 'city': dog.get_city,
                 'zipcode' : dog.get_zipcode,
                 'id': dog.id,
-                'image': dog.get_thumb(),
+                'image': get_thumbnailer(dog.get_thumb())['dog_list'].url,
                 'visible': dog.get_visible(),
             })
-            print(dog.get_thumb())
+            print(data['dogs'][-1]['image'])
         data['dogs'].sort(key=visibility_key)
         return render(request, 'core/dog_list.html', data) 
     else:
