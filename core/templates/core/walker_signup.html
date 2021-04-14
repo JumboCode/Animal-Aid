@@ -27,12 +27,12 @@
 		<!-- <div class="form-inline"> -->
 			<div class = "form-group" style="margin-left:65px; float: left; text-align: left;">
 	     		<label for="inlineFormInput" class="formtext">Name</label> <br>
-	      		<input type="text" class="formfield" placeholder="Walker Name" name="walker_name" id="walker_name" value="{{ data.walker.name }}" required>
+	      		<input type="text" class="formfield" placeholder="Walker Name" name="walker_name" id="walker_name" value="{{ data.walker.name }}" maxlength="30" size="30" required>
 	      	</div>
 
 	      	<div class = "form-group" style="margin-left:65px; float: left; text-align: left;">
 	      		<label for="inlineFormInput" class="formtext">Phone Number</label><br>
-	      		<input type="tel" class="formfield" name="walker_phone" id="walker_phone" value="{{ data.walker.phone }}" maxlength="16" size="16" pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" placeholder="+X XXX-XXX-XXXX (country code optional)" required style="width: 350px;">
+	      		<input type="tel" class="formfield" name="walker_phone" id="walker_phone" value="{{ data.walker.phone }}" maxlength="16" size="16" pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" placeholder="+X XXX-XXX-XXXX" required style="width: 350px;">
 	      	</div>
     	<!-- </div> -->
         	
