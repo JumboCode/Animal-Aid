@@ -56,7 +56,7 @@
         <li {% if active_link == "dog_list" %}class="active"{% endif %}><a href="{% url 'dog_list' %}">Dog List</a></li>
         <li {% if active_link == "results" %}class="active"{% endif %}><a href="{% url 'results' %}">Results</a></li>
         <li {% if active_link == "walker_signup" %}class="active"{% endif %}><a href="{% url 'walker_signup' %}">Form</a></li>
-        <li {% if active_link == "match" %}class="active"{% endif %}><a href="{% url 'match' %}">Match</a></li>
+        <li {% if active_link == "admin_ctrl" %}class="active"{% endif %}><a href="{% url 'admin_ctrl' %}">Admin</a></li>
         <li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'logout' %}" onclick="return confirm('Are you sure you want to log out?')">Logout</a></li>
       {% else %}
         {% if user.is_authenticated %}
