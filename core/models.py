@@ -23,7 +23,7 @@ phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please e
 tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email")
 
 # regex validator for email
-email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@[a-zA-Z0-9_.+-]{1,90}\.[a-zA-Z0-9_.+-]{2,10}$', "Please enter a valid email")
+email_validator = RegexValidator(r'\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b', "Please enter a valid email")
 
 # regex validator for zipcode
 zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code.")
