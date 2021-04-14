@@ -496,7 +496,7 @@ def walker_signup(request):
     else:
         raise PermissionDenied()
 
-def match(request):
+def admin_ctrl(request):
     # Booleans to check which button was pressed
     success = False
     clear = False
@@ -506,7 +506,7 @@ def match(request):
     # only able to edit dogs if logged in as staff
     if request.user.is_authenticated and request.user.is_staff:
         if request.method == 'GET':
-            return render(request, 'core/match.html')
+            return render(request, 'core/admin_ctrl.html')
         elif request.method == 'POST':
             if 'match' in request.POST:	
                 all_dogs = Dog.objects.all()
@@ -545,7 +545,7 @@ def match(request):
                 
                 success = True
 
-                return render(request, 'core/match.html', {'success':success})
+                return render(request, 'core/admin_ctrl.html', {'success':success})
             elif 'delete' in request.POST:				
                 # get all matches, dogs, and walkers
                 matches = Match.objects.all()
@@ -566,7 +566,7 @@ def match(request):
 
                 clear = True
 
-                return render(request, 'core/match.html', {'clear':clear})
+                return render(request, 'core/admin_ctrl.html', {'clear':clear})
             elif 'clearUserTimes' in request.POST:
                 walkers = Walker.objects.all()
 
@@ -576,7 +576,7 @@ def match(request):
                 
                 clear_user_times = True
 
-                return render(request, 'core/match.html', {'clear_user_times':clear_user_times})
+                return render(request, 'core/admin_ctrl.html', {'clear_user_times':clear_user_times})
             elif 'openForm' in request.POST:
                 # reset walker filledForm booleans to False
                 walkers = Walker.objects.all()
@@ -590,7 +590,7 @@ def match(request):
                 # set the form to open
                 form_is_open = True
 
-                return render(request, 'core/match.html')
+                return render(request, 'core/admin_ctrl.html')
                 
             elif 'closeForm' in request.POST:
                 walkers = Walker.objects.all()
@@ -599,11 +599,11 @@ def match(request):
                     print(walker.get_name(), walker.get_filledForm())
                 
                 form_is_open = False
-                return render(request, 'core/match.html')
+                return render(request, 'core/admin_ctrl.html')
                 
             else:
                 clear = False
                 success = False
                 clear_user_times = False
-                return render(request, 'core/match.html', {'success':success, 'clear':clear, 'clear_user_times':clear_user_times})
+                return render(request, 'core/admin_ctrl.html', {'success':success, 'clear':clear, 'clear_user_times':clear_user_times})
             

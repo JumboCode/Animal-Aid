@@ -16,13 +16,13 @@
     <hr style="background-color: grey; margin-left: -1.5%; height: 2px;">
     <form action="" method="post">
         {% csrf_token %}
-        <h2>Match Dogs with Walker</h2>
-        <hr style="background-color: grey; margin-left: -1.5%;">
+        <h2>Matching</h2>
+        <br>
         <button id="match" name="match" type="submit">Match Dogs With Walkers</button>
-        <br><br><br>
-
-        <h2>Open Form | Close Form</h2>
+        <br><br>
         <hr style="background-color: grey; margin-left: -1.5%;">
+        <h2>Form Controls</h2>
+        <br>
         <button id="openForm" name="openForm" type="submit" 
                 onclick="return confirm('Are you sure you would like to open the form?')">
                 Open Form
@@ -31,13 +31,14 @@
                 onclick="return confirm('Are you sure you would like to close access to the form?')">
                 Close Form
         </button>
-        <br><br><br>
-
-        <h2>Clear User Time Selections | Clear Matches</h2>
+        
+        <br><br>
         <hr style="background-color: grey; margin-left: -1.5%;">
+        <h2>Database Clearing</h2>
+        <br>
         <button id="delete" name="delete" type="submit" onclick="return confirm('Are you sure you want to delete all matches?')">Delete Matches</button>
         <button id="clearUserTimes" name="clearUserTimes" type="submit" onclick="return confirm('Are you sure you want to clear walker time selections?')">Clear User Time Selections</button>
-        <br><br><br>
+        <br><br>
         <hr style="background-color: grey; margin-left: -1.5%;">
 
         <h5><a href="{% url 'admin:index' %}">Advanced Settings</a></h5>
