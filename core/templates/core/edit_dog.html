@@ -68,7 +68,7 @@
             </tr>
             <tr>
                 <td class="formtext">Zipcode: </td>
-                <td><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" placeholder="XXXXX" required class="formfield"></td>
+                <td><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" placeholder="XXXXX" maxlength="5" size="5" required class="formfield"></td>
             </tr>
             <tr>
                 {{ image_form.media }}
