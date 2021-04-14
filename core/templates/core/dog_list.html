@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load thumbnail %}
+
 {% load static %}
 
 {% block styles %}
@@ -39,7 +41,7 @@
                         {{ dog.name }}
                     </td>
                     <td style="padding: 1em">
-                        <img width="100" height="100" src="{{ dog.image }}">
+                        <img src="/{{ dog.image|thumbnail_url:'dog_list' }}">
                     </td>
                     <td style="padding: 1em">
                         {{ dog.owner_name }} <br>
@@ -65,10 +67,6 @@
                 <br> <br> <br>
 
                 {% else %}
-                <div class="smallertext"> 
-                    No dogs in list!
-                </div>
-
                 <br> <br>
 
                 {% endif %}
