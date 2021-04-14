@@ -15,7 +15,7 @@
 
 	<div class="container-fluid" >
 
-        <div class="whiteresultcontainer" style="width: 60%;" > 
+        <div class="whiteresultcontainer" style="width: 80%;" > 
 
             <div class="formheaders">Profile</div>
 
@@ -34,7 +34,7 @@
 				</tr>
 				<tr style="text-align: left;">
 					<td style="padding-right: 20px;" class="formtext">Phone Number: </td>
-					<td><input type="tel" name="walker_phone" id="walker_phone" value="{{ data.walker.phone }}"  pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" placeholder="+X XXX-XXX-XXXX (country code optional)" required class="formfield"></td>
+					<td><input type="tel" name="walker_phone" id="walker_phone" value="{{ data.walker.phone }}"  pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" placeholder="+X XXX-XXX-XXXX" required class="formfield"></td>
 				</tr>
 			</table>
 			</div>
@@ -44,53 +44,112 @@
         </div>
 
     </div>
+	
 
-    <br> <br> 
+    <br> 
+	<div class="d-flex justify-content-center">
+		<button type="submit" name="save_walker" id="save_walker" class="subscribebutton" style="margin-left: 5px; margin-right: 5px">Save</button>
+		<br>
+		<button type="submit" name="cancel" id="cancel" class="subscribebutton" style="margin-left: 5px; margin-right: 5px">Cancel</button>
+	</div>
+	{% if data.walker.saved %}
+	<div class="d-flex justify-content-center">
+		<label for="save_walker" style="color: seagreen;">Profile Saved</label>
+	</div>
+	{% endif %}
+	<br> 
 
     <div class="container-fluid" >
 
-        <div class="whiteresultcontainer" style="width: 60%;" > 
+        <div class="whiteresultcontainer" style="width: 80%;" > 
 
             <div class="formheaders">Your Matches</div>
 
-
-            
             <div class="table-responsive-sm" >
 	            <table class="table" style="border-collapse: collapse; text-align: center; margin-left: 65px; width: 85%">
 		            <tr>
 		                <th>Dog</th>
 		                <th>Walk Days</th>
-		                <th>Walk Times</th>
+		                <th>Walk Time</th>
 		            </tr>
 
 		            {% for match in data.match_list %}
 		            <tr>
 		                    <!-- list match attributes in each cell -->
-		                    <td>{{ match.dog.dog_name }}</td>
+		                    <td>{{ match.dog_name }}</td>
 		                    <td>{{ match.day }}</td>
-		                    <td>{{ match.time }}</td>
+		                    <td>{{ match.start_time }} - {{ match.end_time }}</td>
 		            </tr>
 		            {% endfor %}
 	        	</table>
 	        </div>	
 	    	
-	        <br> <br>
-        </div>
+	        <br>
+		</div>
+		{% if data.match_list %}
+		<br> <br>
+		<div class="whiteresultcontainer" style="width: 80%;" > 
+
+			<div class="formheaders">Owner Contact Info</div>
+			<div class="table-responsive-sm" >
+	            <table class="table" style="border-collapse: collapse; text-align: center; margin-left: 65px; width: 85%">
+		            <tr>
+		                <th>Dog</th>
+		                <th>Owner</th>
+		                <th>Phone</th>
+						<th>Email</th>
+						<th>Address</th>
+		            </tr>
+
+		            {% for owner in data.owner_info %}
+		            <tr>
+		                    <!-- list match attributes in each cell -->
+		                    <td>{{ owner.dog_name }}</td>
+							<td>{{ owner.owner_name }}</td>
+							<td>{{ owner.owner_number }}</td>
+							<td>{{ owner.owner_email }}</td>
+							<td>{{ owner.address }}</td>
+		            </tr>
+		            {% endfor %}
+	        	</table>
+	        </div>	
+			<br> <br>
+	    	
+		</div>
+		<br> <br>
+		{% for dog in data.my_dogs_other_walkers %}
+		<div class="whiteresultcontainer" style="width: 80%;" > 
+
+			<div class="formheaders">Other Walkers for {{dog.dog_name}}</div>
+			<div class="table-responsive-sm" >
+	            <table class="table" style="border-collapse: collapse; text-align: center; margin-left: 65px; width: 85%">
+		            <tr>
+		                <th>Name</th>
+		                <th>Phone</th>
+		                <th>Email</th>
+		            </tr>
+
+		            {% for other_walker in dog.other_walkers %}
+		            <tr>
+		                    <!-- list match attributes in each cell -->
+		                    <td>{{ other_walker.name }}</td>
+							<td>{{ other_walker.phone_number }}</td>
+							<td>{{ other_walker.email }}</td>
+		            </tr>
+		            {% endfor %}
+	        	</table>
+	        </div>	
+			<br> <br>
+	    	
+		</div>
+		<br> <br>
+		{% endfor %}
+		{% endif %}
 
     </div>
         
         
 	<br>
-
-	<div class="d-flex justify-content-center">
-		<button type="submit" name="save_walker" id="save_walker" class="subscribebutton" style="margin-left: 5px; margin-right: 5px">Save</button>
-		{% if data.walker.saved %}
-		<label for="save_walker" style="color: seagreen;">Profile Saved</label>
-		{% endif %}
-		<br>
-		<button type="submit" name="cancel" id="cancel" class="subscribebutton" style="margin-left: 5px; margin-right: 5px">Cancel</button>
-
-	</div>
 
 		
 	</form>

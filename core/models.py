@@ -19,6 +19,9 @@ STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864
 # regex validator for phone number
 phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number (country code optional): +X XXX-XXX-XXXX")
 
+# regex validator for email
+tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email (max length is 100 characters)")
+
 # regex validator for zipcode
 zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code.")
 
@@ -143,7 +146,7 @@ class Walker(models.Model):
         ordering = ['name']
         
     name = models.CharField(max_length=30)
-    email = models.EmailField(max_length=100, null=True)
+    email = models.EmailField(max_length=100, null=True, validators=[tufts_email_validator])
     phone_number = models.CharField(max_length=100, null=True, validators=[phone_validator])
     filledForm = models.BooleanField(default=False)
     
@@ -222,7 +225,7 @@ class Walker(models.Model):
     def __str__(self):
         return self.name
 
-
+HOURS_LIST = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
 class Match(models.Model):
     # ID, dog, day, time, walker
     dog    = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog")
@@ -243,10 +246,10 @@ class Match(models.Model):
         return self.day 
 
     def get_start_time(self):
-        return self.time
+        return HOURS_LIST[(self.time-9)]
 
     def get_end_time(self):
-        return self.time + 1
+        return HOURS_LIST[(self.time-8)]
 
     def __str__(self):
         print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
