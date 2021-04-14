@@ -140,6 +140,9 @@ def dog_list(request):
         data = {'dogs':[]}
         # for each dog populate a dictionary w/ name, img, address, and db id
         for dog in dogs:
+            image_path = get_thumbnailer(dog.get_thumb())['dog_list'].url
+            if(not image_path[0] == '/'):
+                image_path = '/' + image_path
             data['dogs'].append({
                 'name': dog.get_name,
                 'owner_name' : dog.get_owner_name,
@@ -149,7 +152,7 @@ def dog_list(request):
                 'city': dog.get_city,
                 'zipcode' : dog.get_zipcode,
                 'id': dog.id,
-                'image': get_thumbnailer(dog.get_thumb())['dog_list'].url,
+                'image': image_path,
                 'visible': dog.get_visible(),
             })
             print(data['dogs'][-1]['image'])
