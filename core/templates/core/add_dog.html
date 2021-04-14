@@ -26,8 +26,8 @@
                     {% csrf_token %}
                     <table>
                         <tr>
-                            <td class="formtext">Name: </td>
-                            <td><input name="dog_name" id="dog_name" required class="formfield"></td>
+                            <td class="formtext">Dog Name: </td>
+                            <td><input name="dog_name" id="dog_name" maxlength="30" size="30" required class="formfield"></td>
                         </tr>
                         <tr>
                             <td class="formtext">Info: </td>
@@ -35,18 +35,18 @@
                         </tr>
                         <tr>
                             <td class="formtext">Owner Name: </td>
-                            <td><input name="owner_name" id="owner_name" required class="formfield"></td>
+                            <td><input name="owner_name" id="owner_name" maxlength="50" size="50"required class="formfield"></td>
                         </tr>
                         <tr>
                             <td class="formtext">Owner Phone: </td>
                             <td>
-                                <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}" maxlength="16" size="16" pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX (country code optional)" required  class="formfield">
+                                <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}" maxlength="16" size="16" pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX" required  class="formfield">
                             </td>
                         </tr>
                         <tr>
                             <td class="formtext">Owner Email: </td>
                             <td >
-                                <input name="owner_email" id="owner_email" required class="formfield" pattern="\b[\w\.-]{1,100}@[\w\.-]{1,100}\.\w{2,4}\b">
+                                <input name="owner_email" id="owner_email" pattern="\b[\w\.-]{1,100}@[\w\.-]{1,100}\.\w{2,4}\b" maxlength="100" size="100" required class="formfield">
                             </td>
                         </tr>
                         <tr>
@@ -59,7 +59,7 @@
                         </tr>
                         <tr>
                             <td class="formtext">Zipcode: </td>
-                            <td ><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" required class="formfield"></td>
+                            <td ><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" maxlength="5" size="5" required class="formfield"></td>
                         </tr>
                         <tr>
                             <td>{{ image_form.media }}</td>
