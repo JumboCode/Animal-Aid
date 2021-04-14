@@ -11,6 +11,11 @@ from json import dumps
 global form_is_open
 form_is_open = False
 
+# constants to change walking days and times
+# Sizes should match DAYS and HOURS constants in core/models.py
+DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+HOURS = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
+
 def home(request):
     return render(request, 'core/home.html')
 def login(request):
@@ -35,7 +40,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect('home')
+            return redirect('edit_walker')
     else:
         form = CustomUserCreationForm()
     return render(request, 'core/signup.html', {'form': form})
@@ -50,13 +55,11 @@ def dog_gallery(request):
     dogs = Dog.objects.all()
     dog_infos = []
     for dog in dogs:
-
-        if dog.get_visible():
-            dog_info = {}
-            dog_info["name"] = dog.get_name()
-            # temp fix until we can display images reliably
-            dog_info["image_path"] = dog.get_image()
-            dog_infos.append(dog_info)
+        dog_info = {}
+        dog_info["name"] = dog.get_name()
+        # temp fix until we can display images reliably
+        dog_info["image_path"] = dog.get_image()
+        dog_infos.append(dog_info)
 
     return render(request, 'core/dog.html', {'dogs': dog_infos})
 
@@ -154,11 +157,6 @@ def dog_list(request):
 
 def visibility_key(dog) :
     return not dog['visible']
-
-# constants to change walking days and times
-# Sizes should match DAYS and HOURS constants in core/models.py
-DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-HOURS = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
 
 def edit_dog(request):
     # only able to edit dogs if logged in as staff
@@ -358,6 +356,36 @@ def edit_walker(request):
 
         # display matches
         match_list = Match.objects.filter(walker__email=username)
+        cleaned_matches = [{'dog_name': m.dog.dog_name,
+                            "day":m.day, 
+                            "start_time": m.get_start_time(),
+                            "end_time": m.get_end_time(),} 
+                        for m in match_list]
+
+        matched_dogs = []
+        for m in match_list:
+            if m.dog not in matched_dogs:
+                matched_dogs.append(m.dog)
+
+        owner_info = [ {'dog_name': d.get_name(),
+                        'owner_name': d.get_owner_name(), 
+                        'owner_number': d.get_phone_number(),
+                        'owner_email': d.get_email(),
+                        'address': (d.get_street_address() + ", " + d.get_city() + ", " + d.get_zipcode()),
+                        }  
+                    for d in matched_dogs]
+
+        my_dogs_other_walkers = []
+        for dog in matched_dogs:
+            dogs_matches = Match.objects.filter(dog=dog)
+            dog_info = {'dog_name': dog.get_name()}
+            dog_info_walker_list = []
+            for dm in dogs_matches:
+                if(dm.get_walker_email() != username and dm.walker not in dog_info_walker_list):
+                    dog_info_walker_list.append(dm.walker)
+            if (len(dog_info_walker_list) != 0):
+                dog_info['other_walkers'] = dog_info_walker_list
+                my_dogs_other_walkers.append(dog_info)
 
         data = {
             'walker': {
@@ -366,7 +394,9 @@ def edit_walker(request):
                 'phone': phone_number,
                 'saved': ('save_walker' in request.POST),
             },
-            'match_list': match_list,
+            'match_list': cleaned_matches,
+            'owner_info': owner_info,
+            'my_dogs_other_walkers': my_dogs_other_walkers,
         }
 
         return render(request, 'core/edit_walker.html', {'data':data})
@@ -496,11 +526,8 @@ def match(request):
                                 
                                 # if they are free
                                 if (time and walker_walktimes[i][j] and not walker.check_walk(i, j) and not dog.check_walk(i, j)):
-                                    day_names = ['monday', 'tuesday', 
-                                                'wednesday', 'thursday', 'friday', 
-                                                'saturday','sunday']
-                                    day_name = day_names[i]
-
+                                    day_name = DAYS[i]
+                                
                                     # mark that walker is walking a dog and dog is being walked
                                     walker.set_walk(i,j)
                                     dog.set_walk(i,j)
