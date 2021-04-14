@@ -136,6 +136,9 @@ class Dog(models.Model):
     # downloads dog image to static and returns resulting path
     # used for creating thumbnails
     def get_thumb(self):
+        directory = os.path.dirname("static/thumbs/static/img/")
+        if not os.path.exists(directory):
+            os.makedirs(directory)
         out_path = os.path.join("static/thumbs/static/img/", self.get_image().split('/')[-1])
         urllib.request.urlretrieve(self.get_image(), out_path)
         return out_path
