@@ -8,10 +8,16 @@ from django.core.exceptions import PermissionDenied, EmptyResultSet
 from core.models import Dog, Walker, Match
 from json import dumps
 
+global form_is_open
+form_is_open = False
+
+# constants to change walking days and times
+# Sizes should match DAYS and HOURS constants in core/models.py
+DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+HOURS = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
 
 def home(request):
     return render(request, 'core/home.html')
-
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
@@ -34,7 +40,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect('home')
+            return redirect('edit_walker')
     else:
         form = CustomUserCreationForm()
     return render(request, 'core/signup.html', {'form': form})
@@ -48,16 +54,16 @@ def dog_gallery(request):
     '''
     dogs = Dog.objects.all()
     dog_infos = []
+
     for dog in dogs:
-        if dog.get_visible():
-            dog_info = {}
-            dog_info["name"] = dog.dog_name
-            # temp fix until we can display images reliably
-            dog_info["image_path"] = dog.image_path
-            dog_infos.append(dog_info)
+        dog_info = {}
+        dog_info["name"] = dog.get_name()
+        # temp fix until we can display images reliably
+        dog_info["image_path"] = dog.get_thumb()
+        dog_infos.append(dog_info)
 
     return render(request, 'core/dog.html', {'dogs': dog_infos})
-    
+
 def results(request):
     if request.user.is_authenticated and request.user.is_staff:
         # POST request
@@ -141,10 +147,9 @@ def dog_list(request):
                 'city': dog.get_city,
                 'zipcode' : dog.get_zipcode,
                 'id': dog.id,
-                'image': dog.get_image(),
+                'image': dog.get_thumb(),
                 'visible': dog.get_visible(),
             })
-
         data['dogs'].sort(key=visibility_key)
         return render(request, 'core/dog_list.html', data) 
     else:
@@ -152,11 +157,6 @@ def dog_list(request):
 
 def visibility_key(dog) :
     return not dog['visible']
-
-# constants to change walking days and times
-# Sizes should match DAYS and HOURS constants in core/models.py
-DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-HOURS = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
 
 def edit_dog(request):
     # only able to edit dogs if logged in as staff
@@ -179,18 +179,11 @@ def edit_dog(request):
                 selected_dog.dog_name = request.POST.get('dog_name')
                 selected_dog.dog_info = request.POST.get('dog_info')
                 selected_dog.owner_name = request.POST.get('owner_name')
-                print(selected_dog.owner_name)
                 selected_dog.owner_phone = request.POST.get('owner_phone')
                 selected_dog.owner_email = request.POST.get('owner_email')
                 selected_dog.street_address = request.POST.get('street_address')
-                print(selected_dog.street_address)
-                print('\n')
                 selected_dog.city = request.POST.get('city')
-                print(selected_dog.city)
-                print('\n')
                 selected_dog.zipcode = request.POST.get('zipcode')
-                print(selected_dog.zipcode)
-                print('\n')
                 selected_dog.visible = request.POST.get('dog_visible') == 'on'
                 if not request.POST.get('image') == '':
                     selected_dog.image_path = request.POST.get('image')
@@ -218,15 +211,9 @@ def edit_dog(request):
                 phone_number = ''
             email = selected_dog.get_email
             street_address = selected_dog.get_street_address
-            print(street_address)
-            print('\n')
             city = selected_dog.get_city
-            print(city)
-            print('\n')
             zipcode = selected_dog.get_zipcode
-            print(zipcode)
-            print('\n')
-            image = selected_dog.get_image
+            image = selected_dog.get_thumb
 
             # two dictionaries passed to render:
             #   data: used by django framework to format walk times table
@@ -356,6 +343,36 @@ def edit_walker(request):
 
         # display matches
         match_list = Match.objects.filter(walker__email=username)
+        cleaned_matches = [{'dog_name': m.dog.dog_name,
+                            "day":m.day, 
+                            "start_time": m.get_start_time(),
+                            "end_time": m.get_end_time(),} 
+                        for m in match_list]
+
+        matched_dogs = []
+        for m in match_list:
+            if m.dog not in matched_dogs:
+                matched_dogs.append(m.dog)
+
+        owner_info = [ {'dog_name': d.get_name(),
+                        'owner_name': d.get_owner_name(), 
+                        'owner_number': d.get_phone_number(),
+                        'owner_email': d.get_email(),
+                        'address': (d.get_street_address() + ", " + d.get_city() + ", " + d.get_zipcode()),
+                        }  
+                    for d in matched_dogs]
+
+        my_dogs_other_walkers = []
+        for dog in matched_dogs:
+            dogs_matches = Match.objects.filter(dog=dog)
+            dog_info = {'dog_name': dog.get_name()}
+            dog_info_walker_list = []
+            for dm in dogs_matches:
+                if(dm.get_walker_email() != username and dm.walker not in dog_info_walker_list):
+                    dog_info_walker_list.append(dm.walker)
+            if (len(dog_info_walker_list) != 0):
+                dog_info['other_walkers'] = dog_info_walker_list
+                my_dogs_other_walkers.append(dog_info)
 
         data = {
             'walker': {
@@ -364,7 +381,9 @@ def edit_walker(request):
                 'phone': phone_number,
                 'saved': ('save_walker' in request.POST),
             },
-            'match_list': match_list,
+            'match_list': cleaned_matches,
+            'owner_info': owner_info,
+            'my_dogs_other_walkers': my_dogs_other_walkers,
         }
 
         return render(request, 'core/edit_walker.html', {'data':data})
@@ -372,8 +391,11 @@ def edit_walker(request):
         raise PermissionDenied()
 
 def walker_signup(request):
+    global form_is_open
+    #print(form_is_open)
+    
     # only able to edit walker profile if logged in as a normal user, not staff
-    if request.user.is_authenticated and not request.user.is_staff:
+    if request.user.is_authenticated and form_is_open:
         
         username = request.user.get_username()
 
@@ -415,8 +437,9 @@ def walker_signup(request):
                 # if '----' is chosen for a dog pref, then the pref is saved as None
                 else:
                     dog_choices.append(None)
+            
             walker.dog_choices = dog_choices
-
+            walker.set_filledForm(True)
             walker.save()
 
             return redirect('home')
@@ -454,40 +477,120 @@ def walker_signup(request):
             'dog_list': visible_dogs,
             'pref_count': PREF_COUNT,
         }
-        return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data)})
+        return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data), 'form_is_open':form_is_open})
+    elif not form_is_open:
+        return render(request, 'core/walker_signup.html', {'form_is_open':form_is_open})
     else:
         raise PermissionDenied()
 
-def match(request):
-    if request.method == 'GET':
-        return render(request, 'core/match.html')
-    elif request.method == 'POST':
-        success = True
-        all_dogs = Dog.objects.all()
-        all_walkers = Walker.objects.all()
-        # for each dog
-        for dog in all_dogs:
-            dog_walktimes = dog.get_walktimes()
-            # for each day the dog needs to be walked
-            for i, day in enumerate(dog_walktimes):
-                # for each time the dog needs to be walked
-                for j, time in enumerate(day):
-                    # for each walker
-                    for walker in all_walkers:
-                        walker_walktimes = walker.get_walktimes()
-                        # if they are free
-                        if (time and walker_walktimes[i][j] and not walker.check_walk(i, j)):
-                            day_names = ['monday', 'tuesday', 
-                                        'wednesday', 'thursday', 'friday', 
-                                        'saturday','sunday']
-                            day_name = day_names[i]
-                            walker.set_walk(i,j)
-                            new_match = Match(
-                                dog=dog,
-                                walker=walker,
-                                day=day_name,
-                                time=j+9
-                            )   
-                            new_match.save()
+def admin_ctrl(request):
+    # Booleans to check which button was pressed
+    success = False
+    clear = False
+    clear_user_times = False
+    global form_is_open
 
-        return render(request, 'core/match.html', {'success':success})
+    # only able to edit dogs if logged in as staff
+    if request.user.is_authenticated and request.user.is_staff:
+        if request.method == 'GET':
+            return render(request, 'core/admin_ctrl.html')
+        elif request.method == 'POST':
+            if 'match' in request.POST:	
+                all_dogs = Dog.objects.all()
+                all_walkers = Walker.objects.all()
+                
+                for dog in all_dogs:
+                    
+                    dog_walktimes = dog.get_walktimes()
+
+                    # for each day the dog needs to be walked
+                    for i, day in enumerate(dog_walktimes):
+                        # for each time the dog needs to be walked
+                        for j, time in enumerate(day):
+                            # for each walker
+                            for walker in all_walkers:
+                                walker_walktimes = walker.get_walktimes()
+                                
+                                # if they are free
+                                if (time and walker_walktimes[i][j] and not walker.check_walk(i, j) and not dog.check_walk(i, j)):
+                                    day_name = DAYS[i]
+                                
+                                    # mark that walker is walking a dog and dog is being walked
+                                    walker.set_walk(i,j)
+                                    dog.set_walk(i,j)
+
+                                    new_match = Match(
+                                        dog=dog,
+                                        walker=walker,
+                                        day=day_name,
+                                        time=j+9
+                                    )   
+                                    new_match.save()
+                                    
+                                    walker.save()
+                                    dog.save()
+                
+                success = True
+
+                return render(request, 'core/admin_ctrl.html', {'success':success})
+            elif 'delete' in request.POST:				
+                # get all matches, dogs, and walkers
+                matches = Match.objects.all()
+                dogs = Dog.objects.all()
+                walkers = Walker.objects.all()
+
+                # delete all matches
+                for match in matches:
+                    match.delete()
+                
+                # clear walking_times arrays for all dogs and walkers
+                for dog in dogs:
+                    dog.clear_matches()
+                    dog.save()
+                for walker in walkers:
+                    walker.clear_matches()
+                    walker.save()
+
+                clear = True
+
+                return render(request, 'core/admin_ctrl.html', {'clear':clear})
+            elif 'clearUserTimes' in request.POST:
+                walkers = Walker.objects.all()
+
+                for walker in walkers:
+                    walker.clear_user_times()
+                    walker.save()
+                
+                clear_user_times = True
+
+                return render(request, 'core/admin_ctrl.html', {'clear_user_times':clear_user_times})
+            elif 'openForm' in request.POST:
+                # reset walker filledForm booleans to False
+                walkers = Walker.objects.all()
+
+                for walker in walkers:
+                    print(walker.get_name(), walker.get_filledForm())
+                    walker.set_filledForm(False)
+                    walker.save()
+                    print(walker.get_name(), walker.get_filledForm())
+
+                # set the form to open
+                form_is_open = True
+
+                return render(request, 'core/admin_ctrl.html')
+                
+            elif 'closeForm' in request.POST:
+                walkers = Walker.objects.all()
+
+                for walker in walkers:
+                    print(walker.get_name(), walker.get_filledForm())
+                
+                form_is_open = False
+                return render(request, 'core/admin_ctrl.html')
+                
+            else:
+                clear = False
+                success = False
+                clear_user_times = False
+                return render(request, 'core/admin_ctrl.html', {'success':success, 'clear':clear, 'clear_user_times':clear_user_times})
+            

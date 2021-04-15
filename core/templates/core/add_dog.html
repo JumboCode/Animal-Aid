@@ -2,86 +2,125 @@
 
 {% load static %}
 
+{% block styles %}
+
+    <link href="{% static '/css/app.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static '/css/adddogform.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static '/css/home.css' %}" rel="stylesheet" type="text/css" />
+{% endblock styles %}
+
+
 {% block content %}
-    <h1>Add Dog</h1>
-    <form action="" method="post">
-        {% csrf_token %}
-        <table>
-            <tr>
-                <td>Name: </td>
-                <td><input name="dog_name" id="dog_name" required></td>
-            </tr>
-            <tr>
-                <td>Info: </td>
-                <td><textarea name="dog_info" id="dog_info" rows="5" cols="50"></textarea></td>
-            </tr>
-            <tr>
-                <td>Owner Name: </td>
-                <td><input name="owner_name" id="owner_name" required></td>
-            </tr>
-            <tr>
-                <td>Owner Phone: </td>
-                <td>
-                    <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}"
-                           pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX (country code optional)"
-                           required>
-                </td>
-            </tr>
-            <tr>
-                <td>Owner Email: </td>
-                <td><input name="owner_email" id="owner_email" required></td>
-            </tr>
-            <tr>
-                <td>Address: </td>
-                <td><input name="street_address" id="street_address" value="{{ data.dog.street_address }}" required></td>
-            </tr>
-            <tr>
-                <td>City: </td>
-                <td><input name="city" id="city" value="{{ data.dog.city }}" required></td>
-            </tr>
-            <tr>
-                <td>Zipcode: </td>
-                <td><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" required></td>
-            </tr>
-            {{ image_form.media }}
-            {{ image_form }}
-        </table>
 
-        <br>
-        <input type="checkbox" name="dog_visible" id="dog_visible" checked>
-        <label for="dog_visible">Visible?</label>
+    <div class="headtext" style="margin-left: 80px;"> Add Dog </div>
+
+    <div class="container-fluid">
+        <div class="whiteresultcontainer">
+            <br>
+
+            <div class="container" style="width: 100%;"> 
+
+                <div class="formheaders" style="margin-left: 65px;">Dog Information</div> <br>
+
+                <form action="" method="post" style="margin-left: 65px;">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <td class="formtext">Dog Name: </td>
+                            <td><input name="dog_name" id="dog_name" maxlength="30" size="30" required class="formfield"></td>
+                        </tr>
+                        <tr>
+                            <td class="formtext">Info: </td>
+                            <td><textarea name="dog_info" id="dog_info" rows="5" cols="40" class="formtextarea"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="formtext">Owner Name: </td>
+                            <td><input name="owner_name" id="owner_name" maxlength="50" size="50"required class="formfield"></td>
+                        </tr>
+                        <tr>
+                            <td class="formtext">Owner Phone: </td>
+                            <td>
+                                <input name="owner_phone" id="owner_phone" value="{{ data.dog.phone }}" maxlength="16" size="16" pattern="^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$" title="+X XXX-XXX-XXXX" required  class="formfield">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="formtext">Owner Email: </td>
+                            <td >
+                                <input name="owner_email" id="owner_email" pattern="\b[\w\.-]{1,100}@[\w\.-]{1,100}\.\w{2,4}\b" maxlength="100" size="100" required class="formfield">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="formtext">Address: </td>
+                            <td ><input name="street_address" id="street_address" value="{{ data.dog.street_address }}" required class="formfield"></td>
+                        </tr>
+                        <tr>
+                            <td class="formtext">City: </td>
+                            <td ><input name="city" id="city" value="{{ data.dog.city }}" required class="formfield"></td>
+                        </tr>
+                        <tr>
+                            <td class="formtext">Zipcode: </td>
+                            <td ><input name="zipcode" id="zipcode" value="{{ data.dog.zipcode }}" pattern="^[0-9]{5}$" title="XXXXX" maxlength="5" size="5" required class="formfield"></td>
+                        </tr>
+                        <tr>
+                            <td>{{ image_form.media }}</td>
+                            <td>{{ image_form }}</td>
+                        </tr>
+                        <tr>
+                            <td class="formtext"><label for="dog_visible">Visible?</label></td>
+                            <td ><input type="checkbox" name="dog_visible" id="dog_visible" style="width: 20px; height: 20px; "checked class="formfield"></td>
+                        </tr>
+                        
+                    </table>
+
+        <br><br><br>
+
+
+                    <div class="formheaders" style="margin-left: 0px;">Times Available</div>
+
+
+                    <table class="table-responsive-xl">
+                        <!-- FOR HEADER - iterate through days ['Monday', 'Tuesday', ...] -->
+                        <tr >
+                            {% for day in days %}
+                                <td ><div class="formtext" style="text-align: center; font-size: 18px; min-width: 90px; border-bottom: 1px solid black" >{{ day }}</div></td>
+                            {% endfor %}
+                        </tr>
+                        
+                        <!-- iterate through hours ['9:00am', '10:00am', ...] -->
+                        {% for hour in hours %}
+                            <tr>
+                                <!-- iterate through days ['Monday', 'Tuesday', ...] -->
+                                {% for day in days %}
+                                    <td>
+                                        <!-- checkbox naming scheme: "Thursday-2:00pm" -->
+                                        <input type="checkbox" name="{{ day }}-{{ hour }}" id="{{ day }}-{{ hour }}">
+                                        <label for="{{ day }}-{{ hour }}">{{ hour }}</label>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+
         <br><br>
-        
-        <table style="background-color: rgba(204, 240, 252, 0.658); border: 1px solid black; border-collapse: collapse;">
 
-            <!-- FOR HEADER - iterate through days ['Monday', 'Tuesday', ...] -->
-            <tr style="border: 1px solid black;">
-                {% for day in days %}
-                    <td><h2 style="text-align: center; min-width: 200px;">{{ day }}</h2></td>
-                {% endfor %}
-            </tr>
-            
-            <!-- iterate through hours ['9:00am', '10:00am', ...] -->
-            {% for hour in hours %}
-                <tr>
-                    <!-- iterate through days ['Monday', 'Tuesday', ...] -->
-                    {% for day in days %}
-                        <td>
-                            <!-- checkbox naming scheme: "Thursday-2:00pm" -->
-                            <input type="checkbox" name="{{ day }}-{{ hour }}" id="{{ day }}-{{ hour }}">
-                            <label for="{{ day }}-{{ hour }}">{{ hour }}</label>
-                        </td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </table>
+                    <div class="row justify-content-center">
+                        <button type="submit" name="save_dog" id="save_dog" class="subscribebutton" style="margin-right: 10px;">Save</button>
+                </form> 
 
-        <br>
-        <button type="submit" name="save_dog" id="save_dog">Save</button>
-    </form>
-    <!-- Seperate form avoids data validation -->
-    <form action="" method="post">
-        {% csrf_token %}
-        <button type="submit" name="cancel" id="cancel">Cancel</button>
-    </form>
+                <br>
+                <!-- Seperate form avoids data validation -->
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="cancel" id="cancel" class="subscribebutton" style="margin-right: 10px;">Cancel</button>
+                </form>
+            </div>
+
+            <br><br>
+        </div>
+    </div>
+</div>
+</div>
+
+<br> <br> <br>
+
 {% endblock %}

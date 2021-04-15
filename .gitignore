@@ -155,3 +155,5 @@ tsconfig.json
 
 # Static Images
 *static/img/dogs/*
+*static/thumbs/static/img/*
+*static/thumbs/static/thumbs/*

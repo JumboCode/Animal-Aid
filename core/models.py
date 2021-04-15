@@ -5,6 +5,12 @@ from django.conf import settings
 from s3direct.fields import S3DirectField
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import RegexValidator
+from easy_thumbnails.files import get_thumbnailer
+
+
+import os
+import urllib.request
+
 
 # constants to control how many walking times are used
 DAYS = 7
@@ -12,7 +18,13 @@ HOURS = 9
 STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864187-stock-illustration-dog-silhouette-vector.jpg'
 
 # regex validator for phone number
-phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number (country code optional): +X XXX-XXX-XXXX")
+phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number: +X XXX-XXX-XXXX")
+
+# regex validator for Tufts email
+tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email")
+
+# regex validator for email
+email_validator = RegexValidator(r'\b[\w\.-]{1,100}@[\w\.-]{1,100}\.\w{2,4}\b', "Please enter a valid email")
 
 # regex validator for zipcode
 zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code.")
@@ -24,8 +36,9 @@ class Dog(models.Model):
     image_path = S3DirectField(dest='example_destination', blank=True)
 
     owner_name = models.CharField(max_length=50, null=True)
-    owner_phone = models.CharField(max_length=100, null=True, validators=[phone_validator])
-    owner_email = models.EmailField(max_length=100, null=True)
+    owner_phone = models.CharField(max_length=16, null=True, validators=[phone_validator])
+    owner_email = models.EmailField(max_length=100, null=True, validators=[email_validator])
+
     street_address = models.CharField(max_length=100, null=True)
     city = models.CharField(max_length=100, null=True)
     zipcode = models.CharField(max_length=5, null=True, validators=[zip_validator])
@@ -34,14 +47,21 @@ class Dog(models.Model):
 
 
     # Array of walk times as booleans
-    
     def blank_times():
         times = []
         for day in range(DAYS * HOURS):
             times.append(False)
         return times
 
+    # times dog needs to be walked
     times = ArrayField(
+        models.BooleanField(),
+        size=DAYS*HOURS,
+        default=blank_times,
+    )
+
+    # times dog is being walked
+    walking_times = ArrayField(
         models.BooleanField(),
         size=DAYS*HOURS,
         default=blank_times,
@@ -88,6 +108,7 @@ class Dog(models.Model):
     def get_owner(self):
         return self.owner_name
     
+    # returns S3 image url if it exists, otherwise return a stock image url
     def get_image(self):
         if self.image_path == '' or self.image_path == None:
             return STOCK_URL
@@ -102,9 +123,35 @@ class Dog(models.Model):
         for day in range(DAYS):
             out_times.append(self.times[day * HOURS : day * HOURS + HOURS])
         return out_times
+
+    def set_walk(self, day, time):
+        self.walking_times[HOURS * day + time] = True
+    
+    # check if dog is currently being walked at that time
+    def check_walk(self, day, time):
+        return self.walking_times[HOURS * day + time]
+
+    def clear_matches(self):
+        for i in range(len(self.walking_times)):
+            self.walking_times[i] = False
     
     def __str__(self):
         return self.dog_name
+    
+    # downloads dog image to static, converts to a thumnail of size 250x250
+    # and returns url to thumbnail
+    def get_thumb(self):
+        directory = os.path.dirname("static/thumbs/static/img/")
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        img_path = os.path.join("static/thumbs/static/img/", self.get_image().split('/')[-1])
+        urllib.request.urlretrieve(self.get_image(), img_path)
+
+        out_path = get_thumbnailer(img_path).get_thumbnail({'size': (250, 250), 'crop': True, 'upscale': True}).url
+        if(not out_path[0] == '/'):
+            out_path = '/' + out_path
+        
+        return out_path
 
 
 class Walker(models.Model):
@@ -112,8 +159,9 @@ class Walker(models.Model):
         ordering = ['name']
         
     name = models.CharField(max_length=30)
-    email = models.EmailField(max_length=100, null=True)
-    phone_number = models.CharField(max_length=100, null=True, validators=[phone_validator])
+    email = models.EmailField(max_length=100, null=True, validators=[tufts_email_validator])
+    phone_number = models.CharField(max_length=16, null=True, validators=[phone_validator])
+    filledForm = models.BooleanField(default=False)
     
     def blank_choices():
         return []
@@ -123,7 +171,6 @@ class Walker(models.Model):
         default=blank_choices,
     )
 
-    
     # Array of walk times as booleans
     def blank_times():
         times = []
@@ -131,13 +178,14 @@ class Walker(models.Model):
             times.append(False)
         return times
 
-
+    # times walker is free
     times = ArrayField(
         models.BooleanField(),
         size=DAYS*HOURS,
         default=blank_times,
     )
 
+    # times walker is walking a dog
     walking_times = ArrayField(
         models.BooleanField(),
         size=DAYS*HOURS,
@@ -169,13 +217,28 @@ class Walker(models.Model):
     def set_walk(self, day, time):
         self.walking_times[HOURS * day + time] = True
     
+    # check if walker is walking a dog at that time
     def check_walk(self, day, time):
         return self.walking_times[HOURS * day + time]
+
+    def clear_matches(self):
+        for i in range(len(self.walking_times)):
+            self.walking_times[i] = False
+
+    def clear_user_times(self):
+        for i in range(len(self.times)):
+            self.times[i] = False
+
+    def get_filledForm(self):
+        return self.filledForm
+
+    def set_filledForm(self, newBool):
+        self.filledForm = newBool
         
     def __str__(self):
         return self.name
 
-
+HOURS_LIST = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
 class Match(models.Model):
     # ID, dog, day, time, walker
     dog    = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog")
@@ -196,10 +259,10 @@ class Match(models.Model):
         return self.day 
 
     def get_start_time(self):
-        return self.time
+        return HOURS_LIST[(self.time-9)]
 
     def get_end_time(self):
-        return self.time + 1
+        return HOURS_LIST[(self.time-8)]
 
     def __str__(self):
         print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
