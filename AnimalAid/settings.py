@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
-    's3direct'
+    's3direct',
     'easy_thumbnails',
 ]
 
