@@ -18,10 +18,13 @@ HOURS = 9
 STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864187-stock-illustration-dog-silhouette-vector.jpg'
 
 # regex validator for phone number
-phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number (country code optional): +X XXX-XXX-XXXX")
+phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number: +X XXX-XXX-XXXX")
+
+# regex validator for Tufts email
+tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email")
 
 # regex validator for email
-tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email (max length is 100 characters)")
+email_validator = RegexValidator(r'\b[\w\.-]{1,100}@[\w\.-]{1,100}\.\w{2,4}\b', "Please enter a valid email")
 
 # regex validator for zipcode
 zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code.")
@@ -33,8 +36,9 @@ class Dog(models.Model):
     image_path = S3DirectField(dest='example_destination', blank=True)
 
     owner_name = models.CharField(max_length=50, null=True)
-    owner_phone = models.CharField(max_length=100, null=True, validators=[phone_validator])
-    owner_email = models.EmailField(max_length=100, null=True)
+    owner_phone = models.CharField(max_length=16, null=True, validators=[phone_validator])
+    owner_email = models.EmailField(max_length=100, null=True, validators=[email_validator])
+
     street_address = models.CharField(max_length=100, null=True)
     city = models.CharField(max_length=100, null=True)
     zipcode = models.CharField(max_length=5, null=True, validators=[zip_validator])
@@ -156,7 +160,7 @@ class Walker(models.Model):
         
     name = models.CharField(max_length=30)
     email = models.EmailField(max_length=100, null=True, validators=[tufts_email_validator])
-    phone_number = models.CharField(max_length=100, null=True, validators=[phone_validator])
+    phone_number = models.CharField(max_length=16, null=True, validators=[phone_validator])
     filledForm = models.BooleanField(default=False)
     
     def blank_choices():
