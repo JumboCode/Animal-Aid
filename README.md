@@ -23,6 +23,7 @@ Run migrations:
 
     python3 manage.py makemigrations core
     python3 manage.py migrate core
+    python3 manage.py migrate
     
 Run Server and view webpage:
 
