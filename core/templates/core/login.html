@@ -36,12 +36,10 @@
     
     {% for message in messages %}
     
-    <div class="alert alert-danger mb-0 pb-0">
-        <a class="close" href="#" data-dismiss="alert">×</a>
+        <br>
+        <p style="color: red">{{ message }}</p>
         
-        {{ message }}
-        
-    </div>
+    <!-- </div> -->
     {% endfor %}
 
     <div class="forgotpasstxt"> <a href="{% url 'password_reset' %}"} style="float: right; margin-right: 60px;">Forgot your password?</a> </div>
