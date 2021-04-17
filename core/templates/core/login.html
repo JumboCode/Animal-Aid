@@ -22,6 +22,7 @@
             <div class="welcometext"> WELCOME </div> <br>
       <div style="display:block; text-align: center; margin: 0 auto">
   <form action="" method="post">
+      
     {% csrf_token %}
     {% for field in form %}
       <div>
@@ -32,6 +33,16 @@
         {% endfor %}
       </div>
     {% endfor %} 
+    
+    {% for message in messages %}
+    
+    <div class="alert alert-danger mb-0 pb-0">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+        
+        {{ message }}
+        
+    </div>
+    {% endfor %}
 
     <div class="forgotpasstxt"> <a href="{% url 'password_reset' %}"} style="float: right; margin-right: 60px;">Forgot your password?</a> </div>
     <br> <br> <br> 
