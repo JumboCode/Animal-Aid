@@ -46,7 +46,7 @@ def login(request):
                 auth_login(request, user)
                 return redirect('home')
         else:
-            messages.error(request, 'Invalid User')
+            messages.error(request, 'Incorrect username or password')
             return redirect('login')
     else:
         form = LoginForm()
