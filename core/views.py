@@ -8,10 +8,13 @@ from django.core.exceptions import PermissionDenied, EmptyResultSet
 from core.models import Dog, Walker, Match
 from json import dumps
 import random
+from django.core.mail import send_mail
 from django.contrib import messages
 
 global form_is_open
 form_is_open = False
+
+SUBSCRIBE_RECIPIENT = 'Benjamin.London@tufts.edu'
 
 # constants to change walking days and times
 # Sizes should match DAYS and HOURS constants in core/models.py
@@ -19,6 +22,17 @@ DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sun
 HOURS = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
 
 def home(request):
+    if request.method == 'POST' and 'subscribe' in request.POST:
+        email = request.POST.get('subscribeemail')
+        send_mail(
+            # subject line
+            'Animal Aid Subscription Request',
+            # body
+            'The following email would like to subscribe to the Animal Aid mailing list:\n' + email,
+            '',
+            [SUBSCRIBE_RECIPIENT],
+        )
+        return redirect('home')
     return render(request, 'core/home.html')
 def login(request):
     if request.method == 'POST':

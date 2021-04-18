@@ -62,8 +62,12 @@
 			<br>
 			<div class="container py-2">
 				<div class="d-flex justify-content-center">
-						<input type="text" input type="text" class="subscribetextfield">
-						<button type="button" class="subscribebutton">SUBSCRIBE </button> </div> 
+					<form action="" method="post">
+						{% csrf_token %}
+						<input name="subscribeemail" type="email" class="subscribetextfield" required>
+						<button name="subscribe" type="submit" class="subscribebutton">SUBSCRIBE </button>
+					</form>
+				</div>
 			</div>
 		</div>
 
