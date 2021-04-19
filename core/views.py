@@ -530,12 +530,9 @@ def admin_ctrl(request):
                 #   **walkers randomized instead of signup order priority
                 walker_matches = {}
 
-                for walker in all_walkers:
-                    len_prefs = len(walker.dog_choices)
-                    
-                    if walker.get_filledForm():
-                        for pref in range(5):
-
+                for pref in range(5):
+                    for walker in all_walkers:                    
+                        if walker.get_filledForm():
                             if not walker.get_name() in walker_matches:
                                 walker_matches[walker.get_name()] = None
 
