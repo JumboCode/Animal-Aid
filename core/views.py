@@ -415,7 +415,6 @@ def edit_walker(request):
 
 def walker_signup(request):
     global form_is_open
-    #print(form_is_open)
     
     # only able to edit walker profile if logged in as a normal user, not staff
     if request.user.is_authenticated and form_is_open:
@@ -618,10 +617,8 @@ def admin_ctrl(request):
                 walkers = Walker.objects.all()
 
                 for walker in walkers:
-                    print(walker.get_name(), walker.get_filledForm())
                     walker.set_filledForm(False)
                     walker.save()
-                    print(walker.get_name(), walker.get_filledForm())
 
                 # set the form to open
                 form_is_open = True
@@ -629,11 +626,6 @@ def admin_ctrl(request):
                 return render(request, 'core/admin_ctrl.html')
                 
             elif 'closeForm' in request.POST:
-                walkers = Walker.objects.all()
-
-                for walker in walkers:
-                    print(walker.get_name(), walker.get_filledForm())
-                
                 form_is_open = False
                 return render(request, 'core/admin_ctrl.html')
                 
