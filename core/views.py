@@ -9,6 +9,7 @@ from core.models import Dog, Walker, Match
 from json import dumps
 import random
 from django.core.mail import send_mail
+from django.contrib import messages
 
 global form_is_open
 form_is_open = False
@@ -44,10 +45,17 @@ def login(request):
             if user is not None:
                 auth_login(request, user)
                 return redirect('home')
+        else:
+            messages.error(request, 'Incorrect username or password')
+            return redirect('login')
+    else:
+        form = LoginForm()
+        return render(request, 'core/login.html', {'form': form})
+
+
     # If user did not enter the correct username and password combination,
     # or are visiting the page for the time, load default login form.
-    form = LoginForm()
-    return render(request, 'core/login.html', {'form': form})
+    
 
 def signup(request):
     if request.method == 'POST':
