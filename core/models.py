@@ -164,7 +164,7 @@ class Walker(models.Model):
     filledForm = models.BooleanField(default=False)
     
     def blank_choices():
-        return []
+        return [None, None, None, None, None]
 
     dog_choices = ArrayField(
         models.CharField(max_length=16),
