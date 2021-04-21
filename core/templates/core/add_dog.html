@@ -123,4 +123,39 @@
 
 <br> <br> <br>
 
+<script>
+    const phone_message = "Please enter a valid phone number: +X XXX-XXX-XXXX";
+    const phone = document.getElementById("owner_phone");
+
+    phone.addEventListener("input", function (event) {
+    if (phone.validity.patternMismatch) {
+        phone.setCustomValidity(phone_message);
+    } else {
+        phone.setCustomValidity("");
+    }
+    });
+
+    const email_message = "Please enter a valid email address";
+    const email = document.getElementById("owner_email");
+
+    email.addEventListener("input", function (event) {
+    if (email.validity.patternMismatch) {
+        email.setCustomValidity(email_message);
+    } else {
+        email.setCustomValidity("");
+    }
+    });
+
+    const zipcode_message = "Please enter a valid five digit zip code";
+    const zipcode = document.getElementById("zipcode");
+
+    zipcode.addEventListener("input", function (event) {
+    if (zipcode.validity.patternMismatch) {
+        zipcode.setCustomValidity(zipcode_message);
+    } else {
+        zipcode.setCustomValidity("");
+    }
+    });
+</script>
+
 {% endblock %}
