@@ -21,13 +21,13 @@ STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864
 phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number: +X XXX-XXX-XXXX")
 
 # regex validator for Tufts email
-tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email")
+tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email address")
 
 # regex validator for email
-email_validator = RegexValidator(r'\b[\w\.-]{1,100}@[\w\.-]{1,100}\.\w{2,4}\b', "Please enter a valid email")
+email_validator = RegexValidator(r'\b[\w\.-]{1,100}@[\w\.-]{1,100}\.\w{2,4}\b', "Please enter a valid email address")
 
 # regex validator for zipcode
-zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code.")
+zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code")
 
 class Dog(models.Model):
     # Updated Fields
