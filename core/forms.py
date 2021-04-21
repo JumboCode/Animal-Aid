@@ -10,7 +10,7 @@ from django.core.validators import RegexValidator
 
 SpecialSym =['$', '@', '#', '%', '*', '!', '^', '&', '(', ')', '?']
 
-tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email (no special characters allowed)")
+tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email address")
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(label='Enter Tufts email', max_length=100, validators=[tufts_email_validator])
