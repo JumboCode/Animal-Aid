@@ -614,11 +614,14 @@ def admin_ctrl(request):
 
                 return render(request, 'core/admin_ctrl.html', {'clear_user_times':clear_user_times})
             elif 'openForm' in request.POST:
-                # reset walker filledForm booleans to False
+                
                 walkers = Walker.objects.all()
 
+                # reset walker filledForm boolean to False
+                # and clear dog choices
                 for walker in walkers:
                     walker.set_filledForm(False)
+                    walker.clear_dog_choices()
                     walker.save()
 
                 # set the form to open
