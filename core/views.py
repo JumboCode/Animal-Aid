@@ -415,7 +415,6 @@ def edit_walker(request):
 
 def walker_signup(request):
     global form_is_open
-    #print(form_is_open)
     
     # only able to edit walker profile if logged in as a normal user, not staff
     if request.user.is_authenticated and form_is_open:
@@ -630,8 +629,6 @@ def admin_ctrl(request):
                 return render(request, 'core/admin_ctrl.html')
                 
             elif 'closeForm' in request.POST:
-                walkers = Walker.objects.all()
-                
                 form_is_open = False
                 return render(request, 'core/admin_ctrl.html')
                 
