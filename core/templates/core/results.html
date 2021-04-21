@@ -52,7 +52,19 @@
             <!-- Button to filter by dog name -->
             <button type="submit" name="filter_dog" id="filter_dog" class="subscribebutton">FILTER</button>
         </form>
+    <script>
+      // Maintain the selected Dog's name after refresh.
+      window.onload = function () {
+        var selItem = sessionStorage.getItem("SelItem");
+	$('#dog_select').val(selItem);
+      }
 
+      $('#dog_select').change(function() {
+        var selVal = $(this).val();
+	sessionStorage.setItem("SelItem", selVal);
+      });
+      
+    </script>
     <!-- </div> -->
     </div>
 
