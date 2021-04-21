@@ -538,44 +538,44 @@ def admin_ctrl(request):
                 walker_matches = {}
 
                 for pref in range(5):
-                    for walker in all_walkers:
-                        if not walker.get_name() in walker_matches:
-                            walker_matches[walker.get_name()] = None
+                    for walker in all_walkers:                    
+                        if walker.get_filledForm():
+                            if not walker.get_name() in walker_matches:
+                                walker_matches[walker.get_name()] = None
 
-                        dog_name = walker.dog_choices[pref]
+                            dog_name = walker.dog_choices[pref]
 
-                        # check matches if pref isn't blank and walker isn't matched with other dogs
-                        if (not dog_name == None and (walker_matches[walker.get_name()] == dog_name or walker_matches[walker.get_name()] == None)):
-                            
-                            dog = Dog.objects.get(dog_name=dog_name)
-                            dog_walktimes = dog.get_walktimes()
-                            walker_walktimes = walker.get_walktimes()
+                            # check matches if pref isn't blank and walker isn't matched with other dogs
+                            if (not dog_name == None and (walker_matches[walker.get_name()] == dog_name or walker_matches[walker.get_name()] == None)):
+                                dog = Dog.objects.get(dog_name=dog_name)
+                                dog_walktimes = dog.get_walktimes()
+                                walker_walktimes = walker.get_walktimes()
 
-                            # for each day the dog needs to be walked
-                            for i, day in enumerate(dog_walktimes):
-                                # for each time the dog needs to be walked
-                                for j, time in enumerate(day):
-                                    # if both are free
-                                    if (time and walker_walktimes[i][j] and not walker.check_walk(i, j) and not dog.check_walk(i, j)):
-                                        # mark that walker is walking a dog and dog is being walked
-                                        walker.set_walk(i,j)
-                                        dog.set_walk(i,j)
+                                # for each day the dog needs to be walked
+                                for i, day in enumerate(dog_walktimes):
+                                    # for each time the dog needs to be walked
+                                    for j, time in enumerate(day):
+                                        # if both are free
+                                        if (time and walker_walktimes[i][j] and not walker.check_walk(i, j) and not dog.check_walk(i, j)):
+                                            # mark that walker is walking a dog and dog is being walked
+                                            walker.set_walk(i,j)
+                                            dog.set_walk(i,j)
 
-                                        day_name = day_names[i]
+                                            day_name = day_names[i]
 
-                                        new_match = Match(
-                                            dog=dog,
-                                            walker=walker,
-                                            day=day_name,
-                                            time=j+9
-                                        )
-                                        new_match.save()
-                                        
-                                        walker.save()
-                                        dog.save()
+                                            new_match = Match(
+                                                dog=dog,
+                                                walker=walker,
+                                                day=day_name,
+                                                time=j+9
+                                            )
+                                            new_match.save()
+                                            
+                                            walker.save()
+                                            dog.save()
 
-                                        if walker_matches[walker.get_name()] == None:
-                                            walker_matches[walker.get_name()] = dog_name
+                                            if walker_matches[walker.get_name()] == None:
+                                                walker_matches[walker.get_name()] = dog_name
 
                 success = True
 
@@ -613,11 +613,14 @@ def admin_ctrl(request):
 
                 return render(request, 'core/admin_ctrl.html', {'clear_user_times':clear_user_times})
             elif 'openForm' in request.POST:
-                # reset walker filledForm booleans to False
+                
                 walkers = Walker.objects.all()
 
+                # reset walker filledForm boolean to False
+                # and clear dog choices
                 for walker in walkers:
                     walker.set_filledForm(False)
+                    walker.clear_dog_choices()
                     walker.save()
 
                 # set the form to open

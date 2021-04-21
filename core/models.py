@@ -164,7 +164,7 @@ class Walker(models.Model):
     filledForm = models.BooleanField(default=False)
     
     def blank_choices():
-        return []
+        return [None, None, None, None, None]
 
     dog_choices = ArrayField(
         models.CharField(max_length=16),
@@ -206,6 +206,9 @@ class Walker(models.Model):
 
     def get_dog_choices(self):
         return self.dog_choices
+
+    def clear_dog_choices(self):
+        self.dog_choices = [None, None, None, None, None]
 
     # takes 2D ArrayField times and maps to 3D array for use in front-end
     def get_walktimes(self):
