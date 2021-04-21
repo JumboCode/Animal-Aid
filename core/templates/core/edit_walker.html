@@ -155,4 +155,17 @@
 	</form>
 
     <br>
+
+	<script>
+        const phone_message = "Please enter a valid phone number: +X XXX-XXX-XXXX";
+        const phone = document.getElementById("walker_phone");
+
+        phone.addEventListener("input", function (event) {
+        if (phone.validity.patternMismatch) {
+            phone.setCustomValidity(phone_message);
+        } else {
+            phone.setCustomValidity("");
+        }
+        });
+    </script>
 {% endblock %}
