@@ -73,8 +73,7 @@ def dog_gallery(request):
     for dog in dogs:
         dog_info = {}
         dog_info["name"] = dog.get_name()
-        # temp fix until we can display images reliably
-        dog_info["image_path"] = dog.get_thumb()
+        dog_info["image_path"] = dog.get_image()
         dog_infos.append(dog_info)
 
     return render(request, 'core/dog.html', {'dogs': dog_infos})
@@ -162,7 +161,7 @@ def dog_list(request):
                 'city': dog.get_city,
                 'zipcode' : dog.get_zipcode,
                 'id': dog.id,
-                'image': dog.get_thumb(),
+                'image': dog.get_image(),
                 'visible': dog.get_visible(),
             })
         data['dogs'].sort(key=visibility_key)
@@ -228,7 +227,7 @@ def edit_dog(request):
             street_address = selected_dog.get_street_address
             city = selected_dog.get_city
             zipcode = selected_dog.get_zipcode
-            image = selected_dog.get_thumb
+            image = selected_dog.get_image
 
             # two dictionaries passed to render:
             #   data: used by django framework to format walk times table

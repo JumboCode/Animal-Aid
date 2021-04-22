@@ -36,12 +36,16 @@
                     <th>Owner Address</th>
                 </tr>
                 {% for dog in dogs %}
-                <tr style="{% if dog.visible is False %} background-color: lightgrey;{% endif %}">
+                {% if dog.visible is False %}
+                    <tr style="background-color: lightgrey;">
+                {% else %}
+                    <tr>
+                {% endif %}
                     <td style="padding: 1em">
                         {{ dog.name }}
                     </td>
                     <td style="padding: 1em">
-                        <img width="100" height="100" src="{{ dog.image }}">
+                        <img width="100" height="100" src="{{ dog.image }}" style="object-fit:cover;">
                     </td>
                     <td style="padding: 1em">
                         {{ dog.owner_name }} <br>
