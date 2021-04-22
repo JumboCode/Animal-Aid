@@ -8,7 +8,6 @@ from django.core.validators import RegexValidator
 from easy_thumbnails.files import get_thumbnailer
 import os
 import urllib.request
-import urllib.parse
 import requests
 
 
