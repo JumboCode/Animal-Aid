@@ -178,7 +178,7 @@ STATICFILES_DIRS = (
 )
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 LOGOUT_REDIRECT_URL = '/'
 # https://stackoverflow.com/questions/61111988/django-keeps-using-wrong-storage-backend-when-trying-to-upload-static-files-to-s
