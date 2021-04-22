@@ -27,7 +27,7 @@ PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 SECRET_KEY = '***REMOVED***'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["animalaidtufts.herokuapp.com", "0.0.0.0", "127.0.0.1","*"]
 
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 
 # located in static/thumbs/
 THUMBNAIL_BASEDIR = 'static/thumbs/'
-THUMBNAIL_DEBUG = False
+THUMBNAIL_DEBUG = True
 
 S3DIRECT_DESTINATIONS = {
     'example_destination': {
@@ -177,11 +177,7 @@ STATICFILES_DIRS = (
     (os.path.join(BASE_DIR, 'static/')),
 )
 
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-
-# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 LOGOUT_REDIRECT_URL = '/'
 # https://stackoverflow.com/questions/61111988/django-keeps-using-wrong-storage-backend-when-trying-to-upload-static-files-to-s
