@@ -31,14 +31,17 @@
 	</div>
 </div>
 
-<br> <br> <br> <br> <br> <br> <br> <br>
+
+
+<br> <br> <br> 
+
 
 <div class="container mt-5">
 
 	<div class="row justify-content-center align-self-center" > 
-		<img src="{% static 'img/SmallPawPrint.svg' %}" class="pawprintsmall"> 
+		<img src="{% static 'img/smallPawPrint.png' %}" class="pawprintsmall"> 
 		<div class="AAhomesmallheader"  style=> Our Mission </div>
-		<img src="{% static 'img/SmallPawPrint.svg' %}" class="pawprintsmall"> 
+		<img src="{% static 'img/smallPawPrint.png' %}" class="pawprintsmall"> 
 	</div>
 
 	<div class="captionhometxt"> Animal Aid pairs volunteer undergraduate students with dogs in the nearby Medford/Somerville area to walk on a weekly basis. Walking is a semester-long commitment, and interested students are able to designate their top choices/schedules at the beginning of each semester. Animal Aid pairs volunteer undergraduate students with dogs in the nearby Medford/Somerville area to walk on a weekly basis. Walking is a semester-long commitment, and interested students are able to designate their top choices/schedules at the beginning of each semester. </div>
@@ -46,15 +49,22 @@
 </div>
 
 
-<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<br> <br> <br> <br> 
+
 
 
 
 	<div class="container-fluid" style="background-color: #EFE7E5;">
 		<div class="row justify-content-center align-self-center"style="padding-top: 100px;"> 
+<<<<<<< HEAD
 			<img src="{% static 'img/SmallPawPrint.svg' %}" class="pawprintsmall"> 
 			<div class="AAhomesmallheader"  style=> Join Our E-List </div>
 			<img src="{% static 'img/SmallPawPrint.svg' %}" class="pawprintsmall"> 
+=======
+			<img src="{% static 'img/smallPawPrint.png' %}" class="pawprintsmall"> 
+			<div class="AAhomesmallheader"  style=> Join Our E-List </div>
+			<img src="{% static 'img/smallPawPrint.png' %}" class="pawprintsmall"> 
+>>>>>>> 228cda24f3b338a747ec2f783c82a1f13672a774
 		</div>
 
 		<div class="container" > 
@@ -62,25 +72,28 @@
 			<br>
 			<div class="container py-2">
 				<div class="d-flex justify-content-center">
-						<input type="text" input type="text" class="subscribetextfield">
-						<button type="button" class="subscribebutton">SUBSCRIBE </button> </div> 
+					<form action="" method="post">
+						{% csrf_token %}
+						<input name="subscribeemail" type="email" class="subscribetextfield" required>
+						<button name="subscribe" type="submit" class="subscribebutton">SUBSCRIBE </button>
+					</form>
+				</div>
 			</div>
 		</div>
 
 		<br> <br> <br> <br>
 	</div>
-
-		
-
-		<!-- <div class="container py-2">
-			<div class="row justify-content-center align-self-center">
-				<div class="col-sm-8" style="width:80%!important">
-					<input type="text" input type="text" class="subscribetextfield">
-					<button type="button" class="btn btn-primary">Add New</button>
-				</div>
-			</div>
-		</div> -->
 	</div>
 
+
+<script type="text/javascript">
+	 $(function() {
+    $('.scroll-down').click (function() {
+      $('html, body').animate({scrollTop: $('section.misson').offset().top }, 'slow');
+      return false;
+    });
+  });
+
+</script>
 
 {% endblock %}

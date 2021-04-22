@@ -7,9 +7,14 @@ from .models import Dog, Walker, Match
 from django.core.exceptions import PermissionDenied, EmptyResultSet
 from core.models import Dog, Walker, Match
 from json import dumps
+import random
+from django.core.mail import send_mail
+from django.contrib import messages
 
 global form_is_open
 form_is_open = False
+
+SUBSCRIBE_RECIPIENT = 'Benjamin.London@tufts.edu'
 
 # constants to change walking days and times
 # Sizes should match DAYS and HOURS constants in core/models.py
@@ -17,6 +22,17 @@ DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sun
 HOURS = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
 
 def home(request):
+    if request.method == 'POST' and 'subscribe' in request.POST:
+        email = request.POST.get('subscribeemail')
+        send_mail(
+            # subject line
+            'Animal Aid Subscription Request',
+            # body
+            'The following email would like to subscribe to the Animal Aid mailing list:\n' + email,
+            '',
+            [SUBSCRIBE_RECIPIENT],
+        )
+        return redirect('home')
     return render(request, 'core/home.html')
 def login(request):
     if request.method == 'POST':
@@ -29,10 +45,17 @@ def login(request):
             if user is not None:
                 auth_login(request, user)
                 return redirect('home')
+        else:
+            messages.error(request, 'Incorrect username or password')
+            return redirect('login')
+    else:
+        form = LoginForm()
+        return render(request, 'core/login.html', {'form': form})
+
+
     # If user did not enter the correct username and password combination,
     # or are visiting the page for the time, load default login form.
-    form = LoginForm()
-    return render(request, 'core/login.html', {'form': form})
+    
 
 def signup(request):
     if request.method == 'POST':
@@ -392,7 +415,6 @@ def edit_walker(request):
 
 def walker_signup(request):
     global form_is_open
-    #print(form_is_open)
     
     # only able to edit walker profile if logged in as a normal user, not staff
     if request.user.is_authenticated and form_is_open:
@@ -497,42 +519,67 @@ def admin_ctrl(request):
         elif request.method == 'POST':
             if 'match' in request.POST:	
                 all_dogs = Dog.objects.all()
-                all_walkers = Walker.objects.all()
-                
-                for dog in all_dogs:
-                    
-                    dog_walktimes = dog.get_walktimes()
+                all_walkers = list(Walker.objects.all())
 
-                    # for each day the dog needs to be walked
-                    for i, day in enumerate(dog_walktimes):
-                        # for each time the dog needs to be walked
-                        for j, time in enumerate(day):
-                            # for each walker
-                            for walker in all_walkers:
+                random.shuffle(all_walkers)
+                
+                day_names = DAYS
+
+                #   for each pref (1-5)
+                #       for each walker
+                #           check that walker hasn't already been matched with dif dog
+                #               for each time
+                #                   match walker with dog if both available
+                #
+                #   **only match walker with one dog per round
+                #   **walkers randomized instead of signup order priority
+                walker_matches = {}
+
+                for pref in range(5):
+                    for walker in all_walkers:                    
+                        if walker.get_filledForm():
+                            if not walker.get_name() in walker_matches:
+                                walker_matches[walker.get_name()] = None
+
+                            dog_name = walker.dog_choices[pref]
+
+                            # check matches if pref isn't blank and walker isn't matched with other dogs
+                            if (not dog_name == None and (walker_matches[walker.get_name()] == dog_name or walker_matches[walker.get_name()] == None)):
+                                dog = Dog.objects.get(dog_name=dog_name)
+                                dog_walktimes = dog.get_walktimes()
                                 walker_walktimes = walker.get_walktimes()
-                                
-                                # if they are free
-                                if (time and walker_walktimes[i][j] and not walker.check_walk(i, j) and not dog.check_walk(i, j)):
-                                    day_name = DAYS[i]
-                                
-                                    # mark that walker is walking a dog and dog is being walked
-                                    walker.set_walk(i,j)
-                                    dog.set_walk(i,j)
 
-                                    new_match = Match(
-                                        dog=dog,
-                                        walker=walker,
-                                        day=day_name,
-                                        time=j+9
-                                    )   
-                                    new_match.save()
-                                    
-                                    walker.save()
-                                    dog.save()
-                
+                                # for each day the dog needs to be walked
+                                for i, day in enumerate(dog_walktimes):
+                                    # for each time the dog needs to be walked
+                                    for j, time in enumerate(day):
+                                        # if both are free
+                                        if (time and walker_walktimes[i][j] and not walker.check_walk(i, j) and not dog.check_walk(i, j)):
+                                            # mark that walker is walking a dog and dog is being walked
+                                            walker.set_walk(i,j)
+                                            dog.set_walk(i,j)
+                                            dog.deselect_need(i,j)
+
+                                            day_name = day_names[i]
+
+                                            new_match = Match(
+                                                dog=dog,
+                                                walker=walker,
+                                                day=day_name,
+                                                time=j+9
+                                            )
+                                            new_match.save()
+                                            
+                                            walker.save()
+                                            dog.save()
+
+                                            if walker_matches[walker.get_name()] == None:
+                                                walker_matches[walker.get_name()] = dog_name
+
                 success = True
 
                 return render(request, 'core/admin_ctrl.html', {'success':success})
+
             elif 'delete' in request.POST:				
                 # get all matches, dogs, and walkers
                 matches = Match.objects.all()
@@ -565,14 +612,15 @@ def admin_ctrl(request):
 
                 return render(request, 'core/admin_ctrl.html', {'clear_user_times':clear_user_times})
             elif 'openForm' in request.POST:
-                # reset walker filledForm booleans to False
+                
                 walkers = Walker.objects.all()
 
+                # reset walker filledForm boolean to False
+                # and clear dog choices
                 for walker in walkers:
-                    print(walker.get_name(), walker.get_filledForm())
                     walker.set_filledForm(False)
+                    walker.clear_dog_choices()
                     walker.save()
-                    print(walker.get_name(), walker.get_filledForm())
 
                 # set the form to open
                 form_is_open = True
@@ -580,11 +628,6 @@ def admin_ctrl(request):
                 return render(request, 'core/admin_ctrl.html')
                 
             elif 'closeForm' in request.POST:
-                walkers = Walker.objects.all()
-
-                for walker in walkers:
-                    print(walker.get_name(), walker.get_filledForm())
-                
                 form_is_open = False
                 return render(request, 'core/admin_ctrl.html')
                 
