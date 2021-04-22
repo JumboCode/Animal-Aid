@@ -5,10 +5,6 @@ from django.conf import settings
 from s3direct.fields import S3DirectField
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import RegexValidator
-from easy_thumbnails.files import get_thumbnailer
-import os
-import urllib.request
-import requests
 
 
 # constants to control how many walking times are used
@@ -20,13 +16,13 @@ STOCK_URL = 'https://st.depositphotos.com/1798678/3986/v/600/depositphotos_39864
 phone_validator = RegexValidator(r'^(\+\d{1,2}\s)?\d{3}-\d{3}-\d{4}$', "Please enter a valid phone number: +X XXX-XXX-XXXX")
 
 # regex validator for Tufts email
-tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email")
+tufts_email_validator = RegexValidator(r'^[a-zA-Z0-9_.+-]{1,90}@tufts\.edu$', "Please enter a valid Tufts email address")
 
 # regex validator for email
-email_validator = RegexValidator(r'\b[\w\.-]{1,100}@[\w\.-]{1,100}\.\w{2,4}\b', "Please enter a valid email")
+email_validator = RegexValidator(r'\b[\w\.-]{1,100}@[\w\.-]{1,100}\.\w{2,4}\b', "Please enter a valid email address")
 
 # regex validator for zipcode
-zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code.")
+zip_validator = RegexValidator(r'^[0-9]{5}$', "Please enter a valid five digit zip code")
 
 class Dog(models.Model):
     # Updated Fields
@@ -126,6 +122,9 @@ class Dog(models.Model):
     def set_walk(self, day, time):
         self.walking_times[HOURS * day + time] = True
     
+    def deselect_need(self, day, time):
+        self.times[HOURS * day + time] = False
+
     # check if dog is currently being walked at that time
     def check_walk(self, day, time):
         return self.walking_times[HOURS * day + time]
@@ -147,7 +146,7 @@ class Walker(models.Model):
     filledForm = models.BooleanField(default=False)
     
     def blank_choices():
-        return []
+        return [None, None, None, None, None]
 
     dog_choices = ArrayField(
         models.CharField(max_length=16),
@@ -189,6 +188,9 @@ class Walker(models.Model):
 
     def get_dog_choices(self):
         return self.dog_choices
+
+    def clear_dog_choices(self):
+        self.dog_choices = [None, None, None, None, None]
 
     # takes 2D ArrayField times and maps to 3D array for use in front-end
     def get_walktimes(self):

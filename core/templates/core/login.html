@@ -8,9 +8,6 @@
   {% endblock styles %}
 
 {% block content %}
-
-<!--   <h1>Login</h1> -->
-
   <br> <br> <br> 
   <div class="container">
 
@@ -22,6 +19,7 @@
             <div class="welcometext"> WELCOME </div> <br>
       <div style="display:block; text-align: center; margin: 0 auto">
   <form action="" method="post">
+      
     {% csrf_token %}
     {% for field in form %}
       <div>
@@ -32,6 +30,14 @@
         {% endfor %}
       </div>
     {% endfor %} 
+    
+    {% for message in messages %}
+    
+        <br>
+        <p style="color: red">{{ message }}</p>
+        
+    <!-- </div> -->
+    {% endfor %}
 
     <div class="forgotpasstxt"> <a href="{% url 'password_reset' %}"} style="float: right; margin-right: 60px;">Forgot your password?</a> </div>
     <br> <br> <br> 
