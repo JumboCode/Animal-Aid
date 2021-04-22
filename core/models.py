@@ -127,6 +127,9 @@ class Dog(models.Model):
     def set_walk(self, day, time):
         self.walking_times[HOURS * day + time] = True
     
+    def deselect_need(self, day, time):
+        self.times[HOURS * day + time] = False
+
     # check if dog is currently being walked at that time
     def check_walk(self, day, time):
         return self.walking_times[HOURS * day + time]
