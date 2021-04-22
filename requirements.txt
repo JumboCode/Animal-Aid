@@ -14,3 +14,4 @@ google-compute-engine
 django-s3direct>=1.1.8
 easy_thumbnails
 requests
+whitenoise
