@@ -143,12 +143,12 @@ class Dog(models.Model):
     # downloads dog image to static, converts to a thumnail of size 250x250
     # and returns url to thumbnail
     def get_thumb(self):
-        directory = os.path.dirname("static/img/thumbs/static/img/")
+        directory = os.path.dirname("static/thumbs/static/img/")
         if not os.path.exists(directory):
             os.makedirs(directory)
 
         # path prep
-        img_path = os.path.join("static/img/thumbs/static/img/", self.get_image().split('/')[-1].replace(' ', '_'))
+        img_path = os.path.join("static/thumbs/static/img/", self.get_image().split('/')[-1].replace(' ', '_'))
         img_url = self.get_image()
 
         # download img

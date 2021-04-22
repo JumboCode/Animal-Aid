@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 ]
 
 # located in static/thumbs/
-THUMBNAIL_BASEDIR = 'static/img/thumbs/'
+THUMBNAIL_BASEDIR = 'static/thumbs/'
 THUMBNAIL_DEBUG = False
 
 S3DIRECT_DESTINATIONS = {
@@ -177,7 +177,7 @@ STATICFILES_DIRS = (
     (os.path.join(BASE_DIR, 'static/')),
 )
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
