@@ -146,6 +146,8 @@ class Dog(models.Model):
             os.makedirs(directory)
         img_path = os.path.join("static/thumbs/static/img/", self.get_image().split('/')[-1])
         img_path = img_path.replace(" ","")
+        print(img_path)
+        print(self.get_image())
         urllib.request.urlretrieve(self.get_image(), img_path)
 
         out_path = get_thumbnailer(img_path).get_thumbnail({'size': (250, 250), 'crop': True, 'upscale': True}).url
