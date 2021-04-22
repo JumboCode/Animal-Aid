@@ -29,7 +29,7 @@ PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 SECRET_KEY = '***REMOVED***'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["animalaidtufts.herokuapp.com", "0.0.0.0", "127.0.0.1"]
 
@@ -97,7 +97,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-
 ]
 
 ROOT_URLCONF = 'AnimalAid.urls'
@@ -132,17 +131,7 @@ DATABASES = {
         'PORT': 5432,
         'USER': 'fmhzcysxtzamqb',
         'PASSWORD': '67fae76176e05933fa21cbcd15af5c91648617331a4364b0c83743a73b9d0c6c'
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': 'animalaid',
-        # 'USER': 'admin',
-        # 'PASSWORD': 'JumboCodeAnimalAid',
-        # 'HOST': 'localhost',
-        # 'PORT': '',
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': str(BASE_DIR / 'db.sqlite3'),
-    # }
 }
 
 # Password validation
