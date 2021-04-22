@@ -5,7 +5,6 @@ from django.conf import settings
 from s3direct.fields import S3DirectField
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import RegexValidator
-from easy_thumbnails.files import get_thumbnailer
 import os
 import urllib.request
 import requests

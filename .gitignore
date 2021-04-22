@@ -154,6 +154,6 @@ tsconfig.json
 */migrations/*
 
 # Static Images
-*static/img/dogs/*
-*static/thumbs/static/img/*
-*static/thumbs/static/thumbs/*
+# *static/img/dogs/*
+# *static/thumbs/static/img/*
+# *static/thumbs/static/thumbs/*
