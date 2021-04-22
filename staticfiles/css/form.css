@@ -1,0 +1,54 @@
+body {
+	background-color: #EFE7E5;
+}
+
+.whiteresultcontainer {
+	width: 92%;
+	height: auto;
+	background-color: #FFFFFF;
+	text-align: center;
+	float:center;
+	margin: 0 auto;
+	border-radius: 30px;
+}
+
+.formheaders {
+	font-size: 22px;
+	text-align: left;
+	text-decoration: underline;
+	padding-top: 30px;
+	margin-left: 65px;
+	color: #575757;
+	font-weight: 900;
+}
+
+.formtext {
+	font-weight: 700;
+	font-size: 16px;
+	padding-top: 10px;
+}
+
+.formfield {
+	font-weight: 300;
+	background-color: #E8E2DF;
+	border-radius: 30px;
+	border: none;
+	padding-left:10px;
+	height:30px;
+	width: 200px;
+}
+
+
+
+table {
+  border: none !important;
+}
+
+
+.headtext {
+	font-weight: 200;
+	font-size: 30px;
+	padding-top: 30px;
+	padding-bottom: 20px;
+}
+

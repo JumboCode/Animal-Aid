@@ -1,0 +1,134 @@
+body {
+	background-color: #EFE7E5;
+	overflow: hidden; /* Hide scrollbars */
+}
+
+.signuplogin-headtxt {
+	font-family: 'Source Sans Pro', sans-serif;
+    float:center;
+    
+}
+
+.whitemodal {
+	width: 80%;
+	height: 31.25rem;
+	border-radius: 30px;
+	background-color: #FFFFFF;
+	float: center;
+	margin: 0 auto;
+	margin-top: 60px;
+	padding: 30px;
+	justify-content: center;
+	align-items: center;
+}
+
+.Awhitemodal {
+    width: 50%;
+	height: 100%;
+	border-radius: 30px;
+	background-color: #FFFFFF;
+	float: center;
+	margin: 0 auto;
+	margin-top: 60px;
+	padding: 30px;
+	justify-content: center;
+	align-items: center;
+    /*position: absolute;*/
+    /*left: 50%;*/
+    /*right: 50%;*/
+}
+
+.passwordsubtxt {
+	text-align: center;
+	font-weight: 500;
+	font-family: 'Roboto', sans-serif;
+	color: #583531;
+
+}
+
+.welcometext {
+	font-family: 'Source Sans Pro', sans-serif;
+    float: center;
+    text-align: center;
+    margin: 0 auto;
+  	font-size: 50px;
+  	font-weight: 600;
+    width: 100%;
+    padding-top: 6%;
+    color: #583531;
+}
+
+.signuploginbutton{
+	height: 3.125rem;
+	width: 12rem;
+	border: none;
+	background-color: #C0A39D;
+	border-radius: 1.875rem;
+	font-family: 'Source Sans Pro', sans-serif;
+    float:center;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+   	color: #FFFFFF;
+/*   	padding-left: 30px;
+   	padding-right: 30px;*/
+}
+
+.Asignuploginbutton {
+    height: 3.125rem;
+	width: 12rem;
+	border: none;
+	background-color: #C0A39D;
+	border-radius: 1.875rem;
+	font-family: 'Source Sans Pro', sans-serif;
+    float:center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+   	color: #FFFFFF;
+    margin: auto;
+    display: flex;
+}
+
+
+.signuploginbutton:hover {
+	background-color: #FF9664;
+}
+
+.signuploginlabeltxt {
+	float: left;
+}
+
+#id_email, #id_password1, #id_password2, #id_username, #id_password {
+	width: 70%;
+	padding-top: 0px;
+	float: center;
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+    font-weight: 300;
+    color: #583531;
+    padding-left: 10px;
+    border-radius: 30px;
+    border-color: #583531;
+
+}
+
+#id_password2 {
+	margin-bottom: 10px;
+}
+
+.forgotpasstxt a{
+	font-family: 'Roboto', sans-serif;
+	text-decoration: none;
+	color: #583531;
+
+}
+
+.forgotpasstxt a:hover{
+	text-decoration: underline;
+	color: #583531;
+	font-weight: 700;
+
+
+}
