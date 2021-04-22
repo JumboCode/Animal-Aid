@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 
 # located in static/thumbs/
 THUMBNAIL_BASEDIR = 'static/thumbs/'
-THUMBNAIL_DEBUG = True
+THUMBNAIL_DEBUG = False
 
 S3DIRECT_DESTINATIONS = {
     'example_destination': {
