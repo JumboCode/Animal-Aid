@@ -523,9 +523,7 @@ def admin_ctrl(request):
 
                 random.shuffle(all_walkers)
                 
-                day_names = ['monday', 'tuesday', 
-                            'wednesday', 'thursday', 'friday', 
-                            'saturday','sunday']
+                day_names = DAYS
 
                 #   for each pref (1-5)
                 #       for each walker
@@ -560,6 +558,7 @@ def admin_ctrl(request):
                                             # mark that walker is walking a dog and dog is being walked
                                             walker.set_walk(i,j)
                                             dog.set_walk(i,j)
+                                            dog.deselect_need(i,j)
 
                                             day_name = day_names[i]
 
