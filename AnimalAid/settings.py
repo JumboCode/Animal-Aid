@@ -44,12 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'storages',
     's3direct',
-    'easy_thumbnails',
 ]
-
-# located in static/thumbs/
-THUMBNAIL_BASEDIR = 'static/thumbs/'
-THUMBNAIL_DEBUG = True
 
 S3DIRECT_DESTINATIONS = {
     'example_destination': {
