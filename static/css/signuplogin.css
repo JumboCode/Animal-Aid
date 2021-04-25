@@ -1,6 +1,6 @@
 body {
 	background-color: #EFE7E5;
-	overflow: hidden; /* Hide scrollbars */
+	/*overflow: hidden;  */
 }
 
 .signuplogin-headtxt {
@@ -91,6 +91,9 @@ body {
     display: flex;
 }
 
+.Asignuploginbutton:hover {
+	background-color: #FF9664;
+}
 
 .signuploginbutton:hover {
 	background-color: #FF9664;
