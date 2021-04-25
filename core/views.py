@@ -5,7 +5,7 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
 from .models import Dog, Walker, Match
 from django.core.exceptions import PermissionDenied, EmptyResultSet
-from core.models import Dog, Walker, Match
+from core.models import Dog, Walker, Match, Form_Open_Tracker
 from json import dumps
 import random
 from django.core.mail import send_mail
