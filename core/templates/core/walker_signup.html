@@ -137,6 +137,14 @@
                 }
             }
 
+            // check previously selected walk time checkboxes
+            for (var day = 0; day < days.length; day++) {
+                for (var hour = 0; hour < hours.length; hour++) {
+                    var cb = document.getElementById(days[day] + "-" + hours[hour]);
+                    cb.checked = times[day][hour];
+                }
+            }
+
             // update checkboxes on load
             updateWalkTimes();
 
