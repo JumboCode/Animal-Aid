@@ -256,3 +256,12 @@ class Match(models.Model):
         print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
         print_str += str(self.day) + "s at " + str(self.time) + " o'clock"
         return print_str
+
+class Form_Open_Tracker(models.Model):
+    form_is_open = models.BooleanField(default=False)
+
+    def get_is_form_open(self):
+        return self.form_is_open
+
+    def set_is_form_open(self, value):
+        self.form_is_open = value
