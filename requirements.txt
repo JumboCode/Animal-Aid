@@ -12,5 +12,8 @@ django-storages
 django-utils-six 
 google-compute-engine
 django-s3direct>=1.1.8
+<<<<<<< HEAD
 requests
 whitenoise
+=======
+>>>>>>> base/master
