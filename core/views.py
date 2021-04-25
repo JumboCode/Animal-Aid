@@ -13,11 +13,11 @@ from django.contrib import messages
 
 global form_is_open_tracker
 
-if Form_Open_Tracker.objects.count() == 0:
-    new_tracker = Form_Open_Tracker(form_is_open = False)
-    new_tracker.save()
+# if Form_Open_Tracker.objects.count() == 0:
+#     new_tracker = Form_Open_Tracker(form_is_open = False)
+#     new_tracker.save()
 
-form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
+# form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
 
 SUBSCRIBE_RECIPIENT = 'Benjamin.London@tufts.edu'
 
