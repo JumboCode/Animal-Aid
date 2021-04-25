@@ -18,6 +18,7 @@ if Form_Open_Tracker.objects.count() == 0:
     new_tracker = Form_Open_Tracker(form_is_open = False)
     new_tracker.save()
     form_open = False
+    form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
     counter+=1
 elif counter == 0:
     form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
