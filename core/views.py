@@ -425,6 +425,7 @@ def edit_walker(request):
 def walker_signup(request):
     global form_open
     print(form_open)
+    print(counter)
     # only able to edit walker profile if logged in as a normal user, not staff
     if request.user.is_authenticated and form_open:
         
