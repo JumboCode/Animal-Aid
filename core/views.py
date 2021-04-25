@@ -425,10 +425,11 @@ def edit_walker(request):
 
 def walker_signup(request):
     global form_open
+    form_open = form_is_open_tracker.get_is_form_open()
     print(form_open)
     print(counter)
     # only able to edit walker profile if logged in as a normal user, not staff
-    if request.user.is_authenticated and form_open:
+    if request.user.is_authenticated and form_is_open_tracker.get_is_form_open():
         
         username = request.user.get_username()
 
@@ -637,6 +638,7 @@ def admin_ctrl(request):
                 form_is_open_tracker.set_is_form_open(True)
                 form_is_open_tracker.save()
                 form_open = True
+                print(form_open)
 
                 return render(request, 'core/admin_ctrl.html')
                 
@@ -644,6 +646,7 @@ def admin_ctrl(request):
                 form_is_open_tracker.set_is_form_open(False)
                 form_is_open_tracker.save()
                 form_open = False
+                print(form_open)
                 return render(request, 'core/admin_ctrl.html')
                 
             else:
