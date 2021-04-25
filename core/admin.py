@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Dog, Walker, Match
+from .models import Dog, Walker, Match, Form_Open_Tracker
 
 
 # class DogModelForm(forms.modelForm):
@@ -44,4 +44,4 @@ class WalkerAdmin(admin.ModelAdmin):
 
 admin.site.register(Walker, WalkerAdmin)
 
-admin.site.register(Match)
+admin.site.register(Match, Form_Open_Tracker)
