@@ -258,8 +258,6 @@ class Form_Open_Tracker(models.Model):
     form_is_open = models.BooleanField(default=False)
 
     def get_is_form_open(self):
-        print("getting value")
-        print(self.form_is_open)
         return self.form_is_open
 
     def set_is_form_open(self, value):
