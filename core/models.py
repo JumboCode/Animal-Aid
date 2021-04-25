@@ -265,3 +265,6 @@ class Form_Open_Tracker(models.Model):
 
     def set_is_form_open(self, value):
         self.form_is_open = value
+
+    def __str__(self):
+        return str(self.form_is_open)
