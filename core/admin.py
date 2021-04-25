@@ -44,4 +44,5 @@ class WalkerAdmin(admin.ModelAdmin):
 
 admin.site.register(Walker, WalkerAdmin)
 
-admin.site.register(Match, Form_Open_Tracker)
+admin.site.register(Match)
+admin.site.register(Form_Open_Tracker)
