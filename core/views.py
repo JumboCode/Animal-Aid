@@ -19,7 +19,6 @@ if Form_Open_Tracker.objects.count() == 0:
 
 form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
 
-
 SUBSCRIBE_RECIPIENT = 'Benjamin.London@tufts.edu'
 
 # constants to change walking days and times
