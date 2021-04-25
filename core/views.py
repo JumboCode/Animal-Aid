@@ -13,12 +13,6 @@ from django.contrib import messages
 
 global form_is_open_tracker
 
-if Form_Open_Tracker.objects.count() == 0:
-    new_tracker = Form_Open_Tracker(form_is_open = False)
-    new_tracker.save()
-
-form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
-
 SUBSCRIBE_RECIPIENT = 'Benjamin.London@tufts.edu'
 
 # constants to change walking days and times
@@ -27,6 +21,13 @@ DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sun
 HOURS = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
 
 def home(request):
+    global form_is_open_tracker
+    if Form_Open_Tracker.objects.count() == 0:
+        new_tracker = Form_Open_Tracker(form_is_open = False)
+        new_tracker.save()
+
+    form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
+    
     if request.method == 'POST' and 'subscribe' in request.POST:
         email = request.POST.get('subscribeemail')
         send_mail(
