@@ -5,13 +5,19 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
 from .models import Dog, Walker, Match
 from django.core.exceptions import PermissionDenied, EmptyResultSet
-from core.models import Dog, Walker, Match, Form_Open_Tracker
+from core.models import Dog, Walker, Match
 from json import dumps
 import random
 from django.core.mail import send_mail
 from django.contrib import messages
 
 global form_is_open_tracker
+
+if Form_Open_Tracker.objects.count() == 0:
+    new_tracker = Form_Open_Tracker(form_is_open = False)
+    new_tracker.save()
+
+form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
 
 SUBSCRIBE_RECIPIENT = 'Benjamin.London@tufts.edu'
 
@@ -21,13 +27,6 @@ DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sun
 HOURS = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
 
 def home(request):
-    global form_is_open_tracker
-    if Form_Open_Tracker.objects.count() == 0:
-        new_tracker = Form_Open_Tracker(form_is_open = False)
-        new_tracker.save()
-
-    form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
-    
     if request.method == 'POST' and 'subscribe' in request.POST:
         email = request.POST.get('subscribeemail')
         send_mail(
