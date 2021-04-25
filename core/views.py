@@ -420,9 +420,7 @@ def edit_walker(request):
         raise PermissionDenied()
 
 def walker_signup(request):
-    global form_is_open_tracker
     global form_open
-    form_is_open = form_is_open_tracker.get_is_form_open()
     # only able to edit walker profile if logged in as a normal user, not staff
     if request.user.is_authenticated and form_is_open:
         
