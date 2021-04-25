@@ -5,19 +5,14 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
 from .models import Dog, Walker, Match
 from django.core.exceptions import PermissionDenied, EmptyResultSet
-from core.models import Dog, Walker, Match, Form_Open_Tracker
+from core.models import Dog, Walker, Match
 from json import dumps
 import random
 from django.core.mail import send_mail
 from django.contrib import messages
 
-global form_is_open_tracker
-
-# if Form_Open_Tracker.objects.count() == 0:
-#     new_tracker = Form_Open_Tracker(form_is_open = False)
-#     new_tracker.save()
-
-# form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
+global form_is_open
+form_is_open = False
 
 SUBSCRIBE_RECIPIENT = 'Benjamin.London@tufts.edu'
 
@@ -418,8 +413,8 @@ def edit_walker(request):
         raise PermissionDenied()
 
 def walker_signup(request):
-    global form_is_open_tracker
-    form_is_open = form_is_open_tracker.get_is_form_open()
+    global form_is_open
+    
     # only able to edit walker profile if logged in as a normal user, not staff
     if request.user.is_authenticated and form_is_open:
         
@@ -514,7 +509,7 @@ def admin_ctrl(request):
     success = False
     clear = False
     clear_user_times = False
-    global form_is_open_tracker
+    global form_is_open
 
     # only able to edit dogs if logged in as staff
     if request.user.is_authenticated and request.user.is_staff:
@@ -627,14 +622,12 @@ def admin_ctrl(request):
                     walker.save()
 
                 # set the form to open
-                form_is_open_tracker.set_is_form_open(True)
-                form_is_open_tracker.save()
+                form_is_open = True
 
                 return render(request, 'core/admin_ctrl.html')
                 
             elif 'closeForm' in request.POST:
-                form_is_open_tracker.set_is_form_open(False)
-                form_is_open_tracker.save()
+                form_is_open = False
                 return render(request, 'core/admin_ctrl.html')
                 
             else:
