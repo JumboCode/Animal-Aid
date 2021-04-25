@@ -422,7 +422,7 @@ def edit_walker(request):
 def walker_signup(request):
     global form_open
     # only able to edit walker profile if logged in as a normal user, not staff
-    if request.user.is_authenticated and form_is_open:
+    if request.user.is_authenticated and form_open:
         
         username = request.user.get_username()
 
@@ -504,9 +504,9 @@ def walker_signup(request):
             'dog_list': visible_dogs,
             'pref_count': PREF_COUNT,
         }
-        return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data), 'form_is_open':form_is_open})
-    elif not form_is_open:
-        return render(request, 'core/walker_signup.html', {'form_is_open':form_is_open})
+        return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data), 'form_is_open':form_open})
+    elif not form_open:
+        return render(request, 'core/walker_signup.html', {'form_is_open':form_open})
     else:
         raise PermissionDenied()
 
