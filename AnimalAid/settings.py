@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os, time, sys
 from pathlib import Path
 from aws.conf import *
-
 import django_heroku
+
+env = os.environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +25,7 @@ PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '***REMOVED***'
+SECRET_KEY = env['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -72,14 +73,15 @@ S3DIRECT_DESTINATIONS = {
 # EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 # EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
 
+
 # Setup SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = "***REMOVED***"
-DEFAULT_FROM_EMAIL = 'jumbocodeanimalaid@gmail.com'
+EMAIL_HOST_PASSWORD = env['SENDGRID_EMAIL_HOST_PASSWORD']
+DEFAULT_FROM_EMAIL = env['SENDGRID_DEFAULT_FROM_EMAIL']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -119,11 +121,11 @@ WSGI_APPLICATION = 'AnimalAid.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dfdj445f5e079o',
-        'HOST': "ec2-34-202-88-122.compute-1.amazonaws.com",
+        'NAME': env['DB_NAME'],
+        'HOST': env['DB_HOST'],
         'PORT': 5432,
-        'USER': 'fmhzcysxtzamqb',
-        'PASSWORD': '67fae76176e05933fa21cbcd15af5c91648617331a4364b0c83743a73b9d0c6c'
+        'USER': env['DB_USER'],
+        'PASSWORD': env['DB_PASSWORD']
     }
 }
 
