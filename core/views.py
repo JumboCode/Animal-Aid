@@ -345,13 +345,17 @@ def edit_walker(request):
         if request.method == 'POST':
 
             # only save if save button was pressed
-            if 'save_walker' in request.POST:
+            if 'save_walker' in request.POST or 'go_to_form' in request.POST:
 
                 # getting walker info from request
                 walker.name = request.POST.get('walker_name')
                 walker.phone_number = request.POST.get('walker_phone')
 
                 walker.save()
+
+                # redirect to form if go to signup button is pressed
+                if 'go_to_form' in request.POST:
+                    return redirect('walker_signup')
 
             # redirect to home if cancel button is pressed
             elif 'cancel' in request.POST:
@@ -434,36 +438,40 @@ def walker_signup(request):
 
         # POST request
         if request.method == 'POST':
+            # only save walker info if logged in as a normal user, not staff
+            if not request.user.is_staff:
+                # getting walker info from request
+                walker.name = request.POST.get('walker_name')
+                walker.phone_number = request.POST.get('walker_phone')
 
-            # getting walker info from request
-            walker.name = request.POST.get('walker_name')
-            walker.phone_number = request.POST.get('walker_phone')
+                # iterate through checkboxes to fill out chosen_times
+                chosen_times = []
+                for day in DAYS:
+                    for hour in HOURS:
+                        chosen_times.append(request.POST.get(day + '-' + hour) == 'on')
+                walker.times = chosen_times
 
-            # iterate through checkboxes to fill out chosen_times
-            chosen_times = []
-            for day in DAYS:
-                for hour in HOURS:
-                    chosen_times.append(request.POST.get(day + '-' + hour) == 'on')
-            walker.times = chosen_times
+                # iterate through dog preferences to fill out dog_choices
+                dog_choices = []
+                for choice_num in range(PREF_COUNT):
+                    dropdown_choice = request.POST.get(f'dog_select_{choice_num + 1}')
 
-            # iterate through dog preferences to fill out dog_choices
-            dog_choices = []
-            for choice_num in range(PREF_COUNT):
-                dropdown_choice = request.POST.get(f'dog_select_{choice_num + 1}')
+                    # append chosen dog name to dog_choices
+                    if Dog.objects.filter(dog_name=dropdown_choice).exists():
+                        dog_choices.append(Dog.objects.get(dog_name=dropdown_choice).get_name())
+                        
+                    # if '----' is chosen for a dog pref, then the pref is saved as None
+                    else:
+                        dog_choices.append(None)
+                
+                walker.dog_choices = dog_choices
+                walker.set_filledForm(True)
+                walker.save()
 
-                # append chosen dog name to dog_choices
-                if Dog.objects.filter(dog_name=dropdown_choice).exists():
-                    dog_choices.append(Dog.objects.get(dog_name=dropdown_choice).get_name())
-                    
-                # if '----' is chosen for a dog pref, then the pref is saved as None
-                else:
-                    dog_choices.append(None)
+                return redirect('edit_walker')
             
-            walker.dog_choices = dog_choices
-            walker.set_filledForm(True)
-            walker.save()
-
-            return redirect('home')
+            else:
+                return redirect('home')
 
         name = walker.get_name()
         phone_number = walker.get_phone_number()
