@@ -35,6 +35,9 @@ def home(request):
         return redirect('home')
     return render(request, 'core/home.html')
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
@@ -58,6 +61,9 @@ def login(request):
     
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -643,4 +649,5 @@ def admin_ctrl(request):
                 success = False
                 clear_user_times = False
                 return render(request, 'core/admin_ctrl.html', {'success':success, 'clear':clear, 'clear_user_times':clear_user_times})
-            
+    else:
+        raise PermissionDenied()
