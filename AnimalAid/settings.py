@@ -12,24 +12,25 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os, time, sys
 from pathlib import Path
 from aws.conf import *
+import django_heroku
+
+env = os.environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '***REMOVED***'
+SECRET_KEY = env['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["animalaidtufts.herokuapp.com", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["animalaidtufts.herokuapp.com", "0.0.0.0", "127.0.0.1","*"]
 
 
 # Application definition
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     's3direct',
 ]
 
@@ -71,17 +73,19 @@ S3DIRECT_DESTINATIONS = {
 # EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 # EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
 
+
 # Setup SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = "***REMOVED***"
-DEFAULT_FROM_EMAIL = 'jumbocodeanimalaid@gmail.com'
+EMAIL_HOST_PASSWORD = env['SENDGRID_EMAIL_HOST_PASSWORD']
+DEFAULT_FROM_EMAIL = env['SENDGRID_DEFAULT_FROM_EMAIL']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -117,16 +121,12 @@ WSGI_APPLICATION = 'AnimalAid.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'animalaid',
-        'USER': 'admin',
-        'PASSWORD': 'JumboCodeAnimalAid',
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': env['DB_NAME'],
+        'HOST': env['DB_HOST'],
+        'PORT': 5432,
+        'USER': env['DB_USER'],
+        'PASSWORD': env['DB_PASSWORD']
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': str(BASE_DIR / 'db.sqlite3'),
-    # }
 }
 
 # Password validation
@@ -168,12 +168,49 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     (os.path.join(BASE_DIR, 'static/')),
 )
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 LOGOUT_REDIRECT_URL = '/'
+# https://stackoverflow.com/questions/61111988/django-keeps-using-wrong-storage-backend-when-trying-to-upload-static-files-to-s
+django_heroku.settings(locals())
 
 
-
+DEBUG_PROPAGATE_EXCEPTIONS = True
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+                       'pathname=%(pathname)s lineno=%(lineno)s ' +
+                       'funcname=%(funcName)s %(message)s'),
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        }
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'testlogger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    }
+}

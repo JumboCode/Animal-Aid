@@ -5,14 +5,25 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
 from .models import Dog, Walker, Match
 from django.core.exceptions import PermissionDenied, EmptyResultSet
-from core.models import Dog, Walker, Match
+from core.models import Dog, Walker, Match, Form_Open_Tracker
 from json import dumps
 import random
 from django.core.mail import send_mail
 from django.contrib import messages
 
-global form_is_open
-form_is_open = False
+global form_is_open_tracker
+global form_open
+counter = 0
+if Form_Open_Tracker.objects.count() == 0:
+    new_tracker = Form_Open_Tracker(form_is_open = False)
+    new_tracker.save()
+    form_open = False
+    form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
+    counter+=1
+elif counter == 0:
+    form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
+    form_open = form_is_open_tracker.get_is_form_open()
+    counter +=1
 
 SUBSCRIBE_RECIPIENT = 'Benjamin.London@tufts.edu'
 
@@ -34,15 +45,20 @@ def home(request):
         )
         return redirect('home')
     return render(request, 'core/home.html')
+
 def login(request):
     if request.user.is_authenticated:
         return redirect('home')
 
     if request.method == 'POST':
-        form = LoginForm(request, data=request.POST)
+        request_post_cpy = request.POST.copy()
+        orig_username = request_post_cpy.get('username',default=None)
+        if orig_username != None:
+            request_post_cpy.__setitem__('username',orig_username.lower())
+        form = LoginForm(request, data=request_post_cpy)
         if form.is_valid():
             # Validate user login credentials.
-            username = form.cleaned_data.get('username')
+            username = form.cleaned_data.get('username').lower()
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
@@ -423,10 +439,13 @@ def edit_walker(request):
         raise PermissionDenied()
 
 def walker_signup(request):
-    global form_is_open
-    
+    global form_open
+    global form_is_open_tracker
+    form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
+    form_open = form_is_open_tracker.get_is_form_open()
+
     # only able to edit walker profile if logged in as a normal user, not staff
-    if request.user.is_authenticated and form_is_open:
+    if request.user.is_authenticated and form_open:
         
         username = request.user.get_username()
 
@@ -512,9 +531,9 @@ def walker_signup(request):
             'dog_list': visible_dogs,
             'pref_count': PREF_COUNT,
         }
-        return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data), 'form_is_open':form_is_open})
-    elif not form_is_open:
-        return render(request, 'core/walker_signup.html', {'form_is_open':form_is_open})
+        return render(request, 'core/walker_signup.html', {'data':data, 'json_data':dumps(json_data), 'form_is_open':form_open})
+    elif not form_open:
+        return render(request, 'core/walker_signup.html', {'form_is_open':form_open})
     else:
         raise PermissionDenied()
 
@@ -523,8 +542,9 @@ def admin_ctrl(request):
     success = False
     clear = False
     clear_user_times = False
-    global form_is_open
-
+    global form_is_open_tracker
+    global form_open
+    form_is_open_tracker = Form_Open_Tracker.objects.all()[0]
     # only able to edit dogs if logged in as staff
     if request.user.is_authenticated and request.user.is_staff:
         if request.method == 'GET':
@@ -624,7 +644,7 @@ def admin_ctrl(request):
                 clear_user_times = True
 
                 return render(request, 'core/admin_ctrl.html', {'clear_user_times':clear_user_times})
-            elif 'openForm' in request.POST:
+            elif ('openForm' in request.POST) and (not form_open):
                 
                 walkers = Walker.objects.all()
 
@@ -636,12 +656,16 @@ def admin_ctrl(request):
                     walker.save()
 
                 # set the form to open
-                form_is_open = True
+                form_is_open_tracker.set_is_form_open(True)
+                form_is_open_tracker.save()
+                form_open = True
 
                 return render(request, 'core/admin_ctrl.html')
                 
             elif 'closeForm' in request.POST:
-                form_is_open = False
+                form_is_open_tracker.set_is_form_open(False)
+                form_is_open_tracker.save()
+                form_open = False
                 return render(request, 'core/admin_ctrl.html')
                 
             else:

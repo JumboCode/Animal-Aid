@@ -224,6 +224,8 @@ class Walker(models.Model):
         return self.name
 
 HOURS_LIST = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm']
+
+END_HOURS_LIST = ['9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm', '6:00pm']
 class Match(models.Model):
     # ID, dog, day, time, walker
     dog    = models.ForeignKey(Dog, on_delete=models.SET_NULL, blank=True, null=True, related_name="dog")
@@ -247,9 +249,21 @@ class Match(models.Model):
         return HOURS_LIST[(self.time-9)]
 
     def get_end_time(self):
-        return HOURS_LIST[(self.time-8)]
+        return END_HOURS_LIST[(self.time-8)]
 
     def __str__(self):
         print_str = str(self.dog) + " (dog) walked by " + str(self.walker) + " (walker) on "
         print_str += str(self.day) + "s at " + str(self.time) + " o'clock"
         return print_str
+
+class Form_Open_Tracker(models.Model):
+    form_is_open = models.BooleanField(default=False)
+
+    def get_is_form_open(self):
+        return self.form_is_open
+
+    def set_is_form_open(self, value):
+        self.form_is_open = value
+
+    def __str__(self):
+        return str(self.form_is_open)

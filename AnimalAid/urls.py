@@ -42,8 +42,7 @@ urlpatterns = [
     url(r'^ajax/validate_password1/$', forms.validate_password1, name='validate_password1'),
     url(r'^ajax/validate_password2/$', forms.validate_password2, name='validate_password2'),
     url('dog_gallery/', core_views.dog_gallery, name="dog_gallery"),
-    path('', core_views.home, name="home"),
-    path('s3direct/', include('s3direct.urls')),
+    url(r'^s3direct/', include('s3direct.urls')),
     path('admin_ctrl/', core_views.admin_ctrl, name="admin_ctrl")
     
 ]

@@ -4,4 +4,13 @@ django-authtools>=1.6.0
 django-braces>=1.13.0
 django-crispy-forms>=1.7.2
 django-environ>=0.4.5
+pillow
+gunicorn
+django-heroku
+boto3
+django-storages
+django-utils-six 
+google-compute-engine
 django-s3direct>=1.1.8
+requests
+whitenoise

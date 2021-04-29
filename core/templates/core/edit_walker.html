@@ -3,9 +3,9 @@
 {% load static %}
 
 {% block styles %}
-    <link href="{% static '/css/app.css' %}" rel="stylesheet" type="text/css" />
-    <link href="{% static '/css/form.css' %}" rel="stylesheet" type="text/css" />
-    <link href="{% static '/css/home.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/app.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/form.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/home.css' %}" rel="stylesheet" type="text/css" />
 {% endblock styles %}
 
 
@@ -47,20 +47,22 @@
 	
 
     <br> 
+
 	<div class="d-flex justify-content-center">
 		<button type="submit" name="save_walker" id="save_walker" class="subscribebutton" style="margin-left: 5px; margin-right: 5px">Save</button>
 		<br>
 		<button type="submit" name="cancel" id="cancel" class="subscribebutton" style="margin-left: 5px; margin-right: 5px">Cancel</button>
 	</div>
 	<br/>
-	<div class="d-flex justify-content-center">
-		<button type="submit" name="go_to_form" id="go_to_form" class="subscribebutton" style="margin-left: 5px; margin-right: 5px">Go to Signup</button>
-	</div>
 	{% if data.walker.saved %}
 	<div class="d-flex justify-content-center">
 		<label for="save_walker" style="color: seagreen;">Profile Saved</label>
 	</div>
 	{% endif %}
+	<br/>
+	<div class="d-flex justify-content-center">
+		<button type="submit" name="go_to_form" id="go_to_form" class="subscribebutton" style="margin-left: 5px; margin-right: 5px">Go to Signup</button>
+	</div>
 	<br> 
 
     <div class="container-fluid" >
