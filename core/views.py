@@ -25,7 +25,7 @@ elif counter == 0:
     form_open = form_is_open_tracker.get_is_form_open()
     counter +=1
 
-SUBSCRIBE_RECIPIENT = 'Benjamin.London@tufts.edu'
+SUBSCRIBE_RECIPIENT = 'lcsanimalaid@gmail.com'
 
 # constants to change walking days and times
 # Sizes should match DAYS and HOURS constants in core/models.py
