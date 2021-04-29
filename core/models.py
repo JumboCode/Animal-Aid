@@ -242,6 +242,9 @@ class Match(models.Model):
     def get_walker_email(self):
         return self.walker.get_email()
     
+    def get_walker_phone(self):
+        return self.walker.get_phone_number()
+    
     def get_day(self):
         return self.day 
 

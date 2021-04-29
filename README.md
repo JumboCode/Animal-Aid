@@ -1,55 +1,56 @@
 
 
-# JumbocodeAnimalAid
+# Jumbocode - Animal Aid Project
 
 Built with [Python][0] using the [Django Web Framework][1].
 
+## Our Team
+### Project Manager
+Ben London
+### Technical Lead
+Viet Nguyen
+### Designer
+Anju Ishizaki
+### Developers
+Amelia Cook, Ann Marie Burke, Catherine Ding, Emily Nadler, Janny Huang, Kunal Valia, Lawrence Xu, Sejal Dua 
+
+---
 
 ## Installation
 
 ### Quick start
 
-To set up a development environment quickly, first install Python 3. It
+1. To set up a development environment quickly, first install Python 3. It
 comes with virtualenv built-in. So create a virtual env by:
 
     1. `$ python3 -m venv AnimalAidEnv`
     2. `$ . AnimalAidEnv/bin/activate`
 
-Install all dependencies:
+Ensure that you define all required environment variables for the database, AWS, and Email Server
 
-    python3 -m pip install -r requirements.txt
+2. Install all dependencies:
 
-Run migrations:
+    `python3 -m pip install -r requirements.txt`
 
-    python3 manage.py makemigrations core
-    python3 manage.py migrate core
-    python3 manage.py migrate
+3. Run migrations:
+
+    `python3 manage.py makemigrations`
     
-Run Server and view webpage:
+    `python3 manage.py migrate core`
 
-    python3 manage.py runserver
+4. Collect static files:
+
+    `python3 manage.py collectstatic`
+
+5. Run Server and view webpage:
+
+    `python3 manage.py runserver`
+    
  Then just open up a browser and go to the url printed by the runserver!
 
 ### Detailed instructions
 
 Take a look at the docs for more information.
-
-
-## Fixing SQLite Database
-Just delete the database and then rerun makemigrations and migrate (you will lose all your data)
-
-## Fixing Postgres Database
-Access the database, drop all the tables, recreate a Schema and give the admin user access:
-    
-    psql animalaid <-- Open up the psql terminal
-    
-    // In that terminal run the following:
-    
-    DROP SCHEMA public CASCADE;
-    CREATE SCHEMA public;
-    GRANT ALL ON SCHEMA public TO public;
-    GRANT ALL ON SCHEMA public TO admin;
-    \q
     
 
 [0]: https://www.python.org/

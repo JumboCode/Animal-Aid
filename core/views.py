@@ -147,10 +147,12 @@ def results(request):
             for match in matches:
                 walker_query = match.get_walker
                 walker_email = match.get_walker_email
+                walker_phone = match.get_walker_phone
                 data["match_results"].append({
                     "dog" : match.get_dog,
                     "walker" : walker_query,
                     "walker_email" : walker_email,
+                    "walker_phone" : walker_phone,
                     "day" : match.get_day,
                     "start_time" : match.get_start_time,
                     "end_time" : match.get_end_time,
